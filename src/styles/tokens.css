@@ -1,0 +1,9 @@
+:root {
+  --bg: #070A0F;
+  --fg: #F0EDE6;
+  --accent: #C8F135;
+  --muted: #1A1E25;
+  --border: rgba(240, 237, 230, 0.1);
+  --font-display: 'Neue Haas Grotesk Display', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}

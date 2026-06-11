@@ -1,0 +1,38 @@
+/* ── Footer responsive overrides ─────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+
+  .footer-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .footer-stats .stat-col {
+    border-left: none !important;
+    padding-left: 0 !important;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-stats .stat-col:last-child,
+  .footer-stats .stat-col:nth-last-child(2):nth-child(odd) {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-stats .stat-col {
+    border-bottom: 1px solid var(--border) !important;
+  }
+
+  .footer-stats .stat-col:last-child {
+    border-bottom: none !important;
+  }
+}

@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import './tokens.css';
+
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  cursor: none;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}

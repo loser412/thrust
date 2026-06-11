@@ -159,10 +159,10 @@ function CodeBlock({ code, lang = 'js' }) {
   return (
     <div style={{
       fontFamily: '"Fira Code", "Cascadia Code", "Consolas", monospace',
-      fontSize: '12px',
-      lineHeight: 1.8,
+      fontSize: '10px',
+      lineHeight: 1.5,
       color: C.fg,
-      padding: '20px',
+      padding: '12px',
       background: C.bg,
       border: `1px solid ${C.border}`,
       borderRadius: '6px',
@@ -203,6 +203,7 @@ export default function DevelopmentPage() {
   const stackRef = useRef(null);
   const workRef  = useRef(null);
   const ctaRef   = useRef(null);
+  const bgRef    = useRef(null);
   const [typed, setTyped] = useState('');
   const TYPED_CODE = `> thrust.init({
     team: "senior-only",
@@ -228,11 +229,48 @@ export default function DevelopmentPage() {
         { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
       );
 
-      gsap.fromTo(capsRef.current?.querySelectorAll('.cap-card') ?? [],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.14, ease: 'power2.out',
-          scrollTrigger: { trigger: capsRef.current, start: 'top 75%' } }
-      );
+      // Enhanced cinematic capability cards animation - scroll synced
+      const capCards = capsRef.current?.querySelectorAll('.cap-card') ?? [];
+      capCards.forEach((card, index) => {
+        // Different animations for each quadrant
+        let fromVars = { opacity: 0, scale: 0.85, rotateY: 45 };
+        
+        if (index === 0) {
+          fromVars = { x: -80, y: 80, opacity: 0, scale: 0.75, rotateY: -45 };
+        } else if (index === 1) {
+          fromVars = { x: 80, y: 80, opacity: 0, scale: 0.75, rotateY: 45 };
+        } else if (index === 2) {
+          fromVars = { x: -80, y: -80, opacity: 0, scale: 0.75, rotateX: -45 };
+        } else {
+          fromVars = { x: 80, y: -80, opacity: 0, scale: 0.75, rotateX: 45 };
+        }
+
+        // Group by row: top 2 cards (0,1) animate together, bottom 2 cards (2,3) animate together
+        const rowIndex = index < 2 ? 0 : 1;
+        const startOffset = rowIndex * 300;
+
+        gsap.fromTo(
+          card,
+          fromVars,
+          {
+            x: 0,
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            rotateX: 0,
+            rotateY: 0,
+            duration: 2.5,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: capsRef.current,
+              start: `top+=${startOffset} center`,
+              end: `top+=${startOffset + 500} center`,
+              scrub: 1.5,
+              markers: false,
+            },
+          }
+        );
+      });
 
       gsap.fromTo(stackRef.current?.querySelectorAll('.stack-tag') ?? [],
         { scale: 0.85, opacity: 0 },
@@ -251,22 +289,64 @@ export default function DevelopmentPage() {
         { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } }
       );
+
+      // Deep zoom parallax background animation
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          scale: 1.8,
+          yPercent: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: bgRef.current.parentElement,
+            start: 'top top',
+            end: 'bottom center',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: C.bg, paddingTop: '80px', minHeight: '100vh' }}>
+    <div style={{ background: C.bg, paddingTop: '80px', minHeight: '100vh', position: 'relative' }}>
+      {/* ── Full page cinematic zoom overlay ── */}
+      <div
+        ref={bgRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 'auto',
+          width: '100%',
+          height: '100vh',
+          zIndex: 0,
+          backgroundImage: `url('/make_somethinglike_tht_in_high_202606110408.jpeg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          willChange: 'transform',
+          transformOrigin: 'center center',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ── Content wrapper with proper z-index ── */}
+      <div style={{ position: 'relative', zIndex: 2 }}>
 
       {/* ── HERO ────────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
+        data-section="hero"
         style={{
           padding: 'clamp(80px,12vw,140px) 40px clamp(60px,8vw,100px)',
           borderBottom: `1px solid ${C.border}`,
           position: 'relative',
           overflow: 'hidden',
-          background: C.bg,
+          background: 'transparent',
+          minHeight: '100vh',
         }}
       >
         {/* Grid overlay */}
@@ -367,7 +447,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* ── CAPABILITIES ──────────────────────────────────────────────────── */}
-      <section ref={capsRef} style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={capsRef} data-section="capabilities" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 001 — CAPABILITIES
         </div>
@@ -379,15 +459,16 @@ export default function DevelopmentPage() {
           WHAT WE<br /><span style={{ color: C.accent }}>BUILD.</span>
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '2px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '28px', perspective: '1200px' }}>
           {CAPABILITIES.map(({ index, title, code, desc, tags }) => (
             <div
               key={index}
               className="cap-card"
               style={{
                 background: C.surface, border: `1px solid ${C.border}`,
-                padding: '36px', position: 'relative',
+                padding: '24px', position: 'relative',
                 transition: 'border-color 0.3s',
+                transformStyle: 'preserve-3d',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.accent; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; }}
@@ -395,26 +476,26 @@ export default function DevelopmentPage() {
               {/* Editor tab */}
               <div style={{
                 display: 'flex', alignItems: 'center', gap: '8px',
-                marginBottom: '16px',
+                marginBottom: '12px',
               }}>
-                <span style={{ fontFamily: 'monospace', fontSize: '10px', color: C.comment }}>
+                <span style={{ fontFamily: 'monospace', fontSize: '9px', color: C.comment }}>
                   /{index}
                 </span>
-                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: C.dim, letterSpacing: '0.08em' }}>
+                <span style={{ fontFamily: 'monospace', fontSize: '9px', color: C.dim, letterSpacing: '0.08em' }}>
                   {title.toLowerCase().replace(/ /g, '-')}.ts
                 </span>
               </div>
 
-              <div style={{ marginBottom: '20px' }}>
+              <div style={{ marginBottom: '16px' }}>
                 <CodeBlock code={code} lang={index === '04' ? 'yaml' : 'js'} />
               </div>
 
               <h3 style={{
-                fontFamily: 'var(--font-display)', fontSize: '18px',
+                fontFamily: 'var(--font-display)', fontSize: '15px',
                 fontWeight: 700, textTransform: 'uppercase',
-                color: C.fg, margin: '0 0 10px', letterSpacing: '-0.01em',
+                color: C.fg, margin: '0 0 8px', letterSpacing: '-0.01em',
               }}>{title}</h3>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '14px', lineHeight: 1.75, color: C.dim, margin: '0 0 20px' }}>{desc}</p>
+              <p style={{ fontFamily: 'var(--font-display)', fontSize: '13px', lineHeight: 1.6, color: C.dim, margin: '0 0 14px' }}>{desc}</p>
 
               <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                 {tags.map((t) => (
@@ -431,7 +512,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* ── TECH STACK ────────────────────────────────────────────────────── */}
-      <section ref={stackRef} style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={stackRef} data-section="stack" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 002 — TECH STACK
         </div>
@@ -450,7 +531,10 @@ export default function DevelopmentPage() {
           fontFamily: 'monospace', fontSize: '13px', lineHeight: 2.2,
         }}>
           {STACK.map((tech, i) => (
-            <div key={tech.name} className="stack-tag" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div key={tech.name} className="stack-tag" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span style={{ color: tech.color, fontWeight: 700, fontFamily: 'var(--font-display)', minWidth: '80px', fontSize: '12px' }}>
+                {tech.name}
+              </span>
               <span style={{ color: C.keyword }}>import</span>
               <span style={{ color: tech.color, fontWeight: 600 }}>{tech.name}</span>
               <span style={{ color: C.fg }}>from</span>
@@ -462,7 +546,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* ── OUR WORK ──────────────────────────────────────────────────────── */}
-      <section ref={workRef} style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={workRef} data-section="work" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 003 — OUR WORK
         </div>
@@ -587,6 +671,7 @@ export default function DevelopmentPage() {
           $ LET'S TALK →
         </Link>
       </section>
+      </div>
     </div>
   );
 }

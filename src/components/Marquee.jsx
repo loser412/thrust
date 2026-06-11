@@ -45,7 +45,6 @@ export default function Marquee({ items = [], speed = 40 }) {
               fontSize: '12px',
               letterSpacing: '0.12em',
               color: 'var(--fg)',
-              opacity: 0.5,
               padding: '0 48px',
             }}
           >

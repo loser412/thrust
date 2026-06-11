@@ -4,6 +4,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const VALUES = [
   { index: '/01', title: 'CLARITY OVER COMPLEXITY', body: 'We don\'t add process for process\'s sake. Simple, direct, and well-reasoned beats elaborate and slow every time.' },
   { index: '/02', title: 'SENIOR TALENT ONLY',       body: 'Every engagement is run by people who have done it before — not managed by them. No juniors learning on your dime.' },
@@ -27,6 +29,7 @@ const DIFFERENTIATORS = [
 
 export default function AboutPage() {
   const heroRef   = useRef(null);
+  const bgRef     = useRef(null);
   const valRef    = useRef(null);
   const teamRef   = useRef(null);
   const diffRef   = useRef(null);
@@ -52,25 +55,61 @@ export default function AboutPage() {
       gsap.fromTo(ctaRef.current,
         { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } });
+
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          scale: 1.8,
+          yPercent: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: bgRef.current.parentElement,
+            start: 'top top',
+            end: 'bottom center',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: 'var(--bg)', paddingTop: '80px' }}>
+    <div style={{ background: 'var(--bg)', paddingTop: '80px', position: 'relative' }}>
+      <div
+        ref={bgRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 'auto',
+          width: '100%',
+          height: '100vh',
+          zIndex: 0,
+          backgroundImage: `url('/about%20us.jpeg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          willChange: 'transform',
+          transformOrigin: 'center center',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ position: 'relative', zIndex: 2 }}>
 
       {/* HERO */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
         <div style={{ position:'absolute', top:'-100px', right:'10%', width:'480px', height:'480px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,241,53,0.07) 0%, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
         <div className="anim"><SectionLabel index="ABT" label="ABOUT" /></div>
         <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
           WE ARE<br />THRUST<br /><span style={{ color:'var(--accent)' }}>& LOGIC.</span>
         </h1>
         <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'60px', flexWrap:'wrap' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', opacity:0.55, margin:0 }}>
+          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             We started Thrust & Logic because we were frustrated. Frustrated with agencies that staffed accounts with juniors, padded timelines, and measured success in decks delivered rather than problems solved.
           </p>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', opacity:0.55, margin:0 }}>
+          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             So we built the agency we wanted to hire. Senior-only. Flat. Transparent. Embedded in your world rather than billing by the hour from a distance. Six years later, the model works — for us and the brands we work with.
           </p>
         </div>
@@ -87,7 +126,7 @@ export default function AboutPage() {
             <div key={index} className="val-row" style={{ display:'grid', gridTemplateColumns:'80px 1fr 1fr', gap:'40px', padding:'36px 0', borderBottom: i < VALUES.length-1 ? '1px solid var(--border)' : 'none', alignItems:'start' }}>
               <span style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.1em', color:'var(--accent)', paddingTop:'4px' }}>{index}</span>
               <div style={{ fontFamily:'var(--font-display)', fontSize:'18px', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', lineHeight:1.2 }}>{title}</div>
-              <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0 }}>{body}</p>
+              <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>{body}</p>
             </div>
           ))}
         </div>
@@ -122,7 +161,7 @@ export default function AboutPage() {
           {DIFFERENTIATORS.map(({ label, desc }) => (
             <div key={label} className="diff-item" style={{ borderTop:'2px solid var(--accent)', paddingTop:'24px', paddingBottom:'24px', paddingRight:'40px' }}>
               <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.15em', color:'var(--accent)', marginBottom:'12px' }}>{label}</div>
-              <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.7, color:'var(--fg)', opacity:0.5, margin:0 }}>{desc}</p>
+              <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.7, color:'var(--fg)', margin:0 }}>{desc}</p>
             </div>
           ))}
         </div>
@@ -142,6 +181,7 @@ export default function AboutPage() {
           LET'S TALK →
         </Link>
       </section>
+      </div>
     </div>
   );
 }

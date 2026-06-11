@@ -4,6 +4,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const OFFERINGS = [
   { index: '/01', title: 'Video Production', desc: 'Brand films, product demos, testimonials, and social content. Scripted, shot, and edited in-house — no outsourcing.', tags: ['Brand Film', 'Product Demo', 'Testimonial', 'Social'] },
   { index: '/02', title: 'Motion & Animation', desc: '2D motion graphics, kinetic typography, and animated explainers that carry your message without a word.', tags: ['Motion Graphics', 'After Effects', 'Lottie', 'Explainer'] },
@@ -70,6 +72,7 @@ const WORK = [
 
 export default function ProductionPage() {
   const heroRef    = useRef(null);
+  const bgRef      = useRef(null);
   const offerRef   = useRef(null);
   const specsRef   = useRef(null);
   const processRef = useRef(null);
@@ -100,22 +103,58 @@ export default function ProductionPage() {
       gsap.fromTo(ctaRef.current,
         { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } });
+
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          scale: 1.8,
+          yPercent: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: bgRef.current.parentElement,
+            start: 'top top',
+            end: 'bottom center',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: 'var(--bg)', paddingTop: '80px' }}>
+    <div style={{ background: 'var(--bg)', paddingTop: '80px', position: 'relative' }}>
+      <div
+        ref={bgRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 'auto',
+          width: '100%',
+          height: '100vh',
+          zIndex: 0,
+          backgroundImage: `url('/image3.jpeg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          willChange: 'transform',
+          transformOrigin: 'center center',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ position: 'relative', zIndex: 2 }}>
 
       {/* HERO */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
         <div style={{ position:'absolute', bottom:'-60px', right:'-80px', width:'420px', height:'420px', borderRadius:'50%', background:'radial-gradient(circle, rgba(241,53,53,0.08) 0%, transparent 70%)', filter:'blur(60px)', pointerEvents:'none' }} />
         <div className="anim"><SectionLabel index="PRD" label="PRODUCTION" /></div>
         <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
           WE CREATE<br />CONTENT THAT<br /><span style={{ color:'var(--accent)' }}>EARNS.</span>
         </h1>
         <div className="anim" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginTop:'48px', flexWrap:'wrap', gap:'24px' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0, maxWidth:'480px' }}>
+          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'480px' }}>
             Video and motion production without the bloat. Concept through delivery — senior crew, own equipment, no outsourcing, no excuses.
           </p>
           <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'14px 28px', textDecoration:'none', transition:'opacity 0.2s' }}
@@ -138,7 +177,7 @@ export default function ProductionPage() {
               <span style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.1em', color:'var(--accent)', paddingTop:'4px' }}>{index}</span>
               <div>
                 <div style={{ fontFamily:'var(--font-display)', fontSize:'22px', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', marginBottom:'10px' }}>{title}</div>
-                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0, maxWidth:'520px' }}>{desc}</p>
+                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'520px' }}>{desc}</p>
               </div>
               <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', justifyContent:'flex-end', maxWidth:'200px' }}>
                 {tags.map((t) => (
@@ -157,7 +196,7 @@ export default function ProductionPage() {
           {SPECS.map(({ value, label }, i) => (
             <div key={label} className="spec-col" style={{ borderLeft: i===0 ? 'none' : '1px solid var(--border)', paddingLeft: i===0 ? '0' : '32px', paddingRight:'32px' }}>
               <div style={{ fontFamily:'var(--font-display)', fontSize:'clamp(40px,4.5vw,64px)', fontWeight:700, letterSpacing:'-0.03em', lineHeight:1, color:'var(--accent)' }}>{value}</div>
-              <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.1em', color:'var(--fg)', opacity:0.35, marginTop:'10px' }}>{label}</div>
+              <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.1em', color:'var(--fg)', marginTop:'10px' }}>{label}</div>
             </div>
           ))}
         </div>
@@ -175,7 +214,7 @@ export default function ProductionPage() {
               <span style={{ fontFamily:'var(--font-mono)', fontSize:'13px', letterSpacing:'0.1em', color:'var(--accent)', paddingTop:'4px' }}>{step}</span>
               <div>
                 <div style={{ fontFamily:'var(--font-display)', fontSize:'18px', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', marginBottom:'10px' }}>{heading}</div>
-                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0 }}>{body}</p>
+                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>{body}</p>
               </div>
             </div>
           ))}
@@ -229,6 +268,7 @@ export default function ProductionPage() {
           LET'S TALK →
         </Link>
       </section>
+      </div>
     </div>
   );
 }

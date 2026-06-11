@@ -149,7 +149,7 @@ export default function ConsultPage() {
         </h1>
 
         <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'56px' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0 }}>
+          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             Tell us what you're working on. We'll give you a straight answer on whether we're the right fit — and if we're not, we'll point you to someone who is.
           </p>
           <div style={{ display:'flex', flexDirection:'column', gap:'20px' }}>
@@ -160,7 +160,7 @@ export default function ConsultPage() {
             ].map(([k, v]) => (
               <div key={k} style={{ display:'flex', gap:'16px', alignItems:'flex-start' }}>
                 <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.15em', color:'var(--accent)', paddingTop:'3px', whiteSpace:'nowrap' }}>{k}</span>
-                <span style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.06em', color:'var(--fg)', opacity:0.45 }}>{v}</span>
+                <div style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.06em', color:'var(--fg)' }}>{v}</div>
               </div>
             ))}
           </div>
@@ -189,7 +189,7 @@ export default function ConsultPage() {
             }}>
               FORM REF: <span style={{ color: 'var(--fg)', fontWeight: 600 }}>{formNumber}</span>
             </div>
-            <p style={{ fontFamily:'var(--font-display)', fontSize:'16px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0 }}>
+            <p style={{ fontFamily:'var(--font-display)', fontSize:'16px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
               We've received your request and logged it under the reference above. We will review your brief and be in touch within 24 hours.
             </p>
           </div>
@@ -335,7 +335,7 @@ export default function ConsultPage() {
                 <span style={{ fontFamily:'var(--font-mono)', fontSize:'18px', color:'var(--accent)', flexShrink:0, transition:'transform 0.3s', transform: openFaq === i ? 'rotate(45deg)' : 'none' }}>+</span>
               </button>
               <div style={{ overflow:'hidden', maxHeight: openFaq === i ? '200px' : '0', transition:'max-height 0.35s ease', paddingBottom: openFaq === i ? '28px' : '0' }}>
-                <p style={{ fontFamily:'var(--font-display)', fontSize:'16px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0 }}>{a}</p>
+                <p style={{ fontFamily:'var(--font-display)', fontSize:'16px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>{a}</p>
               </div>
             </div>
           ))}

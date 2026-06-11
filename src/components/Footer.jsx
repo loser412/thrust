@@ -126,7 +126,6 @@ export default function Footer() {
               fontSize:      '12px',
               letterSpacing: '0.12em',
               color:         'var(--fg)',
-              opacity:       0.35,
               marginTop:     '20px',
               marginBottom:  0,
               lineHeight:    1.8,
@@ -152,7 +151,7 @@ export default function Footer() {
                   fontSize:       '10px',
                   letterSpacing:  '0.15em',
                   color:          'var(--fg)',
-                  opacity:        0.4,
+                  opacity:        1,
                   textDecoration: 'none',
                   border:         '1px solid var(--border)',
                   padding:        '7px 14px',
@@ -210,7 +209,6 @@ export default function Footer() {
                     gap:            '8px',
                   })}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color   = 'var(--fg)';
                     e.currentTarget.style.opacity = '1';
                   }}
                   onMouseLeave={(e) => {
@@ -218,7 +216,7 @@ export default function Footer() {
                     e.currentTarget.style.opacity = '';
                   }}
                 >
-                  <span style={{ color: 'var(--accent)', opacity: 0.5, fontSize: '9px' }}>→</span>
+                  <span style={{ color: 'var(--accent)', opacity: 1, fontSize: '9px' }}>→</span>
                   {label}
                 </NavLink>
               </li>
@@ -269,7 +267,6 @@ export default function Footer() {
                 fontSize:      '11px',
                 letterSpacing: '0.1em',
                 color:         'var(--fg)',
-                opacity:       0.35,
                 marginTop:     '10px',
                 lineHeight:    1.6,
               }}

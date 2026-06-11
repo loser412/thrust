@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import MagneticCursor from './components/MagneticCursor';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import SearchBar from './components/SearchBar';
 import HomePage from './pages/HomePage';
 import DevelopmentPage from './pages/DevelopmentPage';
 import MarketingPage from './pages/MarketingPage';
@@ -93,13 +94,26 @@ function useColorHover() {
   }, []);
 }
 
+// Scroll to top on route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   useColorHover();
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <MagneticCursor />
       <Navbar />
+      <SearchBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/development" element={<DevelopmentPage />} />

@@ -4,6 +4,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const SERVICES = [
   { index: '/01', title: 'Paid Media', desc: 'Meta, Google, TikTok, and programmatic campaigns engineered for ROAS — not vanity metrics. Every dollar tracked.', tags: ['Meta Ads', 'Google Ads', 'TikTok', 'Programmatic'] },
   { index: '/02', title: 'Search & SEO', desc: 'Technical SEO, content strategy, and link acquisition that compounds over time. Rankings you actually keep.', tags: ['Technical SEO', 'Content', 'Link Building', 'Core Web Vitals'] },
@@ -63,6 +65,7 @@ const WORK = [
 
 export default function MarketingPage() {
   const heroRef    = useRef(null);
+  const bgRef      = useRef(null);
   const servRef    = useRef(null);
   const resultsRef = useRef(null);
   const workRef    = useRef(null);
@@ -88,22 +91,58 @@ export default function MarketingPage() {
       gsap.fromTo(ctaRef.current,
         { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } });
+
+      if (bgRef.current) {
+        gsap.to(bgRef.current, {
+          scale: 1.8,
+          yPercent: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: bgRef.current.parentElement,
+            start: 'top top',
+            end: 'bottom center',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: 'var(--bg)', paddingTop: '80px' }}>
+    <div style={{ background: 'var(--bg)', paddingTop: '80px', position: 'relative' }}>
+      <div
+        ref={bgRef}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 'auto',
+          width: '100%',
+          height: '100vh',
+          zIndex: 0,
+          backgroundImage: `url('/image%202.jpeg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          willChange: 'transform',
+          transformOrigin: 'center center',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ position: 'relative', zIndex: 2 }}>
 
       {/* HERO */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
         <div style={{ position:'absolute', top:'-80px', left:'-80px', width:'400px', height:'400px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,241,53,0.08) 0%, transparent 70%)', filter:'blur(60px)', pointerEvents:'none' }} />
         <div className="anim"><SectionLabel index="MKT" label="MARKETING" /></div>
         <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
           WE GROW<br />YOUR<br /><span style={{ color:'var(--accent)' }}>NUMBERS.</span>
         </h1>
         <div className="anim" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginTop:'48px', flexWrap:'wrap', gap:'24px' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0, maxWidth:'480px' }}>
+          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'480px' }}>
             Performance marketing with creative precision. We run campaigns that scale — and audits that reveal exactly why your current ones don't.
           </p>
           <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'14px 28px', textDecoration:'none', transition:'opacity 0.2s' }}
@@ -126,7 +165,7 @@ export default function MarketingPage() {
               <span style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.1em', color:'var(--accent)', paddingTop:'4px' }}>{index}</span>
               <div>
                 <div style={{ fontFamily:'var(--font-display)', fontSize:'22px', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', marginBottom:'10px' }}>{title}</div>
-                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:0, maxWidth:'520px' }}>{desc}</p>
+                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'520px' }}>{desc}</p>
               </div>
               <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', justifyContent:'flex-end', maxWidth:'200px' }}>
                 {tags.map((t) => (
@@ -148,7 +187,7 @@ export default function MarketingPage() {
           {RESULTS.map(({ value, label }, i) => (
             <div key={label} className="result-col" style={{ borderLeft: i === 0 ? 'none' : '1px solid var(--border)', paddingLeft: i === 0 ? '0' : '32px', paddingRight:'32px' }}>
               <div style={{ fontFamily:'var(--font-display)', fontSize:'clamp(40px,4.5vw,64px)', fontWeight:700, letterSpacing:'-0.03em', lineHeight:1, color:'var(--accent)' }}>{value}</div>
-              <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.1em', color:'var(--fg)', opacity:0.35, marginTop:'10px' }}>{label}</div>
+              <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.1em', color:'var(--fg)', marginTop:'10px' }}>{label}</div>
             </div>
           ))}
         </div>
@@ -201,6 +240,7 @@ export default function MarketingPage() {
           LET'S TALK →
         </Link>
       </section>
+      </div>
     </div>
   );
 }

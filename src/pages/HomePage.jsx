@@ -352,6 +352,7 @@ const ctaRef = useRef(null);
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section
+        data-section="hero"
         style={{
           position: 'relative',
           height: '100vh',
@@ -409,7 +410,6 @@ const ctaRef = useRef(null);
                 fontSize: '13px',
                 letterSpacing: '0.1em',
                 color: 'var(--fg)',
-                opacity: 0.45,
                 margin: 0,
                 maxWidth: '340px',
                 lineHeight: 1.9,
@@ -465,7 +465,6 @@ const ctaRef = useRef(null);
               fontSize: '9px',
               letterSpacing: '0.2em',
               color: 'var(--fg)',
-              opacity: 0.3,
               writingMode: 'vertical-rl',
             }}
           >
@@ -482,6 +481,7 @@ const ctaRef = useRef(null);
       {/* ── MISSION STATEMENT ────────────────────────────────────────────── */}
       <section
         ref={missionRef}
+        data-section="about"
         style={{
           padding: 'clamp(80px, 10vw, 140px) 40px',
           display: 'grid',
@@ -527,7 +527,6 @@ const ctaRef = useRef(null);
               fontWeight: 400,
               lineHeight: 1.75,
               color: 'var(--fg)',
-              opacity: 0.55,
               margin: '0 0 32px',
             }}
           >
@@ -542,7 +541,6 @@ const ctaRef = useRef(null);
               fontWeight: 400,
               lineHeight: 1.75,
               color: 'var(--fg)',
-              opacity: 0.55,
               margin: 0,
             }}
           >
@@ -555,6 +553,7 @@ const ctaRef = useRef(null);
       {/* ── STATS ────────────────────────────────────────────────────────── */}
       <section
         ref={statsRef}
+        data-section="stats"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
           borderBottom: '1px solid var(--border)',
@@ -606,7 +605,6 @@ const ctaRef = useRef(null);
                   fontSize: '11px',
                   letterSpacing: '0.12em',
                   color: 'var(--fg)',
-                  opacity: 0.4,
                   marginTop: '12px',
                 }}
               >
@@ -620,6 +618,7 @@ const ctaRef = useRef(null);
       {/* ── SERVICES ─────────────────────────────────────────────────────── */}
       <section
         ref={servicesRef}
+        data-section="services"
         style={{
           padding: '40px',
           borderBottom: '1px solid var(--border)',
@@ -821,6 +820,7 @@ const ctaRef = useRef(null);
       {/* ── PROCESS ──────────────────────────────────────────────────────── */}
       <section
         ref={processRef}
+        data-section="process"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
           borderBottom: '1px solid var(--border)',
@@ -899,7 +899,6 @@ const ctaRef = useRef(null);
                       fontSize: '15px',
                       lineHeight: 1.75,
                       color: 'var(--fg)',
-                      opacity: 0.5,
                       margin: 0,
                     }}
                   >
@@ -980,7 +979,6 @@ const ctaRef = useRef(null);
               fontSize: '16px',
               lineHeight: 1.7,
               color: 'var(--fg)',
-              opacity: 0.5,
               margin: 0,
             }}
           >

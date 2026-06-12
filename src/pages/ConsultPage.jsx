@@ -200,7 +200,7 @@ export default function ConsultPage() {
           LET'S<br />TALK<br /><span style={{ color:'var(--accent)' }}>HONESTLY.</span>
         </h1>
 
-        <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'56px', position: 'relative', zIndex: 2 }}>
+        <div className="anim hero-copy-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'56px', position: 'relative', zIndex: 2 }}>
           <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             Tell us what you're working on. We'll give you a straight answer on whether we're the right fit — and if we're not, we'll point you to someone who is.
           </p>

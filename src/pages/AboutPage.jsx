@@ -105,7 +105,7 @@ export default function AboutPage() {
         <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
           WE ARE<br />THRUST<br /><span style={{ color:'var(--accent)' }}>& LOGIC.</span>
         </h1>
-        <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'60px', flexWrap:'wrap' }}>
+        <div className="anim hero-copy-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'60px', flexWrap:'wrap' }}>
           <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             We started Thrust & Logic because we were frustrated. Frustrated with agencies that staffed accounts with juniors, padded timelines, and measured success in decks delivered rather than problems solved.
           </p>

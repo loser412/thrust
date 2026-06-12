@@ -17,3 +17,98 @@ body {
   background: var(--accent);
   color: var(--bg);
 }
+
+html, body {
+  min-width: 0;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+img, picture, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  nav[style] {
+    padding: 22px 24px !important;
+  }
+
+  .search-widget {
+    right: 24px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: clamp(40px, 8vw, 60px) 20px !important;
+  }
+
+  .hero-copy-grid,
+  .work-card,
+  .shot-card,
+  .offer-row,
+  .proc-step,
+  .val-row,
+  .team-card,
+  .diff-item,
+  .spec-col,
+  .result-col,
+  .serv-row {
+    display: block !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    width: 100% !important;
+  }
+
+  .offer-row,
+  .proc-step,
+  .val-row,
+  .diff-item {
+    padding: 20px 0 !important;
+  }
+
+  .spec-col,
+  .result-col {
+    border-left: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .shot-card,
+  .team-card,
+  .work-card,
+  .search-widget {
+    padding: 24px !important;
+  }
+
+  .stack-tag {
+    width: auto !important;
+  }
+
+  .search-widget {
+    right: 16px !important;
+    top: auto !important;
+    bottom: 20px !important;
+    transform: none !important;
+  }
+
+  .mobile-overlay {
+    padding: 24px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  section {
+    padding: 28px 16px !important;
+  }
+
+  .search-widget {
+    right: 12px !important;
+    bottom: 16px !important;
+  }
+
+  .hero-copy-grid {
+    gap: 24px !important;
+  }
+}

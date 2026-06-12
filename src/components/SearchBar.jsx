@@ -84,6 +84,7 @@ export default function SearchBar() {
 
   return (
     <div
+      className="search-widget"
       style={{
         position: 'fixed',
         right: '40px',

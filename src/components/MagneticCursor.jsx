@@ -84,7 +84,7 @@ export default function MagneticCursor() {
           borderRadius: '50%',
           backgroundColor: 'var(--fg)',
           pointerEvents: 'none',
-          zIndex: 9999,
+          zIndex: 10001,
           mixBlendMode: 'difference',
           transition: 'opacity 0.2s',
         }}
@@ -102,7 +102,7 @@ export default function MagneticCursor() {
           border: '1.5px solid rgba(240, 237, 230, 0.5)',
           backgroundColor: 'transparent',
           pointerEvents: 'none',
-          zIndex: 9998,
+          zIndex: 10000,
           transition: 'width 0.25s ease, height 0.25s ease, border-color 0.25s ease, background-color 0.25s ease',
         }}
       />

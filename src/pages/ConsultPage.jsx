@@ -187,6 +187,7 @@ export default function ConsultPage() {
         zIndex: 0,
         transformOrigin: 'center center',
         willChange: 'transform',
+        pointerEvents: 'none',
       }} />
       <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.30)', zIndex: 0, pointerEvents: 'none' }} />
       <div style={{ position:'relative', zIndex: 1 }}>

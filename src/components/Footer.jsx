@@ -80,7 +80,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 10 }}>
+    <footer ref={footerRef} style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 9999 }}>
 
       {/* ── TOP SECTION ─────────────────────────────────────────────────── */}
       <div

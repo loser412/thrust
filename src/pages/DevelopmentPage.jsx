@@ -526,7 +526,7 @@ export default function DevelopmentPage() {
 
         {/* Import-statement style */}
         <div style={{
-          background: C.surface, border: `1px solid ${C.border}`,
+          background: 'transparent', border: `1px solid ${C.border}`,
           borderRadius: '8px', padding: '28px 32px', marginBottom: '32px',
           fontFamily: 'monospace', fontSize: '13px', lineHeight: 2.2,
         }}>
@@ -559,12 +559,12 @@ export default function DevelopmentPage() {
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          {WORK.map(({ index, repo, branch, commit, title, client, desc, tags, metric, year, accent }) => (
+          {WORK.map(({ index, repo, branch, commit, title, client, desc, tags, metric, year, accent }, i) => (
             <div
               key={index}
               className="work-card"
               style={{
-                background: C.surface, border: `1px solid ${C.border}`,
+                background: i % 2 === 0 ? 'transparent' : C.surface, border: `1px solid ${C.border}`,
                 padding: '0', position: 'relative', overflow: 'hidden',
                 transition: 'border-color 0.3s',
               }}

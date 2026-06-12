@@ -20,6 +20,12 @@ const SPECS = [
   { value: '3', label: '// Studio Cities' },
 ];
 
+const SHOTS = [
+  { title: 'On-Set Direction', desc: 'We lock the mood, framing, and pacing before a single take. Every shot must earn its place in the edit.', accent: '#F13535' },
+  { title: 'Lighting & VFX', desc: 'Practical lighting, subtle effects, and clean compositing that make content feel premium without slowing production.', accent: '#35A0F1' },
+  { title: 'Delivery Ready', desc: 'Native formats for social, web, and broadcast — all color graded, sound mixed, and export-ready.', accent: '#C8F135' },
+];
+
 const PROCESS = [
   { step: '/01', heading: 'BRIEF & CONCEPT', body: 'We extract the story worth telling. A tight creative brief prevents expensive reshoots.' },
   { step: '/02', heading: 'PRE-PRODUCTION', body: 'Storyboards, shot lists, location scouting, talent casting — everything locked before a camera moves.' },
@@ -73,6 +79,8 @@ const WORK = [
 export default function ProductionPage() {
   const heroRef    = useRef(null);
   const bgRef      = useRef(null);
+  const videoRef   = useRef(null);
+  const shotRef    = useRef(null);
   const offerRef   = useRef(null);
   const specsRef   = useRef(null);
   const processRef = useRef(null);
@@ -80,6 +88,17 @@ export default function ProductionPage() {
   const ctaRef     = useRef(null);
 
   useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      video.loop = true;
+      video.preload = 'auto';
+      const playPromise = video.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.catch(() => {});
+      }
+    }
+
     const ctx = gsap.context(() => {
       gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
         { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
@@ -95,6 +114,21 @@ export default function ProductionPage() {
       gsap.fromTo(processRef.current?.querySelectorAll('.proc-step') ?? [],
         { x: -30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: 'power2.out',
           scrollTrigger: { trigger: processRef.current, start: 'top 75%' } });
+
+      gsap.utils.toArray(shotRef.current?.querySelectorAll('.shot-card') ?? []).forEach((card, index) => {
+        gsap.fromTo(card,
+          { x: -80, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.9, ease: 'power2.out',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 90%',
+              end: 'bottom 70%',
+              toggleActions: 'play reverse play reverse',
+              markers: false,
+            },
+          }
+        );
+      });
 
       gsap.fromTo(workRef.current?.querySelectorAll('.work-card') ?? [],
         { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.13, ease: 'power2.out',
@@ -148,20 +182,52 @@ export default function ProductionPage() {
 
       {/* HERO */}
       <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
-        <div style={{ position:'absolute', bottom:'-60px', right:'-80px', width:'420px', height:'420px', borderRadius:'50%', background:'radial-gradient(circle, rgba(241,53,53,0.08) 0%, transparent 70%)', filter:'blur(60px)', pointerEvents:'none' }} />
-        <div className="anim"><SectionLabel index="PRD" label="PRODUCTION" /></div>
-        <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
-          WE CREATE<br />CONTENT THAT<br /><span style={{ color:'var(--accent)' }}>EARNS.</span>
-        </h1>
-        <div className="anim" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginTop:'48px', flexWrap:'wrap', gap:'24px' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'480px' }}>
-            Video and motion production without the bloat. Concept through delivery — senior crew, own equipment, no outsourcing, no excuses.
-          </p>
-          <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'14px 28px', textDecoration:'none', transition:'opacity 0.2s' }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.82')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}>
-            BRIEF US →
-          </Link>
+        <div style={{ position:'absolute', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 1, filter: 'brightness(0.55) saturate(1.1)' }}
+          >
+            <source src="/Curtain_opening_zoomout_animation_202606112331.mp4" type="video/mp4" />
+          </video>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.30)' }} />
+        </div>
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ position:'absolute', bottom:'-60px', right:'-80px', width:'420px', height:'420px', borderRadius:'50%', background:'radial-gradient(circle, rgba(241,53,53,0.08) 0%, transparent 70%)', filter:'blur(60px)', pointerEvents:'none' }} />
+          <div className="anim"><SectionLabel index="PRD" label="PRODUCTION" /></div>
+          <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
+            WE CREATE<br />CONTENT THAT<br /><span style={{ color:'var(--accent)' }}>EARNS.</span>
+          </h1>
+          <div className="anim" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginTop:'48px', flexWrap:'wrap', gap:'24px' }}>
+            <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'480px' }}>
+              Video and motion production without the bloat. Concept through delivery — senior crew, own equipment, no outsourcing, no excuses.
+            </p>
+            <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'14px 28px', textDecoration:'none', transition:'opacity 0.2s' }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.82')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}>
+              BRIEF US →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOT FRAME */}
+      <section ref={shotRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+        <SectionLabel index="000" label="SHOT FRAME" />
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 40px', lineHeight:0.95, color:'var(--fg)' }}>
+          We make every frame count from concept to cut.<br /><span style={{ color:'var(--accent)' }}>Clear direction, polished craft.</span>
+        </h2>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap:'24px' }}>
+          {SHOTS.map(({ title, desc }) => (
+            <div key={title} className="shot-card" style={{ padding:'30px', border:'4px solid transparent', borderImage: 'linear-gradient(135deg, #ff4d4d, #35f14f, #2a8bfd) 1', background:'black', position:'relative', overflow:'hidden' }}>
+              <h3 style={{ fontFamily:'var(--font-display)', fontSize:'20px', fontWeight:700, letterSpacing:'-0.02em', textTransform:'uppercase', color:'var(--fg)', margin:'0 0 14px' }}>{title}</h3>
+              <p style={{ fontFamily:'var(--font-display)', fontSize:'14px', lineHeight:1.85, color:'var(--fg)', opacity:1, margin:0 }}>{desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 

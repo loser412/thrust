@@ -20,6 +20,12 @@ const RESULTS = [
   { value: '18mo', label: '// Avg Engagement' },
 ];
 
+const GROWTH = [
+  { title: 'Audience Precision', desc: 'Find the customers most likely to convert, then scale the channels that move the needle fastest.', accent: '#C8F135' },
+  { title: 'Creative Velocity', desc: 'Test multiple concepts every week so the strongest ideas win and weak ones die fast.', accent: '#35F1D4' },
+  { title: 'Revenue Loop', desc: 'Use performance feedback to tune budgets, offers, and landing pages in real time.', accent: '#F135A0' },
+];
+
 const WORK = [
   {
     index: '01',
@@ -153,6 +159,23 @@ export default function MarketingPage() {
         </div>
       </section>
 
+      {/* GROWTH ENGINE */}
+      <section style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+        <SectionLabel index="000" label="GROWTH ENGINE" />
+        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 40px', lineHeight:0.95, color:'var(--fg)' }}>
+          A lean growth system that keeps your brand moving.<br /><span style={{ color:'var(--accent)' }}>Strategy, testing, and scale.</span>
+        </h2>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap:'24px' }}>
+          {GROWTH.map(({ title, desc, accent }) => (
+            <div key={title} style={{ padding:'30px', border:'1px solid var(--border)', background:'rgba(255,255,255,0.04)', position:'relative', overflow:'hidden' }}>
+              <div style={{ position:'absolute', top:0, left:0, width:'100%', height:'3px', background:accent, opacity:0.7 }} />
+              <h3 style={{ fontFamily:'var(--font-display)', fontSize:'20px', fontWeight:700, letterSpacing:'-0.02em', textTransform:'uppercase', color:'var(--fg)', margin:'0 0 14px' }}>{title}</h3>
+              <p style={{ fontFamily:'var(--font-display)', fontSize:'14px', lineHeight:1.85, color:'var(--fg)', opacity:0.75, margin:0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* SERVICES */}
       <section ref={servRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
         <SectionLabel index="001" label="SERVICES" />
@@ -169,7 +192,7 @@ export default function MarketingPage() {
               </div>
               <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', justifyContent:'flex-end', maxWidth:'200px' }}>
                 {tags.map((t) => (
-                  <span key={t} style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.1em', color:'var(--fg)', opacity:0.4, border:'1px solid var(--border)', padding:'4px 10px', textTransform:'uppercase' }}>{t}</span>
+                  <span key={t} style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.1em', color:'var(--fg)', background:'black', padding:'4px 10px', textTransform:'uppercase' }}>{t}</span>
                 ))}
               </div>
             </div>

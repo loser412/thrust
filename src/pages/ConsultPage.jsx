@@ -15,9 +15,11 @@ const FAQ = [
 ];
 
 export default function ConsultPage() {
-  const heroRef   = useRef(null);
-  const formRef   = useRef(null);
-  const faqRef    = useRef(null);
+  const heroRef        = useRef(null);
+  const heroContentRef = useRef(null);
+  const bgLayerRef     = useRef(null);
+  const formRef        = useRef(null);
+  const faqRef         = useRef(null);
 
   const [selected, setSelected] = useState([]);
   const [budget,   setBudget]   = useState('');
@@ -100,6 +102,35 @@ export default function ConsultPage() {
       gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
         { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
 
+      if (bgLayerRef.current) {
+        gsap.to(bgLayerRef.current, {
+          scale: 1.08,
+          yPercent: 15,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom -50%',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
+
+      if (heroContentRef.current) {
+        gsap.to(heroContentRef.current, {
+          yPercent: -10,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+            markers: false,
+          },
+        });
+      }
+
       gsap.fromTo(formRef.current,
         { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out',
           scrollTrigger: { trigger: formRef.current, start: 'top 80%' } });
@@ -137,18 +168,38 @@ export default function ConsultPage() {
   };
 
   return (
-    <div style={{ background: 'var(--bg)', paddingTop: '80px' }}>
+    <div style={{
+      paddingTop: '80px',
+      minHeight: '100vh',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div ref={bgLayerRef} style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100vh',
+        backgroundImage: "url('/pexels-resourceboy-18541758.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center center',
+        backgroundRepeat: 'no-repeat',
+        zIndex: 0,
+        transformOrigin: 'center center',
+        willChange: 'transform',
+      }} />
+      <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.30)', zIndex: 0, pointerEvents: 'none' }} />
+      <div style={{ position:'relative', zIndex: 1 }}>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position:'absolute', top:'-80px', right:'-80px', width:'500px', height:'500px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,241,53,0.09) 0%, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
-
-        <div className="anim"><SectionLabel index="CST" label="CONSULT" /></div>
-        <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
+      <section ref={heroRef} style={{ minHeight: '70vh', padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+        <div ref={heroContentRef} style={{ position:'relative', zIndex: 2 }}>
+          <div className="anim"><SectionLabel index="CST" label="CONSULT" /></div>
+          <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
           LET'S<br />TALK<br /><span style={{ color:'var(--accent)' }}>HONESTLY.</span>
         </h1>
 
-        <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'56px' }}>
+        <div className="anim" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'60px', marginTop:'56px', position: 'relative', zIndex: 2 }}>
           <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0 }}>
             Tell us what you're working on. We'll give you a straight answer on whether we're the right fit — and if we're not, we'll point you to someone who is.
           </p>
@@ -164,6 +215,7 @@ export default function ConsultPage() {
               </div>
             ))}
           </div>
+        </div>
         </div>
       </section>
 
@@ -342,5 +394,6 @@ export default function ConsultPage() {
         </div>
       </section>
     </div>
+  </div>
   );
 }

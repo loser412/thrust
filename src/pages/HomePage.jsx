@@ -414,6 +414,20 @@ const clientsAnimRef = useRef(null);
           overflow: 'hidden',
         }}
       >
+        <div className="hero-video-bg" aria-hidden="true">
+          <video
+            className="hero-bg-video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source src="/home-hero/Car_moving_at_high_speed_202606170747.mp4" type="video/mp4" />
+            Your browser does not support the background video.
+          </video>
+        </div>
+
         {/* Abstract blobs */}
         <div className="blob blob-1" />
         <div className="blob blob-2" />
@@ -622,14 +636,13 @@ const clientsAnimRef = useRef(null);
         ref={missionRef}
         data-section="about"
         style={{
-          padding: 'clamp(80px, 10vw, 140px) 40px',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '80px',
-          alignItems: 'center',
+          gap: '0',
+          minHeight: '100vh',
         }}
       >
-        <div>
+        <div style={{ backgroundColor: '#F97316', padding: 'clamp(80px, 10vw, 140px) 40px', color: '#000' }}>
           <SectionLabel index="001" label="ABOUT" />
           <div style={{ marginTop: '28px' }}>
             {[
@@ -648,7 +661,7 @@ const clientsAnimRef = useRef(null);
                   letterSpacing: '-0.03em',
                   textTransform: 'uppercase',
                   lineHeight: 1.0,
-                  color: 'var(--fg)',
+                  color: '#000',
                 }}
               >
                 {line}
@@ -657,34 +670,36 @@ const clientsAnimRef = useRef(null);
           </div>
         </div>
 
-        <div className="mission-line">
-          <p
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '17px',
-              fontWeight: 400,
-              lineHeight: 1.75,
-              color: 'var(--fg)',
-              margin: '0 0 32px',
-            }}
-          >
-            Thrust & Logic is a full-service digital agency that operates without the fat.
-            No account managers buffering between you and the people doing the work. No
-            opaque timelines. Just senior talent, clear thinking, and results you can measure.
-          </p>
-          <p
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '17px',
-              fontWeight: 400,
-              lineHeight: 1.75,
-              color: 'var(--fg)',
-              margin: 0,
-            }}
-          >
-            We operate across development, marketing, production, and consulting — often all
-            four simultaneously — for brands that can't afford to move slowly.
-          </p>
+        <div style={{ backgroundColor: '#000', padding: 'clamp(80px, 10vw, 140px) 40px', color: '#D4AF37' }}>
+          <div className="mission-line">
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '17px',
+                fontWeight: 400,
+                lineHeight: 1.75,
+                color: '#D4AF37',
+                margin: '0 0 32px',
+              }}
+            >
+              Thrust & Logic is a full-service digital agency that operates without the fat.
+              No account managers buffering between you and the people doing the work. No
+              opaque timelines. Just senior talent, clear thinking, and results you can measure.
+            </p>
+            <p
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '17px',
+                fontWeight: 400,
+                lineHeight: 1.75,
+                color: '#D4AF37',
+                margin: 0,
+              }}
+            >
+              We operate across development, marketing, production, and consulting — often all
+              four simultaneously — for brands that can't afford to move slowly.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -842,8 +857,12 @@ const clientsAnimRef = useRef(null);
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                background: color,
-                border: `1px solid ${accentLine}`,
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/pexels-pnw-prod-8250951.jpg')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                backgroundBlendMode: 'overlay',
+                border: '2px solid #000',
                 padding: '40px',
                 textDecoration: 'none',
                 position: 'absolute',
@@ -856,9 +875,11 @@ const clientsAnimRef = useRef(null);
                 opacity: 0,
                 willChange: 'transform, opacity',
                 zIndex: 10 + cardIndex,
-                boxShadow: '0 40px 120px rgba(0,0,0,0.18)',
+                boxShadow: '0 40px 120px rgba(0,0,0,0.35)',
                 borderRadius: '32px',
                 transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
+                color: '#D4AF37',
+                fontFamily: 'var(--font-body)',
               }}
               whileHover={{ y: -6, scale: 1.01 }}
               whileTap={{ scale: 0.995 }}
@@ -880,21 +901,22 @@ const clientsAnimRef = useRef(null);
               >
                 <span
                   style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-body)',
                     fontSize: '11px',
-                    letterSpacing: '0.15em',
-                    color: accentLine,
-                    opacity: 0.7,
+                    letterSpacing: '0.18em',
+                    color: '#D4AF37',
+                    opacity: 0.95,
+                    textTransform: 'uppercase',
                   }}
                 >
                   /{index}
                 </span>
                 <span
                   style={{
-                    fontFamily: 'var(--font-mono)',
+                    fontFamily: 'var(--font-body)',
                     fontSize: '18px',
-                    color: 'var(--fg)',
-                    opacity: 0.2,
+                    color: '#D4AF37',
+                    opacity: 0.85,
                     transition: 'opacity 0.3s, transform 0.3s',
                   }}
                 >
@@ -919,11 +941,11 @@ const clientsAnimRef = useRef(null);
 
               <p
                 style={{
-                  fontFamily: 'var(--font-display)',
+                  fontFamily: 'var(--font-body)',
                   fontSize: '15px',
                   lineHeight: 1.7,
-                  color: 'var(--fg)',
-                  opacity: 0.5,
+                  color: '#D4AF37',
+                  opacity: 0.95,
                   margin: '0 0 32px',
                   maxWidth: '380px',
                 }}
@@ -936,13 +958,14 @@ const clientsAnimRef = useRef(null);
                   <span
                     key={tag}
                     style={{
-                      fontFamily: 'var(--font-mono)',
+                      fontFamily: 'var(--font-body)',
                       fontSize: '10px',
-                      letterSpacing: '0.12em',
+                      letterSpacing: '0.18em',
                       textTransform: 'uppercase',
-                      color: 'var(--fg)',
-                      opacity: 0.4,
-                      border: '1px solid var(--border)',
+                      color: '#D4AF37',
+                      opacity: 0.95,
+                      border: '1px solid #000',
+                      background: 'rgba(0,0,0,0.16)',
                       padding: '4px 10px',
                     }}
                   >

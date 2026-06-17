@@ -516,7 +516,7 @@ export default function ProductionPage() {
               width:'max-content',
             }}
           >
-            {mediaVideoRefs.current = [], [...MEDIA_ITEMS, ...MEDIA_ITEMS].map((item, i) => {
+            {(() => { mediaVideoRefs.current = []; return [...MEDIA_ITEMS, ...MEDIA_ITEMS].map((item, i) => {
               const isHovered = hoveredMedia === i;
               const commonStyle = {
                 flex: '0 0 auto',
@@ -605,7 +605,7 @@ export default function ProductionPage() {
                   )}
                 </div>
               );
-            })}
+            })})()}
           </div>
         </div>
       </section>

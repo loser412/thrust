@@ -41,6 +41,7 @@ function RotatingPill() {
 export default function HeroSection() {
   const sectionRef = useRef(null);
   const bgRef = useRef(null);
+  const videoRef = useRef(null);
   const labelRef   = useRef(null);
   const line1Ref   = useRef(null); // "BUILDING"
   const line2Ref   = useRef(null); // "WHAT [pill] MATTERS"
@@ -123,13 +124,67 @@ export default function HeroSection() {
       );
     }, sectionRef);
 
+    // Ensure the background video plays (muted) and resume on visibility/focus
+    const vid = videoRef.current;
+    const tryPlay = () => {
+      if (!vid) return;
+      try {
+        vid.muted = true;
+        const p = vid.play();
+        if (p && p.catch) p.catch(() => {
+          // ignore play errors (autoplay policies), will retry on interaction
+        });
+      } catch (e) {
+        // swallow
+      }
+    };
+
+    tryPlay();
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') tryPlay();
+    });
+    window.addEventListener('focus', tryPlay);
+
+    // Toggle the has-video class when the video actually loads or fails
+    const onLoaded = () => {
+      if (bgRef.current) bgRef.current.classList.add('has-video');
+    };
+    const onError = (ev) => {
+      if (bgRef.current) bgRef.current.classList.remove('has-video');
+      // Log for debugging in the browser console
+      // eslint-disable-next-line no-console
+      console.error('Hero background video failed to load', ev);
+    };
+    if (vid) {
+      vid.addEventListener('loadeddata', onLoaded);
+      vid.addEventListener('error', onError);
+    }
+
+    // Debug info (visible in browser console)
+    // eslint-disable-next-line no-console
+    console.info('Hero video element', vid, 'src=', vid?.currentSrc || vid?.src);
+
     return () => ctx.revert();
   }, []);
 
   return (
     <section ref={sectionRef} className="hero-section" aria-label="Hero">
-      {/* ── Parallax background image ── */}
-      <div ref={bgRef} className="hero-bg-parallax" />
+      {/* ── Parallax background image / video ── */}
+      <div ref={bgRef} className="hero-bg-parallax" aria-hidden="true">
+        <video
+          ref={videoRef}
+          className="hero-bg-video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/home-hero/Car_moving_at_high_speed_202606170747.mp4" type="video/mp4" />
+          Your browser does not support the background video.
+        </video>
+      </div>
 
       {/* ── Background blobs (pure CSS, no JS) ── */}
       <div className="hero-blob hero-blob-1" />

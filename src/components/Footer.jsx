@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './Footer.css';
@@ -27,6 +27,7 @@ const STATS = [
 ];
 
 export default function Footer() {
+  const { pathname } = useLocation();
   const footerRef   = useRef(null);
   const brandRef    = useRef(null);
   const navColRef   = useRef(null);
@@ -78,6 +79,12 @@ export default function Footer() {
 
     return () => ctx.revert();
   }, []);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
 
   return (
     <footer ref={footerRef} style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 9999 }}>

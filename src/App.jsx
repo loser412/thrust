@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { lenis } from './lib/lenis';
 import MagneticCursor from './components/MagneticCursor';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -167,7 +169,12 @@ function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    lenis.scrollTo(0, { immediate: true, force: true });
+    window.scrollTo(0, 0);
+
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+
+    return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
   return null;

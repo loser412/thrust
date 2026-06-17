@@ -133,6 +133,7 @@ const clientsAnimRef = useRef(null);
 
   // ── ScrollTrigger animations ──────────────────────────────────────────────
   useEffect(() => {
+    const ctx = gsap.context(() => {
     // Cinematic scroll-based background image deep zoom & scale
     const bg = heroBgRef.current;
     if (bg) {
@@ -324,7 +325,12 @@ const clientsAnimRef = useRef(null);
       }
     );
 
-    return () => ScrollTrigger.getAll().forEach((t) => t.kill());
+    });
+
+    return () => {
+      document.body.classList.remove('paused-blobs');
+      ctx.revert();
+    };
   }, []);
 
   // ── Auto-scroll clients slider ────────────────────────────────────────────

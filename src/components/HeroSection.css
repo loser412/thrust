@@ -79,17 +79,7 @@
   100% { transform: translate(35px, -45px) scale(0.9); }
 }
 
-/* ── Subtle grid ─────────────────────────────────────────────────────────── */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(240, 237, 230, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240, 237, 230, 0.02) 1px, transparent 1px);
-  background-size: 80px 80px;
-}
+/* ── Grid removed ── */
 
 /* ── Content wrapper ─────────────────────────────────────────────────────── */
 .hero-content {

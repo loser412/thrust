@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
+import PremiumCaseCard from '../components/PremiumCaseCard';
+import CASE_STUDIES from '../data/caseStudies';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -98,60 +101,7 @@ const STACK = [
   { name: 'Terraform',    color: C.num    },
 ];
 
-const WORK = [
-  {
-    index: '01',
-    repo: 'nexus-commerce/storefront',
-    branch: 'main',
-    commit: 'a3f91bc',
-    title: 'Headless Shopify Platform',
-    client: 'NEXUS COMMERCE',
-    desc: 'Rebuilt a legacy Shopify store into a fully headless Next.js storefront. Load time dropped from 6s to 0.9s.',
-    tags: ['Next.js', 'Shopify Plus', 'Algolia', 'AWS'],
-    metric: '+44% CVR',
-    year: '2024',
-    accent: C.accent,
-  },
-  {
-    index: '02',
-    repo: 'orbital-fintech/trading-ui',
-    branch: 'production',
-    commit: 'd8c203a',
-    title: 'Real-time Trading Dashboard',
-    client: 'ORBITAL FINTECH',
-    desc: 'WebSocket-driven interface handling 10k+ live data points per second. Sub-100ms render cycles.',
-    tags: ['React', 'Node.js', 'WebSocket', 'PostgreSQL'],
-    metric: '<100ms latency',
-    year: '2024',
-    accent: C.type,
-  },
-  {
-    index: '03',
-    repo: 'vault-health/patient-portal',
-    branch: 'release/v2',
-    commit: 'f1e77d9',
-    title: 'Patient Portal & API Layer',
-    client: 'VAULT HEALTH',
-    desc: 'HIPAA-compliant patient portal with EHR integration, appointment scheduling, and secure REST API.',
-    tags: ['TypeScript', 'GraphQL', 'Redis', 'Docker'],
-    metric: '60k+ users',
-    year: '2023',
-    accent: C.fn,
-  },
-  {
-    index: '04',
-    repo: 'drift-studio/creator-platform',
-    branch: 'main',
-    commit: 'b29a415',
-    title: 'Creator Monetisation Platform',
-    client: 'DRIFT STUDIO',
-    desc: 'Subscription and digital product platform for 200+ creators. Custom CMS, Stripe Connect, affiliate engine.',
-    tags: ['Next.js', 'Stripe', 'Postgres', 'S3'],
-    metric: '$2M+ processed',
-    year: '2023',
-    accent: C.num,
-  },
-];
+const WORK = CASE_STUDIES;
 
 // ── Mini syntax highlighter ───────────────────────────────────────────────────
 function CodeBlock({ code, lang = 'js' }) {
@@ -205,6 +155,7 @@ export default function DevelopmentPage() {
   const ctaRef   = useRef(null);
   const bgRef    = useRef(null);
   const [typed, setTyped] = useState('');
+  const [openProject, setOpenProject] = useState(null);
   const TYPED_CODE = `> thrust.init({
     team: "senior-only",
     stack: ["React","Node","AWS"],
@@ -447,7 +398,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* ── CAPABILITIES ──────────────────────────────────────────────────── */}
-      <section ref={capsRef} data-section="capabilities" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={capsRef} data-section="capabilities" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 001 — CAPABILITIES
         </div>
@@ -460,8 +411,8 @@ export default function DevelopmentPage() {
         </h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '28px', perspective: '1200px' }}>
-          {CAPABILITIES.map(({ index, title, code, desc, tags }) => (
-            <div
+          {CAPABILITIES.map(({ index, title, code, desc, tags }, cardIndex) => (
+            <motion.div
               key={index}
               className="cap-card"
               style={{
@@ -470,6 +421,11 @@ export default function DevelopmentPage() {
                 transition: 'border-color 0.3s',
                 transformStyle: 'preserve-3d',
               }}
+              initial={{ opacity: 0, y: 28, rotateX: 5 }}
+              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.65, ease: 'easeOut', delay: cardIndex * 0.08 }}
+              whileHover={{ y: -10, scale: 1.01, boxShadow: '0 28px 80px rgba(0,0,0,0.18)' }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.accent; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; }}
             >
@@ -506,13 +462,13 @@ export default function DevelopmentPage() {
                   }}>{t}</span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* ── TECH STACK ────────────────────────────────────────────────────── */}
-      <section ref={stackRef} data-section="stack" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={stackRef} data-section="stack" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 002 — TECH STACK
         </div>
@@ -546,7 +502,7 @@ export default function DevelopmentPage() {
       </section>
 
       {/* ── OUR WORK ──────────────────────────────────────────────────────── */}
-      <section ref={workRef} data-section="work" style={{ padding: 'clamp(80px,10vw,120px) 40px', borderBottom: `1px solid ${C.border}` }}>
+      <section ref={workRef} data-section="work" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
         <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
           // 003 — OUR WORK
         </div>
@@ -558,73 +514,17 @@ export default function DevelopmentPage() {
           PROJECTS WE'VE<br /><span style={{ color: C.accent }}>SHIPPED.</span>
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-          {WORK.map(({ index, repo, branch, commit, title, client, desc, tags, metric, year, accent }, i) => (
-            <div
-              key={index}
-              className="work-card"
-              style={{
-                background: i % 2 === 0 ? 'transparent' : C.surface, border: `1px solid ${C.border}`,
-                padding: '0', position: 'relative', overflow: 'hidden',
-                transition: 'border-color 0.3s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = accent; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; }}
-            >
-              {/* Repo header — git-log style */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '16px',
-                padding: '12px 24px', background: C.bg,
-                borderBottom: `1px solid ${C.border}`,
-                flexWrap: 'wrap',
-              }}>
-                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: C.fn }}>
-                  ⎇ {branch}
-                </span>
-                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: C.dim }}>
-                  {repo}
-                </span>
-                <span style={{ fontFamily: 'monospace', fontSize: '11px', color: C.comment, marginLeft: 'auto' }}>
-                  commit {commit} · {year}
-                </span>
-              </div>
-
-              {/* Card body */}
-              <div style={{ padding: '28px 24px', display: 'grid', gridTemplateColumns: '1fr auto', gap: '24px', alignItems: 'start' }}>
-                <div>
-                  <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.15em', color: accent, marginBottom: '8px', textTransform: 'uppercase' }}>
-                    {client}
-                  </div>
-                  <h3 style={{
-                    fontFamily: 'var(--font-display)', fontSize: 'clamp(18px,1.8vw,24px)',
-                    fontWeight: 700, letterSpacing: '-0.01em', textTransform: 'uppercase',
-                    color: C.fg, margin: '0 0 12px',
-                  }}>{title}</h3>
-                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '14px', lineHeight: 1.75, color: C.dim, margin: '0 0 20px', maxWidth: '580px' }}>{desc}</p>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                    {tags.map((t) => (
-                      <span key={t} style={{
-                        fontFamily: 'monospace', fontSize: '9px', letterSpacing: '0.1em',
-                        textTransform: 'uppercase', color: C.dim,
-                        border: `1px solid ${C.border}`, padding: '3px 8px', borderRadius: '3px',
-                      }}>{t}</span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Metric badge */}
-                <div style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(24px,2.5vw,36px)',
-                  fontWeight: 700, letterSpacing: '-0.02em',
-                  color: accent, whiteSpace: 'nowrap',
-                  textAlign: 'right',
-                }}>{metric}</div>
-              </div>
-            </div>
+        {/* Premium teaser cards */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', margin: '28px 0' }}>
+          {WORK.map((p) => (
+            <PremiumCaseCard key={p.id} project={p} />
           ))}
         </div>
+
+        {/* Legacy detailed cards removed — premium teasers only */}
       </section>
+
+      {/* Modal removed — case studies open on dedicated pages now */}
 
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section

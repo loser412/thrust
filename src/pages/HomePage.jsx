@@ -1,11 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 import SectionLabel from '../components/SectionLabel';
-import Marquee from '../components/Marquee';
 import './HomePage.css';
+
+const MotionLink = motion(Link);
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -87,6 +89,13 @@ const MARQUEE_ITEMS = [
   'STRATEGY', 'EXECUTION', 'CLARITY', 'MOMENTUM',
 ];
 
+const CLIENTS = [
+  { name: 'Ayurveda Organics', logo: '/icons/ayurveda organics.png' },
+  { name: 'ELHC', logo: '/icons/ELHC.png' },
+  { name: 'Property Masters', logo: '/icons/property masters.png' },
+  { name: 'SVS Infra', logoText: true },
+];
+
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function HomePage() {
@@ -104,6 +113,8 @@ const servicesCardsRef = useRef(null);
 const processRef = useRef(null);
 const missionRef = useRef(null);
 const ctaRef = useRef(null);
+const clientsSliderRef = useRef(null);
+const clientsAnimRef = useRef(null);
 
   // ── Animate hero on mount ─────────────────────────────────────────────────
   useEffect(() => {
@@ -316,6 +327,39 @@ const ctaRef = useRef(null);
     return () => ScrollTrigger.getAll().forEach((t) => t.kill());
   }, []);
 
+  // ── Auto-scroll clients slider ────────────────────────────────────────────
+  useEffect(() => {
+    const slider = clientsSliderRef.current;
+    if (!slider) return;
+
+    const startAutoScroll = () => {
+      const maxScroll = slider.scrollWidth / 2;
+      if (slider.scrollLeft >= maxScroll) {
+        slider.scrollLeft = 0;
+      }
+      const remaining = maxScroll - slider.scrollLeft;
+      const duration = Math.max(8, (remaining / maxScroll) * 25);
+
+      clientsAnimRef.current = gsap.to(slider, {
+        scrollLeft: maxScroll,
+        duration,
+        ease: 'none',
+        onComplete: () => {
+          slider.scrollLeft = 0;
+          startAutoScroll();
+        },
+      });
+    };
+
+    startAutoScroll();
+
+    return () => {
+      if (clientsAnimRef.current) {
+        clientsAnimRef.current.kill();
+      }
+    };
+  }, []);
+
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div style={{ 
@@ -368,8 +412,6 @@ const ctaRef = useRef(null);
         <div className="blob blob-1" />
         <div className="blob blob-2" />
         <div className="blob blob-3" />
-        {/* Subtle grid */}
-        <div className="hero-grid" />
 
         {/* ── Hero content ── */}
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -474,9 +516,100 @@ const ctaRef = useRef(null);
         </div>
       </section>
 
-      {/* ── MARQUEE ──────────────────────────────────────────────────────── */}
-      <Marquee items={MARQUEE_ITEMS} speed={35} />
-      <Marquee items={[...MARQUEE_ITEMS].reverse()} speed={28} />
+      {/* ── CLIENTS LOGOS SLIDER ─────────────────────────────────────────── */}
+      <section
+        style={{
+          padding: 'clamp(60px, 8vw, 100px) 40px',
+          overflow: 'hidden',
+        }}
+      >
+        <h3
+          style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(18px, 2.5vw, 28px)',
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
+            textTransform: 'uppercase',
+            color: 'var(--fg)',
+            margin: '0 0 32px 0',
+            lineHeight: 1,
+          }}
+        >
+          OUR CLIENTS
+        </h3>
+        <div
+          style={{
+            maxWidth: '1180px',
+            margin: '0 auto',
+            padding: '28px 24px',
+            background: 'transparent',
+            borderRadius: '32px',
+          }}
+        >
+          <div
+            ref={clientsSliderRef}
+            style={{
+              display: 'flex',
+              gap: '40px',
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              WebkitOverflowScrolling: 'touch',
+              paddingBottom: '16px',
+              cursor: 'grab',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+            }}
+            className="hide-scrollbar"
+          >
+          {[...CLIENTS, ...CLIENTS].map((client, i) => (
+            <div
+              key={`${client.name}-${i}`}
+              style={{
+                flex: '0 0 auto',
+                width: 'clamp(120px, 20vw, 200px)',
+                height: 'clamp(80px, 13vw, 140px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '20px',
+                background: 'rgba(255,255,255,0.06)',
+                borderRadius: '24px',
+                boxShadow: 'inset 0 0 40px rgba(255,255,255,0.18)',
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              {client.logoText ? (
+                <div
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(14px, 2vw, 18px)',
+                    fontWeight: 700,
+                    letterSpacing: '-0.01em',
+                    textTransform: 'uppercase',
+                    color: 'var(--fg)',
+                    textAlign: 'center',
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {client.name}
+                </div>
+              ) : (
+                <img
+                  src={client.logo}
+                  alt={client.name}
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    objectFit: 'contain',
+                    filter: 'brightness(1) saturate(1)',
+                  }}
+                />
+              )}
+            </div>
+          ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── MISSION STATEMENT ────────────────────────────────────────────── */}
       <section
@@ -488,7 +621,6 @@ const ctaRef = useRef(null);
           gridTemplateColumns: '1fr 1fr',
           gap: '80px',
           alignItems: 'center',
-          borderBottom: '1px solid var(--border)',
         }}
       >
         <div>
@@ -556,7 +688,6 @@ const ctaRef = useRef(null);
         data-section="stats"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
-          borderBottom: '1px solid var(--border)',
         }}
       >
         <SectionLabel index="002" label="NUMBERS" />
@@ -621,7 +752,6 @@ const ctaRef = useRef(null);
         data-section="services"
         style={{
           padding: '40px',
-          borderBottom: '1px solid var(--border)',
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
@@ -698,10 +828,10 @@ const ctaRef = useRef(null);
             }}
           >
             {SERVICES.map(({ index, title, to, description, tags, color, accentLine }, cardIndex) => (
-              <Link
-              key={index}
-              to={to}
-              className="service-card"
+              <MotionLink
+                key={index}
+                to={to}
+                className="service-card"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -724,6 +854,9 @@ const ctaRef = useRef(null);
                 borderRadius: '32px',
                 transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
               }}
+              whileHover={{ y: -6, scale: 1.01 }}
+              whileTap={{ scale: 0.995 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = `0 40px 120px rgba(0,0,0,0.35)`;
               }}
@@ -811,7 +944,7 @@ const ctaRef = useRef(null);
                   </span>
                 ))}
               </div>
-            </Link>
+            </MotionLink>
           ))}
         </div>
       </div>
@@ -823,7 +956,6 @@ const ctaRef = useRef(null);
         data-section="process"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
-          borderBottom: '1px solid var(--border)',
         }}
       >
         <div

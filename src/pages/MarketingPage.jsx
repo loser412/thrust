@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+﻿import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -6,109 +7,98 @@ import SectionLabel from '../components/SectionLabel';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PROCESS = [
+  { step: 'DISCOVER', title: 'Find the right story', desc: 'We start with the audience, the category, and the opportunity — then shape an idea that feels ownable and memorable.' },
+  { step: 'PLAN', title: 'Define the pathway', desc: 'A clear campaign blueprint aligns creative, media, and measurement around the outcome you want to own.' },
+  { step: 'CREATE', title: 'Build thoughtful work', desc: 'We craft direction, visuals, and messaging that hold up across paid, owned, and social touchpoints.' },
+  { step: 'LAUNCH', title: 'Move with intention', desc: 'Rollouts are staged, tracked, and refined so momentum builds without noise or wasted spend.' },
+  { step: 'IMPROVE', title: 'Learn and iterate', desc: 'We use real campaign performance to sharpen ideas, refine creative, and keep the program moving.' },
+];
+
 const SERVICES = [
-  { index: '/01', title: 'Paid Media', desc: 'Meta, Google, TikTok, and programmatic campaigns engineered for ROAS — not vanity metrics. Every dollar tracked.', tags: ['Meta Ads', 'Google Ads', 'TikTok', 'Programmatic'] },
-  { index: '/02', title: 'Search & SEO', desc: 'Technical SEO, content strategy, and link acquisition that compounds over time. Rankings you actually keep.', tags: ['Technical SEO', 'Content', 'Link Building', 'Core Web Vitals'] },
-  { index: '/03', title: 'Conversion Rate Optimisation', desc: 'Hypothesis-driven A/B testing and UX improvements that turn existing traffic into revenue without more ad spend.', tags: ['A/B Testing', 'Heatmaps', 'UX Audit', 'Funnel Analysis'] },
-  { index: '/04', title: 'Analytics & Reporting', desc: 'Custom dashboards, attribution modelling, and weekly insight reports so you always know what\'s working.', tags: ['GA4', 'Mixpanel', 'Looker Studio', 'Attribution'] },
+  { title: 'Paid Media', desc: 'Thoughtful campaign architecture across modern channels, focused on relevance and retention.' },
+  { title: 'SEO', desc: 'Search visibility built around brand signals, content clarity, and long-term keyword intent.' },
+  { title: 'Content Strategy', desc: 'A creative engine for brand stories, launch support, and on-brand activation.' },
+  { title: 'Conversion Optimization', desc: 'Refined digital experiences that reduce friction and make paid attention feel natural.' },
+  { title: 'Brand Growth', desc: 'Positioning, creative direction, and campaign narratives that create trust at scale.' },
 ];
 
-const RESULTS = [
-  { value: '3.8x', label: '// Average ROAS' },
-  { value: '62%', label: '// Avg CPA Reduction' },
-  { value: '40+', label: '// Brands Scaled' },
-  { value: '18mo', label: '// Avg Engagement' },
+const AYURVEDA_FEATURE = {
+  title: 'Ayurveda Organics',
+  industry: 'Ayurvedic & Organic Products',
+  role: ['Social Media Management', 'Content Strategy', 'Creative Design', 'Audience Growth'],
+  story: {
+    challenge: 'Ayurveda Organics needed a stronger and more consistent social media presence that reflected the quality of their products and connected with the right audience.',
+    whatWeDid: [
+      'Managed social media accounts',
+      'Planned content calendars',
+      'Designed visual creatives',
+      'Improved brand consistency',
+      'Built a stronger online presence',
+    ],
+    outcome: [
+      'Increased visibility',
+      'Better audience engagement',
+      'Stronger brand identity',
+      'Consistent content presence',
+      'Improved reach across platforms',
+    ],
+  },
+  images: [
+    { src: '/devpage/propertymsters/mm/smm%20ss.PNG', label: 'Instagram Performance', caption: 'Social performance overview' },
+    { src: '/devpage/propertymsters/mm/smm%20ss%202.PNG', label: 'Facebook Performance', caption: 'Audience growth snapshot' },
+  ],
+};
+
+const VALUES = [
+  { title: 'Strategic Thinking', desc: 'We make choices that support positioning, not just execution.' },
+  { title: 'Transparent Communication', desc: 'Every project is shared clearly, with rationale and realistic expectations.' },
+  { title: 'Long-Term Partnerships', desc: 'We focus on sustainable momentum, not one-off spikes.' },
+  { title: 'Attention To Detail', desc: 'Every interaction is refined, from copy to motion to delivery.' },
 ];
 
-const GROWTH = [
-  { title: 'Audience Precision', desc: 'Find the customers most likely to convert, then scale the channels that move the needle fastest.', accent: '#C8F135' },
-  { title: 'Creative Velocity', desc: 'Test multiple concepts every week so the strongest ideas win and weak ones die fast.', accent: '#35F1D4' },
-  { title: 'Revenue Loop', desc: 'Use performance feedback to tune budgets, offers, and landing pages in real time.', accent: '#F135A0' },
-];
-
-const WORK = [
+const TESTIMONIALS = [
   {
-    index: '01',
-    client: 'SOLSTICE APPAREL',
-    title: 'Paid Social Scale-Up',
-    desc: 'Took Meta ad spend from $15k to $120k/mo while maintaining a 4.1x ROAS. Creative testing cadence of 20 ads per week.',
-    tags: ['Meta Ads', 'Creative Testing', 'Attribution'],
-    metric: '4.1x ROAS',
-    year: '2024',
-    accent: '#C8F135',
-  },
-  {
-    index: '02',
-    client: 'MERIDIAN SaaS',
-    title: 'B2B SEO & Content Engine',
-    desc: 'Built a 60-article content cluster targeting high-intent SaaS keywords. Organic traffic up 310% in 9 months.',
-    tags: ['SEO', 'Content Strategy', 'Link Building'],
-    metric: '+310% organic',
-    year: '2024',
-    accent: '#35F1D4',
-  },
-  {
-    index: '03',
-    client: 'PEAK FITNESS',
-    title: 'CRO & Funnel Rebuild',
-    desc: 'Redesigned checkout flow and ran 14 A/B tests over 90 days. Revenue per visitor increased by 58% without additional spend.',
-    tags: ['CRO', 'A/B Testing', 'UX Audit'],
-    metric: '+58% RPV',
-    year: '2023',
-    accent: '#F135A0',
-  },
-  {
-    index: '04',
-    client: 'LUNE SKINCARE',
-    title: 'Full-Funnel Google Strategy',
-    desc: 'Built Performance Max and search campaigns from scratch. Hit ROAS target in week 3. CPA down 47% vs prior agency.',
-    tags: ['Google Ads', 'Performance Max', 'Shopping'],
-    metric: '-47% CPA',
-    year: '2023',
-    accent: '#F1A035',
+    name: 'Gurnam Saini',
+    role: 'Founder, Ayurveda Organics',
+    quote: 'They helped us turn our Ayurveda story into a consistent social presence. The creative direction and content rhythm made the brand feel premium, and the campaign visuals brought stronger audience engagement than anything we had before.',
   },
 ];
 
 export default function MarketingPage() {
-  const heroRef    = useRef(null);
-  const bgRef      = useRef(null);
-  const servRef    = useRef(null);
-  const resultsRef = useRef(null);
-  const workRef    = useRef(null);
-  const ctaRef     = useRef(null);
+  const heroRef = useRef(null);
+  const bgRef = useRef(null);
+  const processRef = useRef(null);
+  const servicesRef = useRef(null);
+  const workRef = useRef(null);
+  const valuesRef = useRef(null);
+  const testimonialsRef = useRef(null);
+  const ctaRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
-        { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
+        { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out' });
 
-      gsap.fromTo(servRef.current?.querySelectorAll('.serv-row') ?? [],
-        { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: servRef.current, start: 'top 75%' } });
-
-      gsap.fromTo(resultsRef.current?.querySelectorAll('.result-col') ?? [],
-        { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: resultsRef.current, start: 'top 80%' } });
-
-      gsap.fromTo(workRef.current?.querySelectorAll('.work-card') ?? [],
-        { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.13, ease: 'power2.out',
-          scrollTrigger: { trigger: workRef.current, start: 'top 75%' } });
-
-      gsap.fromTo(ctaRef.current,
-        { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
-          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } });
+      const sections = [processRef, servicesRef, workRef, valuesRef, testimonialsRef, ctaRef];
+      sections.forEach((sectionRef) => {
+        if (!sectionRef.current) return;
+        gsap.fromTo(sectionRef.current,
+          { y: 32, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, ease: 'power2.out',
+            scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } });
+      });
 
       if (bgRef.current) {
         gsap.to(bgRef.current, {
-          scale: 1.8,
-          yPercent: 50,
+          opacity: 0.85,
+          backgroundPosition: '50% 35%',
+          scale: 1.05,
           ease: 'none',
           scrollTrigger: {
             trigger: bgRef.current.parentElement,
             start: 'top top',
-            end: 'bottom center',
+            end: 'bottom top',
             scrub: 1,
-            markers: false,
           },
         });
       }
@@ -117,152 +107,289 @@ export default function MarketingPage() {
   }, []);
 
   return (
-    <div style={{ background: 'var(--bg)', paddingTop: '80px', position: 'relative' }}>
+    <div style={{ background: 'transparent', color: '#FFFFFF', paddingTop: '80px', position: 'relative', overflow: 'hidden' }}>
       <div
         ref={bgRef}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
-          right: 0,
-          bottom: 'auto',
           width: '100%',
           height: '100vh',
           zIndex: 0,
-          backgroundImage: `url('/image%202.jpeg')`,
+          backgroundImage: "linear-gradient(180deg, rgba(5,8,22,0.55), rgba(5,8,22,0.75)), url('/image%202.jpeg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',
-          willChange: 'transform',
-          transformOrigin: 'center center',
           pointerEvents: 'none',
         }}
       />
       <div style={{ position: 'relative', zIndex: 2 }}>
+        <section ref={heroRef} style={{ padding: 'clamp(100px,12vw,180px) 40px 80px', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '8%', right: '10%', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(198,255,0,0.12)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: '10%', left: '8%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+          <div className="anim" style={{ maxWidth: '920px' }}>
+            <SectionLabel index="MKT" label="MARKETING" />
+            <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(72px, 9vw, 96px)', fontWeight: 800, lineHeight: 0.92, letterSpacing: '-0.03em', margin: '24px 0 28px', maxWidth: '720px' }}>
+              Marketing With Purpose.
+            </h1>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.9, maxWidth: '680px', color: '#CBD5E1', marginBottom: '36px' }}>
+              We help businesses attract attention, build trust, and grow with clarity. Clear strategy, creative execution, and modern marketing built to last.
+            </p>
+            <Link to="/consult" style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#050816', background: '#C6FF00', padding: '18px 28px', borderRadius: '999px', textDecoration: 'none', transition: 'transform 0.2s ease' }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+              Start the conversation
+            </Link>
+          </div>
+        </section>
 
-      {/* HERO */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
-        <div style={{ position:'absolute', top:'-80px', left:'-80px', width:'400px', height:'400px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,241,53,0.08) 0%, transparent 70%)', filter:'blur(60px)', pointerEvents:'none' }} />
-        <div className="anim"><SectionLabel index="MKT" label="MARKETING" /></div>
-        <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
-          WE GROW<br />YOUR<br /><span style={{ color:'var(--accent)' }}>NUMBERS.</span>
-        </h1>
-        <div className="anim" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginTop:'48px', flexWrap:'wrap', gap:'24px' }}>
-          <p style={{ fontFamily:'var(--font-display)', fontSize:'17px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'480px' }}>
-            Performance marketing with creative precision. We run campaigns that scale — and audits that reveal exactly why your current ones don't.
-          </p>
-          <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'14px 28px', textDecoration:'none', transition:'opacity 0.2s' }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.82')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}>
-            GET AN AUDIT →
-          </Link>
-        </div>
-      </section>
+        <section ref={processRef} className="fade-up" style={{ padding: '80px 40px', background: '#0F172A', borderRadius: '32px', margin: '0 40px 40px' }}>
+          <SectionLabel index="001" label="PROCESS" />
+          <div style={{ display: 'grid', gap: '22px', gridTemplateColumns: '1fr' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 4vw, 64px)', fontWeight: 700, lineHeight: 1.02, margin: '20px 0 18px' }}>
+              Discover → Plan → Create → Launch → Improve.
+            </h2>
+            <p style={{ color: '#CBD5E1', maxWidth: '760px', fontFamily: 'var(--font-body)', lineHeight: 1.9, fontSize: '17px' }}>
+              Our process is the story we tell together. It keeps creativity grounded, execution precise, and growth consistent.
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '20px', marginTop: '40px' }}>
+            {PROCESS.map(({ step, title, desc }) => (
+              <motion.div key={step} style={{ padding: '28px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', minHeight: '240px' }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, ease: 'power2.out' }}>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '16px' }}>{step}</div>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>{title}</h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.85, color: '#CBD5E1', margin: 0 }}>{desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
 
-      {/* GROWTH ENGINE */}
-      <section style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
-        <SectionLabel index="000" label="GROWTH ENGINE" />
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 40px', lineHeight:0.95, color:'var(--fg)' }}>
-          A lean growth system that keeps your brand moving.<br /><span style={{ color:'var(--accent)' }}>Strategy, testing, and scale.</span>
-        </h2>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0, 1fr))', gap:'24px' }}>
-          {GROWTH.map(({ title, desc, accent }) => (
-            <div key={title} style={{ padding:'30px', border:'1px solid var(--border)', background:'rgba(255,255,255,0.04)', position:'relative', overflow:'hidden' }}>
-              <div style={{ position:'absolute', top:0, left:0, width:'100%', height:'3px', background:accent, opacity:0.7 }} />
-              <h3 style={{ fontFamily:'var(--font-display)', fontSize:'20px', fontWeight:700, letterSpacing:'-0.02em', textTransform:'uppercase', color:'var(--fg)', margin:'0 0 14px' }}>{title}</h3>
-              <p style={{ fontFamily:'var(--font-display)', fontSize:'14px', lineHeight:1.85, color:'var(--fg)', opacity:0.75, margin:0 }}>{desc}</p>
+        <section ref={servicesRef} className="fade-up" style={{ padding: '80px 40px', margin: '0 40px 40px' }}>
+          <SectionLabel index="002" label="SERVICES" />
+          <div style={{ display: 'grid', gap: '20px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 4vw, 64px)', fontWeight: 700, lineHeight: 1.02, margin: '20px 0 18px' }}>
+              Premium services that support creative execution and strategic clarity.
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
+              {SERVICES.map((service) => (
+                <motion.div key={service.title} style={{ padding: '32px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', cursor: 'default' }}
+                  whileHover={{ y: -6, scale: 1.01 }}
+                  transition={{ duration: 0.25, ease: 'easeOut' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(198,255,0,0.14)', display: 'grid', placeItems: 'center', color: '#C6FF00', fontSize: '24px' }}>•</div>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, margin: 0 }}>{service.title}</h3>
+                  </div>
+                  <p style={{ fontFamily: 'var(--font-body)', lineHeight: 1.9, color: '#CBD5E1', fontSize: '16px', margin: 0 }}>{service.desc}</p>
+                </motion.div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      {/* SERVICES */}
-      <section ref={servRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
-        <SectionLabel index="001" label="SERVICES" />
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 48px', lineHeight:0.95, color:'var(--fg)' }}>
-          HOW WE<br /><span style={{ color:'var(--accent)' }}>DRIVE GROWTH.</span>
-        </h2>
-        <div style={{ display:'flex', flexDirection:'column' }}>
-          {SERVICES.map(({ index, title, desc, tags }) => (
-            <div key={index} className="serv-row" style={{ display:'grid', gridTemplateColumns:'80px 1fr auto', gap:'32px', padding:'36px 0', borderBottom:'1px solid var(--border)', alignItems:'start' }}>
-              <span style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.1em', color:'var(--accent)', paddingTop:'4px' }}>{index}</span>
-              <div>
-                <div style={{ fontFamily:'var(--font-display)', fontSize:'22px', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', marginBottom:'10px' }}>{title}</div>
-                <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.75, color:'var(--fg)', margin:0, maxWidth:'520px' }}>{desc}</p>
+        <section ref={workRef} className="fade-up" style={{ padding: '80px 40px', background: '#0F172A', borderRadius: '32px', margin: '0 40px 40px' }}>
+          <SectionLabel index="003" label="Featured Partnership" />
+          <div style={{ display: 'grid', gap: '32px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '30px', alignItems: 'center' }}>
+              <div style={{ position: 'relative', minHeight: '620px', overflow: 'visible' }}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.98, y: 30 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, ease: 'power3.out' }}
+                  style={{
+                    position: 'relative',
+                    borderRadius: '36px',
+                    overflow: 'hidden',
+                    boxShadow: '0 40px 90px rgba(0,0,0,0.3)',
+                    minHeight: '520px',
+                    background: '#060911',
+                  }}
+                >
+                  <img
+                    src="/devpage/propertymsters/mm/smm%20ss.PNG"
+                    alt="Ayurveda Organics Instagram performance"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,8,22,0) 34%, rgba(5,8,22,0.92) 100%)' }} />
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 40, y: -30 }}
+                  whileInView={{ opacity: 1, x: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.75, ease: 'power3.out', delay: 0.15 }}
+                  style={{
+                    position: 'absolute',
+                    top: '18%',
+                    right: '-12%',
+                    width: '320px',
+                    borderRadius: '28px',
+                    overflow: 'hidden',
+                    boxShadow: '0 30px 60px rgba(0,0,0,0.26)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(7,12,26,0.9)',
+                  }}
+                >
+                  <img
+                    src="/devpage/propertymsters/mm/smm%20ss%202.PNG"
+                    alt="Ayurveda Organics Facebook performance"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                  />
+                </motion.div>
               </div>
-              <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', justifyContent:'flex-end', maxWidth:'200px' }}>
-                {tags.map((t) => (
-                  <span key={t} style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.1em', color:'var(--fg)', background:'black', padding:'4px 10px', textTransform:'uppercase' }}>{t}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
-      {/* RESULTS */}
-      <section ref={resultsRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
-        <SectionLabel index="002" label="RESULTS" />
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 48px', lineHeight:0.95, color:'var(--fg)' }}>
-          THE<br /><span style={{ color:'var(--accent)' }}>NUMBERS.</span>
-        </h2>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'2px' }}>
-          {RESULTS.map(({ value, label }, i) => (
-            <div key={label} className="result-col" style={{ borderLeft: i === 0 ? 'none' : '1px solid var(--border)', paddingLeft: i === 0 ? '0' : '32px', paddingRight:'32px' }}>
-              <div style={{ fontFamily:'var(--font-display)', fontSize:'clamp(40px,4.5vw,64px)', fontWeight:700, letterSpacing:'-0.03em', lineHeight:1, color:'var(--accent)' }}>{value}</div>
-              <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.1em', color:'var(--fg)', marginTop:'10px' }}>{label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* WORK */}
-      <section ref={workRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
-        <SectionLabel index="003" label="OUR WORK" />
-        <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 56px', lineHeight:0.95, color:'var(--fg)' }}>
-          CAMPAIGNS WE'VE<br /><span style={{ color:'var(--accent)' }}>RUN.</span>
-        </h2>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'2px' }}>
-          {WORK.map(({ index, client, title, desc, tags, metric, year, accent }) => (
-            <div
-              key={index}
-              className="work-card"
-              style={{ padding:'40px', border:'1px solid var(--border)', position:'relative', overflow:'hidden', cursor:'default', transition:'border-color 0.3s', background:'var(--bg)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = accent; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
-            >
-              <div style={{ position:'absolute', top:0, left:0, right:0, height:'2px', background:accent, opacity:0.7 }} />
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'28px' }}>
+              <div style={{ display: 'grid', gap: '22px', paddingTop: '24px' }}>
                 <div>
-                  <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.18em', color:accent, marginBottom:'6px', textTransform:'uppercase' }}>{client}</div>
-                  <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.1em', color:'var(--fg)', opacity:0.3 }}>{year}</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '14px' }}>Ayurveda Organics</div>
+                  <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(42px, 4.5vw, 62px)', fontWeight: 700, lineHeight: 1.02, margin: '0 0 22px', maxWidth: '540px' }}>
+                    Ayurvedic branding refined for social media and audience growth.
+                  </h2>
+                  <div style={{ display: 'grid', gap: '10px', color: '#CBD5E1' }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#94A3B8' }}>Industry</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.4 }}>{AYURVEDA_FEATURE.industry}</div>
+                  </div>
                 </div>
-                <div style={{ fontFamily:'var(--font-display)', fontSize:'clamp(22px,2.5vw,32px)', fontWeight:700, letterSpacing:'-0.02em', color:accent, lineHeight:1 }}>{metric}</div>
-              </div>
-              <h3 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(18px,1.8vw,24px)', fontWeight:700, letterSpacing:'-0.01em', textTransform:'uppercase', color:'var(--fg)', margin:'0 0 14px' }}>{title}</h3>
-              <p style={{ fontFamily:'var(--font-display)', fontSize:'14px', lineHeight:1.75, color:'var(--fg)', opacity:0.5, margin:'0 0 28px' }}>{desc}</p>
-              <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
-                {tags.map((t) => <span key={t} style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'0.12em', textTransform:'uppercase', color:'var(--fg)', opacity:0.4, border:'1px solid var(--border)', padding:'3px 9px' }}>{t}</span>)}
+
+                <div style={{ display: 'grid', gap: '18px' }}>
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '12px' }}>The Challenge</div>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.95, color: '#CBD5E1', margin: 0 }}>
+                      {AYURVEDA_FEATURE.story.challenge}
+                    </p>
+                  </div>
+
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '12px' }}>What We Did</div>
+                    <ul style={{ display: 'grid', gap: '10px', paddingLeft: '22px', margin: 0, color: '#CBD5E1', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.95 }}>
+                      {AYURVEDA_FEATURE.story.whatWeDid.map((item) => (
+                        <li key={item} style={{ listStyleType: 'disc' }}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '12px' }}>The Outcome</div>
+                    <div style={{ display: 'grid', gap: '10px', paddingLeft: '22px', color: '#CBD5E1', fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.95 }}>
+                      {AYURVEDA_FEATURE.story.outcome.map((item) => (
+                        <div key={item} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#C6FF00', marginTop: '8px' }} />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gap: '12px', padding: '24px', borderRadius: '28px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C6FF00' }}>Our Role</div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '12px' }}>
+                    {AYURVEDA_FEATURE.role.map((role) => (
+                      <span key={role} style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, lineHeight: 1.7, color: '#FFFFFF', background: 'rgba(255,255,255,0.06)', borderRadius: '999px', padding: '10px 14px' }}>{role}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section ref={ctaRef} style={{ padding:'clamp(80px,10vw,120px) 40px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'40px' }}>
-        <div>
-          <SectionLabel index="003" label="START" />
-          <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(40px,6vw,80px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'16px 0 0', lineHeight:0.92, color:'var(--fg)' }}>
-            READY TO<br /><span style={{ color:'var(--accent)' }}>SCALE?</span>
-          </h2>
-        </div>
-        <Link to="/consult" style={{ fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'0.18em', textTransform:'uppercase', color:'var(--bg)', background:'var(--accent)', padding:'18px 36px', textDecoration:'none', fontWeight:500, transition:'opacity 0.2s, transform 0.2s' }}
-          onMouseEnter={(e) => { e.currentTarget.style.opacity='0.85'; e.currentTarget.style.transform='translateY(-2px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.opacity='1'; e.currentTarget.style.transform='translateY(0)'; }}>
-          LET'S TALK →
-        </Link>
-      </section>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px' }}>
+              {AYURVEDA_FEATURE.images.map(({ src, label, caption }) => (
+                <motion.div
+                  key={src}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{ duration: 0.65, ease: 'power2.out' }}
+                  style={{
+                    position: 'relative',
+                    overflow: 'hidden',
+                    borderRadius: '32px',
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    boxShadow: '0 24px 60px rgba(0,0,0,0.2)',
+                    minHeight: '320px',
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={label}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(5,8,22,0.08), rgba(5,8,22,0.9))' }} />
+                  <div style={{ position: 'absolute', left: '24px', bottom: '24px', right: '24px', color: '#FFFFFF' }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#C6FF00', marginBottom: '10px' }}>{label}</div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 700, lineHeight: 1.3 }}>{caption}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section ref={valuesRef} className="fade-up" style={{ padding: '80px 40px', margin: '0 40px 40px' }}>
+          <SectionLabel index="004" label="WHY WORK WITH US" />
+          <div style={{ display: 'grid', gap: '16px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 4vw, 64px)', fontWeight: 700, lineHeight: 1.02, margin: '20px 0 18px' }}>
+              Values that make collaboration feel easy and dependable.
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
+              {VALUES.map((item) => (
+                <motion.div key={item.title} style={{ padding: '30px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  initial={{ opacity: 0, y: 26 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, ease: 'power2.out' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>{item.title}</div>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.95, color: '#CBD5E1', margin: 0 }}>{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section ref={testimonialsRef} className="fade-up" style={{ padding: '80px 40px', background: '#0F172A', borderRadius: '32px', margin: '0 40px 40px' }}>
+          <SectionLabel index="005" label="TESTIMONIALS" />
+          <div style={{ display: 'grid', gap: '16px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 4vw, 50px)', fontWeight: 700, lineHeight: 0.98, margin: '20px 0 16px' }}>
+              Simple, authentic feedback from teams we partner with.
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
+              {TESTIMONIALS.map((item) => (
+                <motion.div key={item.name} style={{ padding: '34px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  initial={{ opacity: 0, y: 28 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, ease: 'power2.out' }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '18px', lineHeight: 1.95, color: '#CBD5E1', margin: '0 0 26px' }}>
+                    “{item.quote}”
+                  </p>
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', fontWeight: 700, color: '#FFFFFF' }}>{item.name}</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#94A3B8', marginTop: '6px' }}>{item.role}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section ref={ctaRef} style={{ padding: '80px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '32px', margin: '0 40px 80px' }}>
+          <div>
+            <SectionLabel index="006" label="START" />
+            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 700, lineHeight: 0.92, margin: '16px 0 0' }}>
+              Ready to make marketing feel more deliberate?
+            </h2>
+          </div>
+          <Link to="/consult" style={{ fontFamily: 'var(--font-display)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#050816', background: '#C6FF00', padding: '18px 36px', borderRadius: '999px', textDecoration: 'none', transition: 'transform 0.2s ease' }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
+            LET'S TALK →
+          </Link>
+        </section>
       </div>
     </div>
   );

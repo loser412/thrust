@@ -193,7 +193,7 @@ export default function ConsultPage() {
       <div style={{ position:'relative', zIndex: 1 }}>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section ref={heroRef} style={{ minHeight: '70vh', padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden' }}>
+      <section ref={heroRef} style={{ minHeight: '70vh', padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', position: 'relative', overflow: 'hidden' }}>
         <div ref={heroContentRef} style={{ position:'relative', zIndex: 2 }}>
           <div className="anim"><SectionLabel index="CST" label="CONSULT" /></div>
           <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
@@ -221,7 +221,7 @@ export default function ConsultPage() {
       </section>
 
       {/* ── FORM ─────────────────────────────────────────────────────────── */}
-      <section style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+      <section style={{ padding:'clamp(80px,10vw,120px) 40px' }}>
         <SectionLabel index="001" label="INTAKE FORM" />
 
         {submitted ? (

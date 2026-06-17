@@ -49,17 +49,7 @@
   100% { transform: translate(-25px, -50px) scale(1.2); }
 }
 
-/* ── Subtle grid overlay ─────────────────────────────────────────────────── */
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(240, 237, 230, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(240, 237, 230, 0.025) 1px, transparent 1px);
-  background-size: 80px 80px;
-  pointer-events: none;
-  z-index: 1;
-}
+/* ── Grid removed ── */
 
 /* ── Scroll indicator ────────────────────────────────────────────────────── */
 .scroll-line {
@@ -85,4 +75,24 @@
 /* ── Paused play state for blobs ── */
 .paused-blobs .blob {
   animation-play-state: paused !important;
+}
+
+/* ── Hide scrollbar ────────────────────────────────────────────────────────── */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }

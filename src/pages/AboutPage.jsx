@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
@@ -87,10 +88,12 @@ export default function AboutPage() {
           width: '100%',
           height: '100vh',
           zIndex: 0,
-          backgroundImage: `url('/about%20us.jpeg')`,
+          backgroundImage: `radial-gradient(circle at 20% 20%, rgba(255, 214, 117, 0.18), transparent 24%),
+            linear-gradient(180deg, rgba(21, 9, 1, 0.94) 0%, rgba(75, 36, 12, 0.98) 18%, rgba(97, 50, 13, 1) 36%, rgba(143, 95, 24, 0.38) 58%, rgba(18, 9, 3, 0.96) 100%)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          backgroundBlendMode: 'overlay',
           willChange: 'transform',
           transformOrigin: 'center center',
           pointerEvents: 'none',
@@ -99,7 +102,7 @@ export default function AboutPage() {
       <div style={{ position: 'relative', zIndex: 2 }}>
 
       {/* HERO */}
-      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', borderBottom: '1px solid var(--border)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
+      <section ref={heroRef} style={{ padding: 'clamp(80px,12vw,160px) 40px clamp(60px,8vw,100px)', position: 'relative', overflow: 'hidden', background:'transparent' }}>
         <div style={{ position:'absolute', top:'-100px', right:'10%', width:'480px', height:'480px', borderRadius:'50%', background:'radial-gradient(circle, rgba(200,241,53,0.07) 0%, transparent 70%)', filter:'blur(80px)', pointerEvents:'none' }} />
         <div className="anim"><SectionLabel index="ABT" label="ABOUT" /></div>
         <h1 className="anim" style={{ fontFamily:'var(--font-display)', fontSize:'clamp(52px,9vw,124px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', lineHeight:0.92, margin:'24px 0 0', color:'var(--fg)' }}>
@@ -116,7 +119,7 @@ export default function AboutPage() {
       </section>
 
       {/* VALUES */}
-      <section ref={valRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+      <section ref={valRef} style={{ padding:'clamp(80px,10vw,120px) 40px' }}>
         <SectionLabel index="001" label="VALUES" />
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 48px', lineHeight:0.95, color:'var(--fg)' }}>
           WHAT WE<br /><span style={{ color:'var(--accent)' }}>STAND FOR.</span>
@@ -133,36 +136,53 @@ export default function AboutPage() {
       </section>
 
       {/* TEAM */}
-      <section ref={teamRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+      <section ref={teamRef} style={{ padding:'clamp(80px,10vw,120px) 40px' }}>
         <SectionLabel index="002" label="TEAM" />
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 48px', lineHeight:0.95, color:'var(--fg)' }}>
           THE PEOPLE<br /><span style={{ color:'var(--accent)' }}>BEHIND IT.</span>
         </h2>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'2px' }}>
-          {TEAM.map(({ name, role, bio }) => (
-            <div key={name} className="team-card" style={{ background:'var(--muted)', border:'1px solid var(--border)', padding:'40px 36px', transition:'border-color 0.25s' }}
+          {TEAM.map(({ name, role, bio }, index) => (
+            <motion.div
+              key={name}
+              className="team-card"
+              style={{ background:'var(--muted)', border:'1px solid var(--border)', padding:'40px 36px', transition:'border-color 0.25s', transformStyle:'preserve-3d' }}
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.22 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: index * 0.07 }}
+              whileHover={{ y: -8, boxShadow: '0 32px 80px rgba(0,0,0,0.18)' }}
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(200,241,53,0.3)')}
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}>
               <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'0.18em', color:'var(--accent)', marginBottom:'16px', textTransform:'uppercase' }}>{role}</div>
               <div style={{ fontFamily:'var(--font-display)', fontSize:'24px', fontWeight:700, letterSpacing:'-0.02em', color:'var(--fg)', marginBottom:'16px' }}>{name}</div>
               <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.7, color:'var(--fg)', opacity:0.5, margin:0 }}>{bio}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>
 
       {/* DIFFERENTIATORS */}
-      <section ref={diffRef} style={{ padding:'clamp(80px,10vw,120px) 40px', borderBottom:'1px solid var(--border)' }}>
+      <section ref={diffRef} style={{ padding:'clamp(80px,10vw,120px) 40px' }}>
         <SectionLabel index="003" label="WHY US" />
         <h2 style={{ fontFamily:'var(--font-display)', fontSize:'clamp(32px,4vw,52px)', fontWeight:700, letterSpacing:'-0.03em', textTransform:'uppercase', margin:'20px 0 48px', lineHeight:0.95, color:'var(--fg)' }}>
           THE HONEST<br /><span style={{ color:'var(--accent)' }}>DIFFERENCE.</span>
         </h2>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'2px' }}>
-          {DIFFERENTIATORS.map(({ label, desc }) => (
-            <div key={label} className="diff-item" style={{ borderTop:'2px solid var(--accent)', paddingTop:'24px', paddingBottom:'24px', paddingRight:'40px' }}>
+          {DIFFERENTIATORS.map(({ label, desc }, index) => (
+            <motion.div
+              key={label}
+              className="diff-item"
+              style={{ borderTop:'2px solid var(--accent)', paddingTop:'24px', paddingBottom:'24px', paddingRight:'40px' }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.24 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: index * 0.06 }}
+              whileHover={{ x: 6 }}
+            >
               <div style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'0.15em', color:'var(--accent)', marginBottom:'12px' }}>{label}</div>
               <p style={{ fontFamily:'var(--font-display)', fontSize:'15px', lineHeight:1.7, color:'var(--fg)', margin:0 }}>{desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>

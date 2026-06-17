@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
+import { COMPANY } from '../lib/company';
 import './Navbar.css';
 
 const NAV_LINKS = [
@@ -95,7 +96,7 @@ export default function Navbar() {
         <Link
           ref={logoRef}
           to="/"
-          aria-label="Thrust and Logic — Home"
+          aria-label={`${COMPANY.name} - Home`}
           style={{
             fontFamily:     'var(--font-display)',
             fontSize:       '20px',
@@ -265,7 +266,7 @@ export default function Navbar() {
           color:      'var(--fg)',
           opacity:    0.25,
         }}>
-          THRUST &amp; LOGIC — EST. 2018
+          {COMPANY.name.toUpperCase()} - EST. 2018
         </div>
       </div>
     </>

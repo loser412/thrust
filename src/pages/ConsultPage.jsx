@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import SectionLabel from '../components/SectionLabel';
+import { COMPANY } from '../lib/company';
 
 const SERVICES = ['Development', 'Marketing', 'Production', 'Consulting', 'Multiple / Not Sure'];
 
@@ -371,6 +372,49 @@ export default function ConsultPage() {
             </button>
           </form>
         )}
+      </section>
+
+      <section style={{ padding:'0 40px clamp(80px,10vw,120px)' }}>
+        <div className="direct-contact-grid" style={{
+          borderTop: '1px solid var(--border)',
+          borderBottom: '1px solid var(--border)',
+          padding: 'clamp(32px,5vw,56px) 0',
+          display: 'grid',
+          gridTemplateColumns: '1.1fr 1fr',
+          gap: '40px',
+          alignItems: 'start',
+        }}>
+          <div>
+            <SectionLabel index="DIR" label="DIRECT CONTACT" />
+            <h2 style={{
+              fontFamily:'var(--font-display)',
+              fontSize:'clamp(30px,4vw,52px)',
+              fontWeight:700,
+              letterSpacing:'-0.03em',
+              textTransform:'uppercase',
+              margin:'20px 0 0',
+              lineHeight:0.95,
+              color:'var(--fg)',
+            }}>
+              {COMPANY.name}<br /><span style={{ color:'var(--accent)' }}>OFFICE.</span>
+            </h2>
+          </div>
+
+          <address style={{
+            fontFamily:'var(--font-mono)',
+            fontSize:'12px',
+            letterSpacing:'0.1em',
+            lineHeight:1.9,
+            color:'var(--fg)',
+            fontStyle:'normal',
+            textTransform:'uppercase',
+          }}>
+            <span style={{ display:'block', color:'var(--accent)', marginBottom:'8px' }}>{COMPANY.registeredOffice}</span>
+            <a href={`mailto:${COMPANY.email}`} style={{ color:'var(--fg)', textDecoration:'none', display:'block' }}>{COMPANY.email}</a>
+            <a href={COMPANY.phoneHref} style={{ color:'var(--fg)', textDecoration:'none', display:'block' }}>Ph: {COMPANY.phone}</a>
+            <a href={COMPANY.websiteHref} target="_blank" rel="noopener noreferrer" style={{ color:'var(--fg)', textDecoration:'none', display:'block' }}>{COMPANY.website}</a>
+          </address>
+        </div>
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}

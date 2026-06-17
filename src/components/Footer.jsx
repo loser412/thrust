@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { COMPANY } from '../lib/company';
 import './Footer.css';
 
 const NAV_LINKS = [
@@ -93,7 +94,7 @@ export default function Footer() {
       <div
         style={{
           display:       'grid',
-          gridTemplateColumns: '1fr auto',
+          gridTemplateColumns: '1fr auto auto',
           gap:           '80px',
           padding:       'clamp(60px, 8vw, 100px) 40px 60px',
           alignItems:    'flex-start',
@@ -230,6 +231,40 @@ export default function Footer() {
             ))}
           </ul>
         </div>
+
+        <div>
+          <div
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '10px',
+              letterSpacing: '0.2em',
+              color:         'var(--accent)',
+              textTransform: 'uppercase',
+              marginBottom:  '20px',
+            }}
+          >
+            / CONTACT
+          </div>
+          <address
+            style={{
+              fontFamily:    'var(--font-mono)',
+              fontSize:      '11px',
+              letterSpacing: '0.08em',
+              lineHeight:    1.8,
+              color:         'var(--fg)',
+              opacity:       0.62,
+              fontStyle:     'normal',
+              maxWidth:      '280px',
+              textTransform: 'uppercase',
+            }}
+          >
+            <span style={{ display: 'block', color: 'var(--fg)', opacity: 1 }}>{COMPANY.name}</span>
+            <span style={{ display: 'block' }}>{COMPANY.registeredOffice}</span>
+            <a href={`mailto:${COMPANY.email}`} style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>{COMPANY.email}</a>
+            <a href={COMPANY.phoneHref} style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>Ph: {COMPANY.phone}</a>
+            <a href={COMPANY.websiteHref} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>{COMPANY.website}</a>
+          </address>
+        </div>
       </div>
 
       {/* ── DIVIDER ─────────────────────────────────────────────────────── */}
@@ -308,7 +343,7 @@ export default function Footer() {
             opacity:       0.25,
           }}
         >
-          © {new Date().getFullYear()} Thrust &amp; Logic. All rights reserved.
+          © {new Date().getFullYear()} {COMPANY.name}. All rights reserved.
         </span>
 
         <span

@@ -102,6 +102,46 @@ export default function MarketingPage() {
           },
         });
       }
+
+      // Process steps staggered reveal
+      const steps = processRef.current?.querySelectorAll('.process-step') ?? [];
+      if (steps.length) {
+        gsap.fromTo(steps,
+          { y: 30, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out', stagger: 0.08,
+            scrollTrigger: { trigger: processRef.current, start: 'top 80%' } }
+        );
+      }
+
+      // Services cards
+      const services = servicesRef.current?.querySelectorAll('.service-card') ?? [];
+      if (services.length) {
+        gsap.fromTo(services,
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'power2.out',
+            scrollTrigger: { trigger: servicesRef.current, start: 'top 82%' } }
+        );
+      }
+
+      // Work images
+      const workImgs = workRef.current?.querySelectorAll('.work-image') ?? [];
+      if (workImgs.length) {
+        gsap.fromTo(workImgs,
+          { y: 40, opacity: 0, scale: 0.98 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.08, ease: 'power3.out',
+            scrollTrigger: { trigger: workRef.current, start: 'top 78%' } }
+        );
+      }
+
+      // Values and testimonials
+      const values = valuesRef.current?.querySelectorAll('.value-card') ?? [];
+      if (values.length) {
+        gsap.fromTo(values, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, stagger: 0.06, ease: 'power2.out', scrollTrigger: { trigger: valuesRef.current, start: 'top 82%' } });
+      }
+      const testi = testimonialsRef.current?.querySelectorAll('.testimonial-card') ?? [];
+      if (testi.length) {
+        gsap.fromTo(testi, { y: 28, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, stagger: 0.06, ease: 'power2.out', scrollTrigger: { trigger: testimonialsRef.current, start: 'top 82%' } });
+      }
     });
     return () => ctx.revert();
   }, []);
@@ -144,7 +184,7 @@ export default function MarketingPage() {
           </div>
         </section>
 
-        <section ref={processRef} className="fade-up" style={{ padding: '80px 40px', background: '#0F172A', borderRadius: '32px', margin: '0 40px 40px' }}>
+        <section ref={processRef} className="fade-up" style={{ padding: '80px 40px', background: 'transparent', borderRadius: '32px', margin: '0 40px 40px' }}>
           <SectionLabel index="001" label="PROCESS" />
           <div style={{ display: 'grid', gap: '22px', gridTemplateColumns: '1fr' }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 4vw, 64px)', fontWeight: 700, lineHeight: 1.02, margin: '20px 0 18px' }}>
@@ -156,7 +196,7 @@ export default function MarketingPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '20px', marginTop: '40px' }}>
             {PROCESS.map(({ step, title, desc }) => (
-              <motion.div key={step} style={{ padding: '28px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', minHeight: '240px' }}
+              <motion.div key={step} className="process-step" style={{ padding: '28px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', minHeight: '240px' }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
@@ -177,7 +217,7 @@ export default function MarketingPage() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
               {SERVICES.map((service) => (
-                <motion.div key={service.title} style={{ padding: '32px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', cursor: 'default' }}
+                <motion.div key={service.title} className="service-card" style={{ padding: '32px', borderRadius: '28px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)', cursor: 'default' }}
                   whileHover={{ y: -6, scale: 1.01 }}
                   transition={{ duration: 0.25, ease: 'easeOut' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
@@ -297,7 +337,7 @@ export default function MarketingPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px' }}>
               {AYURVEDA_FEATURE.images.map(({ src, label, caption }) => (
-                <motion.div
+                <motion.div className="work-image"
                   key={src}
                   initial={{ opacity: 0, y: 24 }}
                   whileHover={{ scale: 1.02 }}
@@ -338,7 +378,7 @@ export default function MarketingPage() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
               {VALUES.map((item) => (
-                <motion.div key={item.title} style={{ padding: '30px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
+                <motion.div key={item.title} className="value-card" style={{ padding: '30px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
                   initial={{ opacity: 0, y: 26 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
@@ -359,7 +399,7 @@ export default function MarketingPage() {
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '24px', marginTop: '28px' }}>
               {TESTIMONIALS.map((item) => (
-                <motion.div key={item.name} style={{ padding: '34px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
+                <motion.div key={item.name} className="testimonial-card" style={{ padding: '34px', borderRadius: '24px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}
                   initial={{ opacity: 0, y: 28 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}

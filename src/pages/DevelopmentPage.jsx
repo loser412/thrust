@@ -274,7 +274,7 @@ export default function DevelopmentPage() {
           width: '100%',
           height: '100vh',
           zIndex: 0,
-          backgroundImage: `url('/make_somethinglike_tht_in_high_202606110408.jpeg')`,
+          backgroundImage: `url('/pexels-steve-34205959.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

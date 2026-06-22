@@ -8,6 +8,7 @@ import SectionLabel from '../components/SectionLabel';
 import './HomePage.css';
 
 const MotionLink = motion(Link);
+const PROCESS_BG_IMAGE = new URL('/PURE_YELLOW_BG_WITH_(MAN_202606181135.jpeg', import.meta.url).href;
 
 // ─── DATA ────────────────────────────────────────────────────────────────────
 
@@ -214,16 +215,26 @@ const clientsAnimRef = useRef(null);
     if (servicesRef.current && servicesCardsRef.current) {
       const cards = servicesCardsRef.current.querySelectorAll('.service-card');
       if (cards?.length) {
-        // Set GSAP center translations and initial states
-        gsap.set(cards, { xPercent: -50, yPercent: -50, left: '50%', top: '50%' });
-        
-        // Card 1 starts slightly faded and scaled down, then reveals immediately as we enter the pinned section
-        gsap.set(cards[0], { autoAlpha: 0, y: 0, scale: 0.9 });
-        
-        // Cards 2, 3, 4 are initially below the viewport (y: '100vh')
-        for (let i = 1; i < cards.length; i++) {
-          gsap.set(cards[i], { autoAlpha: 1, y: '100vh', scale: 1 });
-        }
+        // Set GSAP center translations and initial states (State 0: Card 0 active)
+        cards.forEach((card, index) => {
+          const relIndex = index;
+          const initX = `${relIndex * 38}vw`;
+          const initScale = relIndex === 0 ? 1 : 0.75;
+          const initAlpha = relIndex === 0 ? 1 : (relIndex === 1 ? 0.4 : 0);
+          const initZIndex = relIndex === 0 ? 30 : 20;
+
+          gsap.set(card, {
+            xPercent: -50,
+            yPercent: -50,
+            left: '50%',
+            top: '50%',
+            x: initX,
+            y: 0,
+            scale: initScale,
+            autoAlpha: initAlpha,
+            zIndex: initZIndex,
+          });
+        });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -252,44 +263,41 @@ const clientsAnimRef = useRef(null);
           },
         });
 
-        // 1. Reveal Card 1
-        tl.to(cards[0], { autoAlpha: 1, scale: 1, duration: 0.8, ease: 'power1.out' });
-        tl.to({}, { duration: 0.3 }); // brief pause
+        // Horizontal slider: transition one-by-one per scroll
+        for (let step = 1; step < cards.length; step++) {
+          const label = `step-${step}`;
 
-        // 2. Stack cards 2, 3, and 4
-        cards.forEach((card, index) => {
-          if (index === 0) return;
-          
-          // Scale down and fade all previous cards in the stack to create beautiful 3D layered depth
-          for (let j = 0; j < index; j++) {
+          // Add a pause on the current card
+          tl.to({}, { duration: 0.3 });
+
+          // Add step label
+          tl.addLabel(label);
+
+          // Animate all cards relative to the active card (which is 'step')
+          cards.forEach((card, index) => {
+            const relIndex = index - step;
+            const targetX = `${relIndex * 38}vw`;
+            const targetScale = relIndex === 0 ? 1 : 0.75;
+            const targetAlpha = relIndex === 0 ? 1 : (Math.abs(relIndex) === 1 ? 0.4 : 0);
+            const targetZIndex = relIndex === 0 ? 30 : 20;
+
             tl.to(
-              cards[j],
+              card,
               {
-                scale: 0.94 - (index - j) * 0.04,
-                y: -30 * (index - j),
-                autoAlpha: 0.6 / (index - j), // fade more for deeper cards
+                x: targetX,
+                scale: targetScale,
+                autoAlpha: targetAlpha,
+                zIndex: targetZIndex,
                 duration: 1,
                 ease: 'power1.inOut',
               },
-              `card-${index}`
+              label
             );
-          }
+          });
 
-          // Slide current card up from below the viewport to center
-          tl.fromTo(
-            card,
-            { y: '100vh' },
-            {
-              y: 0,
-              duration: 1,
-              ease: 'power1.inOut',
-            },
-            `card-${index}`
-          );
-
-          // Add a pause to keep card visible before next card slide
-          tl.to({}, { duration: 0.5 });
-        });
+          // Add a pause on the new active card
+          tl.to({}, { duration: 0.3 });
+        }
       }
     }
 
@@ -709,6 +717,7 @@ const clientsAnimRef = useRef(null);
         data-section="stats"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
+          backgroundColor: '#ffffff',
         }}
       >
         <SectionLabel index="002" label="NUMBERS" />
@@ -736,7 +745,7 @@ const clientsAnimRef = useRef(null);
                   fontWeight: 700,
                   letterSpacing: '-0.04em',
                   lineHeight: 1,
-                  color: 'var(--fg)',
+                  color: '#111111',
                   display: 'flex',
                   alignItems: 'baseline',
                   gap: '4px',
@@ -756,7 +765,7 @@ const clientsAnimRef = useRef(null);
                   fontFamily: 'var(--font-mono)',
                   fontSize: '11px',
                   letterSpacing: '0.12em',
-                  color: 'var(--fg)',
+                  color: '#333333',
                   marginTop: '12px',
                 }}
               >
@@ -772,11 +781,9 @@ const clientsAnimRef = useRef(null);
         ref={servicesRef}
         data-section="services"
         style={{
-          padding: '40px',
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+          padding: 'clamp(32px, 4vw, 60px) clamp(20px, 4vw, 40px)',
+          background: 'transparent',
+          margin: 0,
           boxSizing: 'border-box',
           position: 'relative',
         }}
@@ -829,7 +836,7 @@ const clientsAnimRef = useRef(null);
         <div
           style={{
             position: 'relative',
-            height: '65vh',
+            height: '36vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -849,7 +856,7 @@ const clientsAnimRef = useRef(null);
             }}
           >
             {SERVICES.map(({ index, title, to, description, tags, color, accentLine }, cardIndex) => (
-              <MotionLink
+              <Link
                 key={index}
                 to={to}
                 className="service-card"
@@ -857,123 +864,115 @@ const clientsAnimRef = useRef(null);
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'flex-start',
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('/pexels-pnw-prod-8250951.jpg')`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                backgroundBlendMode: 'overlay',
-                border: '2px solid #000',
-                padding: '40px',
+                background: 'rgba(255,255,255,0.7)',
+                border: 'none',
+                padding: '30px',
                 textDecoration: 'none',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
                 overflow: 'hidden',
-                width: 'min(420px, 32vw)',
+                width: 'min(340px, 26vw)',
                 aspectRatio: '1 / 1',
                 cursor: 'pointer',
                 opacity: 0,
                 willChange: 'transform, opacity',
                 zIndex: 10 + cardIndex,
-                boxShadow: '0 40px 120px rgba(0,0,0,0.35)',
-                borderRadius: '32px',
-                transition: 'box-shadow 0.3s ease, border-color 0.3s ease',
-                color: '#D4AF37',
+                boxShadow: '0 24px 60px rgba(0,0,0,0.14)',
+                borderRadius: '28px',
+                color: '#D32F2F',
                 fontFamily: 'var(--font-body)',
-              }}
-              whileHover={{ y: -6, scale: 1.01 }}
-              whileTap={{ scale: 0.995 }}
-              transition={{ duration: 0.22, ease: 'easeOut' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = `0 40px 120px rgba(0,0,0,0.35)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 40px 120px rgba(0,0,0,0.18)';
+                transformStyle: 'preserve-3d',
+                transform: 'translate(-50%, -50%)',
               }}
             >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  marginBottom: '40px',
-                }}
-              >
-                <span
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(circle at 30% 35%, rgba(255, 209, 178, 0.32), transparent 42%)' }} />
+              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, boxShadow: '0 0 120px rgba(255, 210, 178, 0.28)', filter: 'blur(20px)' }} />
+              <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}>
+                <div
                   style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    letterSpacing: '0.18em',
-                    color: '#D4AF37',
-                    opacity: 0.95,
-                    textTransform: 'uppercase',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: '40px',
                   }}
                 >
-                  /{index}
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '18px',
-                    color: '#D4AF37',
-                    opacity: 0.85,
-                    transition: 'opacity 0.3s, transform 0.3s',
-                  }}
-                >
-                  ↗
-                </span>
-              </div>
-
-              <h3
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(28px, 3vw, 44px)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.02em',
-                  textTransform: 'uppercase',
-                  color: 'var(--fg)',
-                  margin: '0 0 20px',
-                  lineHeight: 1,
-                }}
-              >
-                {title}
-              </h3>
-
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '15px',
-                  lineHeight: 1.7,
-                  color: '#D4AF37',
-                  opacity: 0.95,
-                  margin: '0 0 32px',
-                  maxWidth: '380px',
-                }}
-              >
-                {description}
-              </p>
-
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {tags.map((tag) => (
                   <span
-                    key={tag}
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '10px',
+                      fontSize: '11px',
                       letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: '#D4AF37',
+                      color: '#138808',
                       opacity: 0.95,
-                      border: '1px solid #000',
-                      background: 'rgba(0,0,0,0.16)',
-                      padding: '4px 10px',
+                      textTransform: 'uppercase',
                     }}
                   >
-                    {tag}
+                    /{index}
                   </span>
-                ))}
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '18px',
+                      color: '#138808',
+                      opacity: 0.95,
+                      transition: 'opacity 0.3s, transform 0.3s',
+                    }}
+                  >
+                    ↗
+                  </span>
+                </div>
+
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(28px, 3vw, 44px)',
+                    fontWeight: 700,
+                    letterSpacing: '-0.02em',
+                    textTransform: 'uppercase',
+                    color: '#FF8900',
+                    margin: '0 0 20px',
+                    lineHeight: 1,
+                  }}
+                >
+                  {title}
+                </h3>
+
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '15px',
+                    lineHeight: 1.7,
+                    color: '#138808',
+                    opacity: 0.95,
+                    margin: '0 0 32px',
+                    maxWidth: '380px',
+                  }}
+                >
+                  {description}
+                </p>
+
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '10px',
+                        letterSpacing: '0.18em',
+                        textTransform: 'uppercase',
+                        color: '#FFFFFF',
+                        opacity: 0.95,
+                        border: '1px solid rgba(0,0,0,0.3)',
+                        background: '#000000',
+                        padding: '4px 10px',
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </MotionLink>
+            </Link>
           ))}
         </div>
       </div>
@@ -985,6 +984,10 @@ const clientsAnimRef = useRef(null);
         data-section="process"
         style={{
           padding: 'clamp(80px, 10vw, 120px) 40px',
+          backgroundImage: `url(${PROCESS_BG_IMAGE})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <div
@@ -1015,7 +1018,7 @@ const clientsAnimRef = useRef(null);
             </h2>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             {PROCESS.map(({ step, heading, body }, i) => (
               <div
                 key={step}
@@ -1024,8 +1027,10 @@ const clientsAnimRef = useRef(null);
                   display: 'grid',
                   gridTemplateColumns: '80px 1fr',
                   gap: '24px',
-                  padding: '32px 0',
-                  borderBottom: i < PROCESS.length - 1 ? '1px solid var(--border)' : 'none',
+                  padding: '36px',
+                  borderBottom: i < PROCESS.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+                  background: '#000000',
+                  borderRadius: '18px',
                   alignItems: 'start',
                 }}
               >

@@ -20,6 +20,10 @@
 .premium-cta .arrow{ display:inline-block; transform:translateX(0); transition:transform .22s ease }
 .premium-card:hover .premium-cta .arrow{ transform:translateX(6px) }
 
+/* Per-card background colors: 1st light blue, 2nd skin tone */
+.premium-card-link:nth-child(1) .premium-card{ background:#E6F7FF }
+.premium-card-link:nth-child(2) .premium-card{ background:#FFE8D6 }
+
 .cs-page{ background:#fff; color:#111; min-height:100vh }
 .cs-hero{ background-size:cover; background-position:center; padding:120px 20px; color:#111; position:relative; overflow:hidden }
 .cs-hero::before{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.24), rgba(0,0,0,0.22)); pointer-events:none; }

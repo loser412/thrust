@@ -1,9 +1,11 @@
 :root {
-  --bg: #070A0F;
-  --fg: #F0EDE6;
-  --accent: #C8F135;
-  --muted: #1A1E25;
-  --border: rgba(240, 237, 230, 0.1);
+  --bg: #050816;
+  --fg: #FFFFFF;
+  --accent: #3B82F6;
+  --accent-alt: #8B5CF6;
+  --subtext: #94A3B8;
+  --muted: #0D1224;
+  --border: rgba(255, 255, 255, 0.08);
   --font-display: 'Neue Haas Grotesk Display', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
 }

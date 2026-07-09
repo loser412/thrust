@@ -1,821 +1,1096 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
-import SectionLabel from '../components/SectionLabel';
 import './HomePage.css';
 
-const MotionLink = motion(Link);
-const PROCESS_BG_IMAGE = new URL('/PURE_YELLOW_BG_WITH_(MAN_202606181135.jpeg', import.meta.url).href;
+gsap.registerPlugin(ScrollTrigger);
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// Icon shapes as inline SVG for each capability
+const SHAPES = {
+  square: (color) => (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <rect x="2" y="2" width="24" height="24" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  ),
+  circle: (color) => (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <circle cx="14" cy="14" r="11" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  ),
+  diamond: (color) => (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2 L26 14 L14 26 L2 14 Z" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  ),
+  triangle: (color) => (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 3 L26 25 L2 25 Z" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  ),
+  hexagon: (color) => (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 2 L24 8 L24 20 L14 26 L4 20 L4 8 Z" stroke={color} strokeWidth="1.5" fill="none" />
+    </svg>
+  ),
+};
 
-const STATS = [
-  { value: 150, suffix: '+', label: '// Projects Delivered' },
-  { value: 8,   suffix: '+', label: '// Years Operating'   },
-  { value: 40,  suffix: '+', label: '// Happy Clients'     },
-  { value: 3,   suffix: 'x', label: '// Avg ROI Uplift'    },
-];
-
-const SERVICES = [
+const CAPABILITIES = [
   {
     index: '01',
     title: 'DEVELOPMENT',
+    subtitle: 'Code That Scales.',
+    desc: 'Full-stack systems engineered for scale. Web apps, APIs, headless commerce, and bespoke platforms built to last.',
     to: '/development',
-    description:
-      'Full-stack systems engineered for scale. Web apps, APIs, headless commerce, and bespoke platforms built to last.',
-    tags: ['React', 'Node', 'Postgres', 'AWS'],
-    color: '#0D1A2E',
-    accentLine: 'var(--accent)',
+    shape: 'square',
+    accent: '#C8F135',
   },
   {
     index: '02',
-    title: 'MARKETING',
+    title: 'BRAND & MARKETING',
+    subtitle: 'Science That Converts.',
+    desc: 'Performance marketing with creative precision. Paid media, SEO, and conversion systems tuned to your growth curve.',
     to: '/marketing',
-    description:
-      'Performance marketing with creative precision. Paid media, SEO, and conversion systems tuned to your growth curve.',
-    tags: ['Paid Media', 'SEO', 'Analytics', 'CRO'],
-    color: '#0E1A0B',
-    accentLine: '#A0D929',
+    shape: 'circle',
+    accent: '#4FC3F7',
   },
   {
     index: '03',
     title: 'PRODUCTION',
+    subtitle: 'Frames That Speak.',
+    desc: 'Video, motion, and content that earns attention. Concept through delivery — no agency markup, no creative lag.',
     to: '/production',
-    description:
-      'Video, motion, and content that earns attention. Concept through delivery — no agency markup, no creative lag.',
-    tags: ['Video', 'Motion', 'Direction', 'Post'],
-    color: '#1A0D0D',
-    accentLine: '#F13535',
+    shape: 'diamond',
+    accent: '#FF6B8A',
   },
   {
     index: '04',
-    title: 'CONSULTING',
-    to: '/consult',
-    description:
-      'Strategic clarity for complex problems. Fractional leadership, audits, and roadmaps that unlock real momentum.',
-    tags: ['Strategy', 'Audits', 'Roadmaps', 'OKRs'],
-    color: '#150F1A',
-    accentLine: '#A035F1',
+    title: 'THINK TANK',
+    subtitle: 'Strategy at Target.',
+    desc: 'Strategic clarity for complex problems. Fractional leadership, audits, and roadmaps that unlock real momentum.',
+    to: '/about',
+    shape: 'triangle',
+    accent: '#C8F135',
+  },
+  {
+    index: '05',
+    title: 'BLACK PRAXIS',
+    subtitle: 'Technology Advisory.',
+    desc: 'Bespoke technology consultation and systems architecture to align your software stack with business goals.',
+    to: '/development',
+    shape: 'hexagon',
+    accent: '#4FC3F7',
   },
 ];
 
-const PROCESS = [
+const PROCESS_STEPS = [
   {
-    step: '/01',
-    heading: 'DISCOVERY',
-    body: 'We map the terrain — business model, constraints, competitors, and the exact problem worth solving.',
+    index: '01',
+    title: 'Discover',
+    desc: 'We map the terrain — business model, constraints, competitors, and the exact problem worth solving.',
+    shape: 'square',
+    accent: '#1A1A1A',
+    bg: '#C8E6B0',      // sage green
+    textColor: '#1A1A1A',
+    labelColor: '#4A7A3A',
   },
   {
-    step: '/02',
-    heading: 'STRATEGY',
-    body: 'A focused brief becomes a measurable plan. No bloat, no scope creep — just clear next moves.',
+    index: '02',
+    title: 'Strategise',
+    desc: 'A focused brief becomes a measurable plan. No bloat, no scope creep — just clear next moves.',
+    shape: 'circle',
+    accent: '#1A1A1A',
+    bg: '#E8C9A0',      // warm sand / mustard
+    textColor: '#1A1A1A',
+    labelColor: '#8B6914',
   },
   {
-    step: '/03',
-    heading: 'EXECUTION',
-    body: 'We build, test, and ship in rapid cycles. Senior talent only. You always know where things stand.',
+    index: '03',
+    title: 'Execute',
+    desc: 'We build, test, and ship in rapid cycles. Senior talent only. You always know where things stand.',
+    shape: 'diamond',
+    accent: '#F5F2EB',
+    bg: '#C4604A',      // terracotta brick
+    textColor: '#F5F2EB',
+    labelColor: 'rgba(245,242,235,0.6)',
   },
   {
-    step: '/04',
-    heading: 'SCALE',
-    body: 'Post-launch we tune, optimise, and grow. The relationship doesn\'t end at delivery.',
+    index: '04',
+    title: 'Measure',
+    desc: 'Post-launch we tune, optimise, and grow. The relationship doesn\'t end at delivery.',
+    shape: 'triangle',
+    accent: '#1A1A1A',
+    bg: '#A8C4D4',      // dusty sky blue
+    textColor: '#1A1A1A',
+    labelColor: '#2E5F7A',
+  },
+  {
+    index: '05',
+    title: 'Scale',
+    desc: 'Systematic growth. We find the inflection points and push them — hard.',
+    shape: 'hexagon',
+    accent: '#F5F2EB',
+    bg: '#4A3728',      // espresso brown
+    textColor: '#F5F2EB',
+    labelColor: 'rgba(245,242,235,0.5)',
   },
 ];
-
-const MARQUEE_ITEMS = [
-  'DEVELOPMENT', 'MARKETING', 'PRODUCTION', 'CONSULTING',
-  'STRATEGY', 'EXECUTION', 'CLARITY', 'MOMENTUM',
-];
-
-const CLIENTS = [
-  { name: 'Ayurveda Organics', logo: '/icons/ayurveda organics.png' },
-  { name: 'ELHC', logo: '/icons/ELHC.png' },
-  { name: 'Property Masters', logo: '/icons/property masters.png' },
-  { name: 'SVS Infra', logoText: true },
-];
-
-// ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function HomePage() {
-// Hero section refs
-const heroHeadRef = useRef(null);
-const heroSubRef = useRef(null);
-const heroBgRef = useRef(null);
-    // Scroll indicator ref
-    const scrollIndicatorRef = useRef(null);
-// Store background tween for pause/resume
-const heroBgTween = useRef(null);
-const statsRef = useRef(null);
-const servicesRef = useRef(null);
-const servicesCardsRef = useRef(null);
-const processRef = useRef(null);
-const missionRef = useRef(null);
-const ctaRef = useRef(null);
-const clientsSliderRef = useRef(null);
-const clientsAnimRef = useRef(null);
+  const heroRef      = useRef(null);
+  const videoRef     = useRef(null);
+  const statsRef     = useRef(null);
+  const capsRef      = useRef(null);
+  const capsStageRef = useRef(null);
+  const capsCardsRef = useRef([]);
+  const operateRef   = useRef(null);
+  const ctaRef       = useRef(null);
 
-  // ── Animate hero on mount ─────────────────────────────────────────────────
-  useEffect(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.fromTo(
-      heroHeadRef.current,
-      { y: 60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.1 }
-    ).fromTo(
-      heroSubRef.current,
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8 },
-      '-=0.5'
-    );
-  }, []);
-
-  // ── ScrollTrigger animations ──────────────────────────────────────────────
   useEffect(() => {
     const ctx = gsap.context(() => {
-    // Cinematic scroll-based background image deep zoom & scale
-    const bg = heroBgRef.current;
-    if (bg) {
-      // Smooth fade-in on mount — start very slightly zoomed in
-      gsap.set(bg, { scale: 1.05 });
-      gsap.to(bg, { opacity: 0.35, duration: 1.2, ease: 'power2.out' });
-
-      // Cinematic slow zoom that lasts the ENTIRE page scroll — ends just above footer
-      ScrollTrigger.create({
-        trigger: document.documentElement,
-        start: 'top top',
-        end: 'bottom bottom', // runs all the way to the very last pixel of the page
-        scrub: 2,             // heavier scrub = slower, more cinematic feel
-        animation: gsap.fromTo(
-          bg,
-          { scale: 1.05, yPercent: 0 },
-          { scale: 1.35, yPercent: 12, ease: 'none' } // subtle total zoom & gentle parallax
-        ),
-      });
-
-      // Store custom pause/resume controller to disable/enable CSS blobs during pinned sections
-      heroBgTween.current = {
-        pause: () => {
-          document.body.classList.add('paused-blobs');
-        },
-        resume: () => {
-          document.body.classList.remove('paused-blobs');
-        },
-      };
-    }
-
-    // Mission statement
-    const missionLines = missionRef.current?.querySelectorAll('.mission-line');
-    if (missionLines?.length) {
+      // Hero content fade in
       gsap.fromTo(
-        missionLines,
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out',
-          scrollTrigger: { trigger: missionRef.current, start: 'top 75%' },
-        }
+        heroRef.current?.querySelectorAll('.anim-hero') ?? [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
       );
-    }
 
-    // Stats — counter animation
-    const statEls = statsRef.current?.querySelectorAll('.stat-number');
-    statEls?.forEach((el) => {
-      const target = parseInt(el.dataset.target, 10);
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 80%',
-        once: true,
-        onEnter: () => {
-          gsap.to(
-            { val: 0 },
-            { val: target, duration: 1.6, ease: 'power2.out',
-              onUpdate: function () { el.textContent = Math.round(this.targets()[0].val); }
-            }
-          );
-        },
-      });
-    });
+      // Slow cinematic video zoom
+      if (videoRef.current) {
+        gsap.fromTo(
+          videoRef.current,
+          { scale: 1.08 },
+          {
+            scale: 1.25,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 2,
+            },
+          }
+        );
+      }
 
-    // Stat blocks fade-in
-    const statBlocks = statsRef.current?.querySelectorAll('.stat-block');
-    if (statBlocks?.length) {
+      // Stats
       gsap.fromTo(
-        statBlocks,
+        statsRef.current?.querySelectorAll('.home-stats-col') ?? [],
         { y: 30, opacity: 0 },
         {
-          y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: statsRef.current, start: 'top 75%' },
+          y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out',
+          scrollTrigger: { trigger: statsRef.current, start: 'top 82%' },
         }
       );
-    }
 
-    // Service cards - stacked overlay reveal animation with pinning
-    if (servicesRef.current && servicesCardsRef.current) {
-      const cards = servicesCardsRef.current.querySelectorAll('.service-card');
-      if (cards?.length) {
-        // Set GSAP center translations and initial states (State 0: Card 0 active)
-        cards.forEach((card, index) => {
-          const relIndex = index;
-          const initX = `${relIndex * 38}vw`;
-          const initScale = relIndex === 0 ? 1 : 0.75;
-          const initAlpha = relIndex === 0 ? 1 : (relIndex === 1 ? 0.4 : 0);
-          const initZIndex = relIndex === 0 ? 30 : 20;
-
-          gsap.set(card, {
-            xPercent: -50,
-            yPercent: -50,
-            left: '50%',
-            top: '50%',
-            x: initX,
-            y: 0,
-            scale: initScale,
-            autoAlpha: initAlpha,
-            zIndex: initZIndex,
-          });
-        });
-
-        const tl = gsap.timeline({
+      // Stats count-up animation
+      statsRef.current?.querySelectorAll('.home-stat-number').forEach((el) => {
+        const targetVal = parseFloat(el.getAttribute('data-target'));
+        const suffix = el.getAttribute('data-suffix') || '';
+        const countObj = { val: 0 };
+        gsap.to(countObj, {
+          val: targetVal,
+          duration: 1.6,
+          ease: 'power3.out',
           scrollTrigger: {
-            trigger: servicesRef.current,
-            start: 'top top',
-            end: '+=300%',
-            pin: true,
-            scrub: 1,
-            markers: false,
-            onEnter: () => {
-              if (heroBgTween.current) heroBgTween.current.pause();
-              document.body.classList.add('paused-blobs');
-            },
-            onLeave: () => {
-              if (heroBgTween.current) heroBgTween.current.resume();
-              document.body.classList.remove('paused-blobs');
-            },
-            onEnterBack: () => {
-              if (heroBgTween.current) heroBgTween.current.pause();
-              document.body.classList.add('paused-blobs');
-            },
-            onLeaveBack: () => {
-              if (heroBgTween.current) heroBgTween.current.resume();
-              document.body.classList.remove('paused-blobs');
-            },
+            trigger: statsRef.current,
+            start: 'top 82%',
+          },
+          onUpdate: () => {
+            el.innerText = Math.floor(countObj.val) + suffix;
           },
         });
-
-        // Horizontal slider: transition one-by-one per scroll
-        for (let step = 1; step < cards.length; step++) {
-          const label = `step-${step}`;
-
-          // Add a pause on the current card
-          tl.to({}, { duration: 0.3 });
-
-          // Add step label
-          tl.addLabel(label);
-
-          // Animate all cards relative to the active card (which is 'step')
-          cards.forEach((card, index) => {
-            const relIndex = index - step;
-            const targetX = `${relIndex * 38}vw`;
-            const targetScale = relIndex === 0 ? 1 : 0.75;
-            const targetAlpha = relIndex === 0 ? 1 : (Math.abs(relIndex) === 1 ? 0.4 : 0);
-            const targetZIndex = relIndex === 0 ? 30 : 20;
-
-            tl.to(
-              card,
-              {
-                x: targetX,
-                scale: targetScale,
-                autoAlpha: targetAlpha,
-                zIndex: targetZIndex,
-                duration: 1,
-                ease: 'power1.inOut',
-              },
-              label
-            );
-          });
-
-          // Add a pause on the new active card
-          tl.to({}, { duration: 0.3 });
-        }
-      }
-    }
-
-
-    // Process steps — individual scroll-scrubbed right-to-left reveal
-    const steps = processRef.current?.querySelectorAll('.process-step');
-    if (steps?.length) {
-      // Set all steps initially off-screen to the right & invisible
-      gsap.set(steps, { x: 120, opacity: 0, clipPath: 'inset(0 0% 0 0)' });
-
-      steps.forEach((step, i) => {
-        ScrollTrigger.create({
-          trigger: step,
-          start: 'top 85%',
-          end: 'top 40%',
-          scrub: 0.8,
-          animation: gsap.fromTo(
-            step,
-            { x: 120, opacity: 0, clipPath: 'inset(0 100% 0 0)' },
-            { x: 0, opacity: 1, clipPath: 'inset(0 0% 0 0)', ease: 'power2.out' }
-          ),
-        });
       });
-    }
 
-    // CTA
-    gsap.fromTo(
-      ctaRef.current,
-      { scale: 0.97, opacity: 0 },
-      {
-        scale: 1, opacity: 1, duration: 0.8, ease: 'power2.out',
-        scrollTrigger: { trigger: ctaRef.current, start: 'top 80%' },
+      // ── Capability cards: centre-locked stage, cards swap on scroll ──
+      const stage = capsStageRef.current;
+      const cards = capsCardsRef.current.filter(Boolean);
+      if (stage && cards.length) {
+        const CARD_W  = cards[0].offsetWidth;
+        const SPACING = CARD_W + 60; // centre-to-centre distance
+        // Total pinned scroll: give ~600px of scroll per card transition
+        const PX_PER_CARD = 600;
+        const totalScroll = PX_PER_CARD * (cards.length - 1);
+
+        // Place every card initially: card 0 at centre, rest stacked to the right
+        cards.forEach((card, i) => {
+          gsap.set(card, {
+            x:       i * SPACING,
+            scale:   i === 0 ? 1    : 0.78,
+            opacity: i === 0 ? 1    : i === 1 ? 0.5 : 0,
+            zIndex:  i === 0 ? 10   : 5,
+          });
+        });
+
+        // Single update fn — called every scroll frame via onUpdate
+        const update = (progress) => {
+          // activeProgress floats from 0 → cards.length-1
+          const activeProgress = progress * (cards.length - 1);
+
+          cards.forEach((card, i) => {
+            const offset = i - activeProgress;         // -N → +N (negative = left)
+            const dist   = Math.abs(offset);           // distance from focus
+
+            // scale: 1 at centre, 0.78 one card away
+            const t     = Math.max(0, 1 - dist);
+            const scale = 0.78 + 0.22 * t;
+
+            // opacity: fully visible at centre, dim at 1 away, invisible beyond 1.6
+            const opacity = dist > 1.6 ? 0 : Math.max(0, 1 - dist * 0.65);
+
+            gsap.set(card, {
+              x:       offset * SPACING,
+              scale,
+              opacity,
+              zIndex:  Math.round(10 - dist * 3),
+            });
+          });
+        };
+
+        // Pin the section and drive update via onUpdate
+        ScrollTrigger.create({
+          trigger: capsRef.current,
+          start: 'top top',
+          end: `+=${totalScroll}`,
+          scrub: 1.2,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => update(self.progress),
+        });
       }
-    );
 
+      // Process cells
+      gsap.fromTo(
+        operateRef.current?.querySelectorAll('.home-grid-cell, .home-grid-cell-dark') ?? [],
+        { y: 40, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: 'power3.out',
+          scrollTrigger: { trigger: operateRef.current, start: 'top 82%' },
+        }
+      );
+
+      // CTA
+      gsap.fromTo(
+        ctaRef.current,
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.9, ease: 'power2.out',
+          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' },
+        }
+      );
     });
 
-    return () => {
-      document.body.classList.remove('paused-blobs');
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
-  // ── Auto-scroll clients slider ────────────────────────────────────────────
-  useEffect(() => {
-    const slider = clientsSliderRef.current;
-    if (!slider) return;
-
-    const startAutoScroll = () => {
-      const maxScroll = slider.scrollWidth / 2;
-      if (slider.scrollLeft >= maxScroll) {
-        slider.scrollLeft = 0;
-      }
-      const remaining = maxScroll - slider.scrollLeft;
-      const duration = Math.max(8, (remaining / maxScroll) * 25);
-
-      clientsAnimRef.current = gsap.to(slider, {
-        scrollLeft: maxScroll,
-        duration,
-        ease: 'none',
-        onComplete: () => {
-          slider.scrollLeft = 0;
-          startAutoScroll();
-        },
-      });
-    };
-
-    startAutoScroll();
-
-    return () => {
-      if (clientsAnimRef.current) {
-        clientsAnimRef.current.kill();
-      }
-    };
-  }, []);
-
-  // ─────────────────────────────────────────────────────────────────────────
   return (
-    <div style={{ 
-      background: 'var(--bg)',
-      position: 'relative',
-    }}>
+    <div style={{ background: '#0A0A0A' }}>
 
-      {/* ── Full page cinematic scroll-based background image ── */}
-      <div
-        ref={heroBgRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100vh',
-          backgroundImage: `
-            linear-gradient(135deg, rgba(200, 241, 53, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
-            url('/generate_it_according_landscape_202606100851.jpeg')
-          `,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          zIndex: 0,
-          opacity: 0, // smoothly faded in via GSAP
-          pointerEvents: 'none',
-          willChange: 'transform',
-          transformOrigin: 'center center',
-        }}
-      />
-
-      {/* ── Content wrapper with proper z-index ── */}
-      <div style={{ position: 'relative', zIndex: 2 }}>
-
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      {/* ── HERO: Dark full-screen with car video background ──────────────── */}
       <section
-        data-section="hero"
+        ref={heroRef}
         style={{
           position: 'relative',
-          height: '100vh',
-          minHeight: '640px',
+          minHeight: '100vh',
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-end',
-          padding: '0 40px 72px',
+          alignItems: 'flex-end',
           overflow: 'hidden',
         }}
       >
+        {/* Video Background */}
         <div className="hero-video-bg" aria-hidden="true">
           <video
+            ref={videoRef}
             className="hero-bg-video"
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
           >
             <source src="/home-hero/Car_moving_at_high_speed_202606170747.mp4" type="video/mp4" />
-            Your browser does not support the background video.
           </video>
         </div>
 
-        {/* Abstract blobs */}
-        <div className="blob blob-1" />
-        <div className="blob blob-2" />
-        <div className="blob blob-3" />
+        {/* Dark overlay gradient */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(to bottom, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.75) 80%, rgba(10,10,10,0.98) 100%)',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }} />
 
-        {/* ── Hero content ── */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <SectionLabel index="001" label="DIGITAL AGENCY" />
-
-          <h1
-            ref={heroHeadRef}
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(56px, 10vw, 136px)',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
-              textTransform: 'uppercase',
-              lineHeight: 0.9,
-              margin: '20px 0 0',
-              color: 'var(--fg)',
-            }}
-          >
-            WE BUILD<br />
-            DIGITAL<br />
-            <span style={{ color: 'var(--accent)' }}>ENGINES.</span>
-          </h1>
-
-          <div
-            ref={heroSubRef}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-end',
-              marginTop: '48px',
-              flexWrap: 'wrap',
-              gap: '24px',
-            }}
-          >
-            <p
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '13px',
-                letterSpacing: '0.1em',
-                color: 'var(--fg)',
-                margin: 0,
-                maxWidth: '340px',
-                lineHeight: 1.9,
-              }}
-            >
-              Development · Marketing · Production · Consulting
-              <br />
-              Systems that move fast. Thinking that stays sharp.
-            </p>
-
-            <Link
-              to="/consult"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '12px',
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'var(--bg)',
-                background: 'var(--accent)',
-                padding: '14px 28px',
-                textDecoration: 'none',
-                transition: 'opacity 0.2s, transform 0.2s',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
-            >
-              START A PROJECT
-              <span style={{ fontSize: '16px', lineHeight: 1 }}>→</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
+        {/* Hero Content */}
         <div
-          className="scroll-indicator"
           style={{
-            position: 'absolute',
-            bottom: '72px',
-            right: '40px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
+            position: 'relative',
             zIndex: 2,
+            width: '100%',
+            padding: '0 60px clamp(60px, 8vw, 100px)',
+            boxSizing: 'border-box',
           }}
         >
-          <span
+          {/* Top label */}
+          <div
+            className="anim-hero"
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '9px',
+              fontSize: '11px',
               letterSpacing: '0.2em',
-              color: 'var(--fg)',
-              writingMode: 'vertical-rl',
+              color: '#C8F135',
+              textTransform: 'uppercase',
+              marginBottom: '24px',
+              fontWeight: 600,
             }}
           >
-            SCROLL
-          </span>
-          <div className="scroll-line" />
-        </div>
-      </section>
+            Full-Service Digital Agency // Est. 2018
+          </div>
 
-      {/* ── CLIENTS LOGOS SLIDER ─────────────────────────────────────────── */}
-      <section
-        style={{
-          padding: 'clamp(60px, 8vw, 100px) 40px',
-          overflow: 'hidden',
-        }}
-      >
-        <h3
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(18px, 2.5vw, 28px)',
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-            textTransform: 'uppercase',
-            color: 'var(--fg)',
-            margin: '0 0 32px 0',
-            lineHeight: 1,
-          }}
-        >
-          OUR CLIENTS
-        </h3>
-        <div
-          style={{
-            maxWidth: '1180px',
-            margin: '0 auto',
-            padding: '28px 24px',
-            background: 'transparent',
-            borderRadius: '32px',
-          }}
-        >
-          <div
-            ref={clientsSliderRef}
+          {/* Main heading */}
+          <h1
+            className="anim-hero"
             style={{
-              display: 'flex',
-              gap: '40px',
-              overflowX: 'auto',
-              overflowY: 'hidden',
-              WebkitOverflowScrolling: 'touch',
-              paddingBottom: '16px',
-              cursor: 'grab',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(56px, 9vw, 120px)',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              lineHeight: 0.92,
+              margin: '0 0 36px',
+              color: '#FFFFFF',
+              maxWidth: '900px',
             }}
-            className="hide-scrollbar"
           >
-          {[...CLIENTS, ...CLIENTS].map((client, i) => (
-            <div
-              key={`${client.name}-${i}`}
-              style={{
-                flex: '0 0 auto',
-                width: 'clamp(120px, 20vw, 200px)',
-                height: 'clamp(80px, 13vw, 140px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '20px',
-                background: 'rgba(255,255,255,0.06)',
-                borderRadius: '24px',
-                boxShadow: 'inset 0 0 40px rgba(255,255,255,0.18)',
-                border: '1px solid rgba(255,255,255,0.08)',
-              }}
-            >
-              {client.logoText ? (
-                <div
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(14px, 2vw, 18px)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.01em',
-                    textTransform: 'uppercase',
-                    color: 'var(--fg)',
-                    textAlign: 'center',
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {client.name}
-                </div>
-              ) : (
-                <img
-                  src={client.logo}
-                  alt={client.name}
-                  style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    objectFit: 'contain',
-                    filter: 'brightness(1) saturate(1)',
-                  }}
-                />
-              )}
-            </div>
-          ))}
-          </div>
-        </div>
-      </section>
+            We Build<br />
+            <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Digital</span><br />
+            Engines.
+          </h1>
 
-      {/* ── MISSION STATEMENT ────────────────────────────────────────────── */}
-      <section
-        ref={missionRef}
-        data-section="about"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '0',
-          minHeight: '100vh',
-        }}
-      >
-        <div style={{ backgroundColor: '#F97316', padding: 'clamp(80px, 10vw, 140px) 40px', color: '#000' }}>
-          <SectionLabel index="001" label="ABOUT" />
-          <div style={{ marginTop: '28px' }}>
-            {[
-              'MOST AGENCIES',
-              'SELL YOU A TEAM.',
-              'WE BUILD YOU',
-              <><span style={{ color: 'var(--accent)' }}>A MACHINE.</span></>,
-            ].map((line, i) => (
-              <div
-                key={i}
-                className="mission-line"
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(32px, 4.5vw, 60px)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.03em',
-                  textTransform: 'uppercase',
-                  lineHeight: 1.0,
-                  color: '#000',
-                }}
-              >
-                {line}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{ backgroundColor: '#000', padding: 'clamp(80px, 10vw, 140px) 40px', color: '#D4AF37' }}>
-          <div className="mission-line">
+          {/* Subtext + buttons row */}
+          <div
+            className="anim-hero"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '48px',
+              alignItems: 'end',
+              maxWidth: '900px',
+            }}
+          >
             <p
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '17px',
-                fontWeight: 400,
-                lineHeight: 1.75,
-                color: '#D4AF37',
-                margin: '0 0 32px',
-              }}
-            >
-              Thrust & Logic is a full-service digital agency that operates without the fat.
-              No account managers buffering between you and the people doing the work. No
-              opaque timelines. Just senior talent, clear thinking, and results you can measure.
-            </p>
-            <p
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '17px',
-                fontWeight: 400,
-                lineHeight: 1.75,
-                color: '#D4AF37',
+                fontFamily: 'var(--font-body)',
+                fontSize: '16px',
+                lineHeight: 1.7,
+                color: 'rgba(255,255,255,0.65)',
                 margin: 0,
               }}
             >
-              We operate across development, marketing, production, and consulting — often all
-              four simultaneously — for brands that can't afford to move slowly.
+              Formulating systemized structures for digital presence, optimizing growth, and streamlining operations for ambitious brands.
             </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                <Link
+                  to="/consult"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    background: '#C8F135',
+                    color: '#0A0A0A',
+                    padding: '14px 32px',
+                    textDecoration: 'none',
+                    fontWeight: 700,
+                    transition: 'opacity 0.2s',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.88')}
+                  onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+                >
+                  START PROJECT
+                </Link>
+                <Link
+                  to="/development"
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '11px',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    color: '#FFFFFF',
+                    padding: '14px 32px',
+                    textDecoration: 'none',
+                    fontWeight: 500,
+                    transition: 'border-color 0.2s, background 0.2s',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#FFFFFF';
+                    e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  Our Services
+                </Link>
+              </div>
+
+              {/* Cap labels */}
+              <div
+                style={{
+                  display: 'flex',
+                  gap: '20px',
+                  flexWrap: 'wrap',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '10px',
+                  letterSpacing: '0.1em',
+                  color: 'rgba(255,255,255,0.35)',
+                }}
+              >
+                <span>/ DEVELOPMENT</span>
+                <span>/ MARKETING</span>
+                <span>/ PRODUCTION</span>
+                <span>/ STRATEGY</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── STATS ────────────────────────────────────────────────────────── */}
-      <section
-        ref={statsRef}
-        data-section="stats"
-        style={{
-          padding: 'clamp(80px, 10vw, 120px) 40px',
-          backgroundColor: '#ffffff',
-        }}
-      >
-        <SectionLabel index="002" label="NUMBERS" />
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '40px',
-            marginTop: '48px',
-          }}
-        >
-          {STATS.map(({ value, suffix, label }) => (
-            <div
-              key={label}
-              className="stat-block"
+      {/* ── CLIENTS MARQUEE ──────────────────────────────────────────────── */}
+      {(() => {
+        // Clients with logos
+        const LOGO_CLIENTS = [
+          { name: 'Easy Life Home Care', logo: '/icons/ELHC.png',              height: 36 },
+          { name: 'Ayurveda Organics',   logo: '/icons/ayurveda organics.png', height: 34 },
+          { name: 'HopUp',              logo: '/icons/image.png',             height: 38 },
+          { name: 'Property Masters',   logo: '/icons/property masters.png',  height: 42 },
+        ];
+
+        // Divider dot
+        const Dot = () => (
+          <div style={{
+            width: '4px', height: '4px', borderRadius: '50%',
+            background: 'rgba(0,0,0,0.15)', flexShrink: 0, margin: '0 48px',
+          }} />
+        );
+
+        // Logo-based client item
+        const LogoItem = ({ name, logo, height }) => (
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 48px', flexShrink: 0 }}>
+            <img
+              src={logo}
+              alt={name}
               style={{
-                borderTop: '1px solid var(--border)',
-                paddingTop: '28px',
+                height: `${height}px`,
+                width: 'auto',
+                objectFit: 'contain',
+                filter: 'none',
+                opacity: 0.85,
+                transition: 'opacity 0.35s ease',
+                userSelect: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.85';
+              }}
+            />
+          </div>
+        );
+
+        // Text wordmark for SVS Infra (no logo)
+        const WordmarkItem = ({ name }) => (
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 48px', flexShrink: 0 }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '20px',
+                fontWeight: 700,
+                letterSpacing: '0.06em',
+                color: 'rgba(10,10,10,0.7)',
+                textTransform: 'uppercase',
+                whiteSpace: 'nowrap',
+                userSelect: 'none',
+                transition: 'color 0.35s ease',
+                lineHeight: 1,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#000000'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(10,10,10,0.7)'; }}
+            >
+              {name}
+            </span>
+          </div>
+        );
+
+        // All items in one ordered list
+        const allItems = [
+          ...LOGO_CLIENTS.map((c) => ({ type: 'logo', ...c })),
+          { type: 'wordmark', name: 'SVS Infra' },
+        ];
+
+        return (
+          <section
+            style={{
+              background: '#FFFFFF',
+              borderTop: '1px solid rgba(0,0,0,0.07)',
+              borderBottom: '1px solid rgba(0,0,0,0.07)',
+              padding: '0',
+              overflow: 'hidden',
+              position: 'relative',
+            }}
+          >
+            {/* Left fade — white */}
+            <div style={{
+              position: 'absolute', left: 0, top: 0, bottom: 0, width: '140px',
+              background: 'linear-gradient(to right, #FFFFFF, transparent)',
+              zIndex: 2, pointerEvents: 'none',
+            }} />
+            {/* Right fade — white */}
+            <div style={{
+              position: 'absolute', right: 0, top: 0, bottom: 0, width: '140px',
+              background: 'linear-gradient(to left, #FFFFFF, transparent)',
+              zIndex: 2, pointerEvents: 'none',
+            }} />
+
+            {/* Ghost label */}
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%,-50%)',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '9px',
+              letterSpacing: '0.24em',
+              color: 'rgba(0,0,0,0.1)',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              zIndex: 3, pointerEvents: 'none',
+            }}>
+              TRUSTED BY OUR CLIENTS
+            </div>
+
+            {/* Scrolling track — duplicated for seamless loop */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                height: '108px',
+                width: 'max-content',
+                animation: 'marquee 32s linear infinite',
+                willChange: 'transform',
               }}
             >
-              <div
+              {[0, 1].map((setIdx) => (
+                <div key={setIdx} style={{ display: 'flex', alignItems: 'center' }}>
+                  {allItems.map((item, i) => (
+                    <div key={`${setIdx}-${i}`} style={{ display: 'flex', alignItems: 'center' }}>
+                      {item.type === 'logo'
+                        ? <LogoItem name={item.name} logo={item.logo} height={item.height} />
+                        : <WordmarkItem name={item.name} />
+                      }
+                      <Dot />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+
+
+      {/* ── STATS ────────────────────────────────────────────────────────── */}
+      <section ref={statsRef} style={{ background: '#F5F2EB' }}>
+        {/* Tab labels */}
+        <div className="home-stats-tabs">
+          {['01 / Development', '02 / Production', '03 / Creative', '04 / Marketing', '05 / Consulting'].map((tab) => {
+            const [num, label] = tab.split(' / ');
+            return (
+              <span
+                key={tab}
                 style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: 'clamp(52px, 5vw, 80px)',
-                  fontWeight: 700,
-                  letterSpacing: '-0.04em',
-                  lineHeight: 1,
-                  color: '#111111',
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: '4px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '10px',
+                  letterSpacing: '0.12em',
+                  color: 'rgba(255, 255, 255, 0.65)',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                <span
-                  className="stat-number"
-                  data-target={value}
-                  style={{ display: 'inline-block', minWidth: '2ch' }}
-                >
-                  0
-                </span>
-                <span style={{ color: 'var(--accent)' }}>{suffix}</span>
+                <span style={{ color: '#C8F135' }}>{num}</span> / {label}
+              </span>
+            );
+          })}
+        </div>
+
+        {/* 4-column stats */}
+        <div className="home-stats-grid">
+          {[
+            { target: 120, suffix: '+', label: 'Projects Delivered' },
+            { target: 40,  suffix: '+', label: 'Happy Clients' },
+            { target: 6,   suffix: '+', label: 'Years Operating' },
+            { target: 98,  suffix: '%', label: 'Client Retention' },
+          ].map(({ target, suffix, label }) => (
+            <div key={label} className="home-stats-col">
+              <div
+                className="home-stat-number"
+                data-target={target}
+                data-suffix={suffix}
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(52px, 6vw, 80px)',
+                  fontWeight: 600,
+                  color: '#0A0A0A',
+                  lineHeight: 1,
+                  marginBottom: '12px',
+                }}
+              >
+                0{suffix}
               </div>
               <div
                 style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '11px',
-                  letterSpacing: '0.12em',
-                  color: '#333333',
-                  marginTop: '12px',
+                  letterSpacing: '0.1em',
+                  color: '#777777',
+                  lineHeight: 1.5,
                 }}
               >
-                {label}
+                // {label}
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── SERVICES ─────────────────────────────────────────────────────── */}
+      {/* ── WHAT WE DO BEST: Centre-locked card stage ────────────────────── */}
       <section
-        ref={servicesRef}
-        data-section="services"
-        style={{
-          padding: 'clamp(32px, 4vw, 60px) clamp(20px, 4vw, 40px)',
-          background: 'transparent',
-          margin: 0,
-          boxSizing: 'border-box',
-          position: 'relative',
-        }}
+        ref={capsRef}
+        style={{ background: '#F5F2EB', overflow: 'hidden' }}
+      >
+        {/* Section header */}
+        <div style={{ padding: '80px 60px 0', boxSizing: 'border-box' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
+              flexWrap: 'wrap',
+              gap: '24px',
+              marginBottom: '40px',
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(40px, 5.5vw, 72px)',
+                fontWeight: 700,
+                color: '#0A0A0A',
+                lineHeight: 0.95,
+                margin: 0,
+              }}
+            >
+              What We<br />
+              <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Do Best.</span>
+            </h2>
+            <p
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '15px',
+                lineHeight: 1.65,
+                color: '#666666',
+                maxWidth: '380px',
+                margin: 0,
+              }}
+            >
+              Crafting digital experiences, branding, and strategies that build enterprise value and drive lasting growth.
+            </p>
+          </div>
+
+          {/* Scroll indicator row */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              marginBottom: '0',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              letterSpacing: '0.14em',
+              color: '#AAAAAA',
+            }}
+          >
+            <span style={{ width: '28px', height: '1px', background: '#AAAAAA', display: 'inline-block' }} />
+            SCROLL TO EXPLORE
+          </div>
+        </div>
+
+        {/* —— Card Stage: fixed height, cards sit here absolutely centered —— */}
+        <div
+          ref={capsStageRef}
+          style={{
+            position: 'relative',
+            height: '520px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          {[...CAPABILITIES, {
+            index: '06',
+            title: 'ALL IN',
+            subtitle: 'Every brief is a new problem worth solving.',
+            desc: 'We bring senior-level thinking to every engagement. No juniors, no hand-offs, no excuses.',
+            to: '/consult',
+            shape: 'square',
+            accent: '#C8F135',
+            isDark: true,
+          }].map(({ index, title, subtitle, desc, to, shape, accent, isDark }, i) => {
+            const CARD_W = 380;
+            return (
+              <Link
+                key={index}
+                to={to}
+                ref={(el) => (capsCardsRef.current[i] = el)}
+                style={{
+                  position: 'absolute',
+                  width: `${CARD_W}px`,
+                  height: '440px',
+                  /* centre the card on the stage origin */
+                  left: `calc(50% - ${CARD_W / 2}px)`,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: isDark ? '#0A0A0A' : '#FFFFFF',
+                  border: isDark ? 'none' : '1px solid rgba(0,0,0,0.08)',
+                  padding: '44px 40px',
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  textDecoration: 'none',
+                  transformOrigin: 'center center',
+                  willChange: 'transform, opacity',
+                  /* GSAP owns transform — don't set transition on it */
+                }}
+              >
+                <div>
+                  <div style={{ marginBottom: '24px' }}>
+                    {SHAPES[shape](isDark ? '#C8F135' : accent)}
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '10px',
+                      color: isDark ? '#555' : '#AAAAAA',
+                      letterSpacing: '0.14em',
+                      display: 'block',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    /{index} // {title}
+                  </span>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '28px',
+                      fontWeight: 600,
+                      margin: '0 0 14px',
+                      color: isDark ? '#FFFFFF' : '#0A0A0A',
+                      lineHeight: 1.1,
+                    }}
+                  >
+                    {subtitle}
+                  </h3>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '13px',
+                      lineHeight: 1.7,
+                      color: isDark ? 'rgba(255,255,255,0.5)' : '#777',
+                    }}
+                  >
+                    {desc}
+                  </p>
+                </div>
+
+                {isDark ? (
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      background: '#C8F135',
+                      color: '#0A0A0A',
+                      padding: '10px 20px',
+                      display: 'inline-block',
+                      fontWeight: 700,
+                      alignSelf: 'flex-start',
+                    }}
+                  >
+                    CONTACT US →
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '10px',
+                      letterSpacing: '0.14em',
+                      color: '#AAAAAA',
+                      fontWeight: 600,
+                      display: 'inline-block',
+                    }}
+                  >
+                    EXPLORE →
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Progress dots */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '8px',
+            paddingBottom: '60px',
+          }}
+        >
+          {[...CAPABILITIES, { index: '06' }].map((_, i) => (
+            <span
+              key={i}
+              style={{
+                width: i === 0 ? '24px' : '6px',
+                height: '6px',
+                borderRadius: '3px',
+                background: i === 0 ? '#0A0A0A' : 'rgba(0,0,0,0.15)',
+                display: 'inline-block',
+                transition: 'all 0.3s',
+              }}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* ── HOW WE OPERATE ──────────────────────────────────────────────── */}
+      <section
+        ref={operateRef}
+        className="home-grid-section"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.08)' }}
       >
         <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-end',
-            marginBottom: '48px',
             flexWrap: 'wrap',
-            gap: '20px',
+            gap: '24px',
           }}
         >
-          <div>
-            <SectionLabel index="003" label="SERVICES" />
-            <h2
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(40px, 5.5vw, 72px)',
+              fontWeight: 700,
+              color: '#0A0A0A',
+              lineHeight: 0.95,
+              margin: 0,
+            }}
+          >
+            How We<br />
+            <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Operate.</span>
+          </h2>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '15px',
+              lineHeight: 1.65,
+              color: '#666666',
+              maxWidth: '380px',
+              margin: 0,
+            }}
+          >
+            We don't slide into templates. Every engagement starts with a clean slate and focused execution.
+          </p>
+        </div>
+
+        {/* Retro-coloured 3×2 grid */}
+        <div className="home-grid-layout">
+          {PROCESS_STEPS.map(({ index, title, desc, shape, accent, bg, textColor, labelColor }) => (
+            <div
+              key={index}
               style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(36px, 5vw, 64px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                textTransform: 'uppercase',
-                margin: '16px 0 0',
-                lineHeight: 0.95,
-                color: 'var(--fg)',
+                padding: '52px',
+                borderRight: '1px solid rgba(0,0,0,0.08)',
+                borderBottom: '1px solid rgba(0,0,0,0.08)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                minHeight: '320px',
+                boxSizing: 'border-box',
+                background: bg,
+                position: 'relative',
+                overflow: 'hidden',
+                cursor: 'default',
+                transition: 'filter 0.3s ease',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.filter = 'brightness(0.93)')}
+              onMouseLeave={(e) => (e.currentTarget.style.filter = 'brightness(1)')}
             >
-              WHAT WE<br />
-              <span style={{ color: 'var(--accent)' }}>DO BEST.</span>
-            </h2>
+              {/* subtle noise texture */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E")`,
+                backgroundRepeat: 'repeat',
+                backgroundSize: '128px',
+                pointerEvents: 'none',
+              }} />
+
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ marginBottom: '28px' }}>{SHAPES[shape](accent)}</div>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '10px',
+                    color: labelColor,
+                    letterSpacing: '0.14em',
+                    display: 'block',
+                    marginBottom: '12px',
+                    fontWeight: 600,
+                  }}
+                >
+                  /{index}
+                </span>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: 'clamp(22px, 2.5vw, 30px)',
+                    fontWeight: 600,
+                    margin: '0 0 14px',
+                    color: textColor,
+                    lineHeight: 1.1,
+                  }}
+                >
+                  {title}
+                </h3>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13px',
+                    lineHeight: 1.65,
+                    color: textColor,
+                    opacity: 0.72,
+                    margin: 0,
+                  }}
+                >
+                  {desc}
+                </p>
+              </div>
+            </div>
+          ))}
+
+          {/* Dark Promise CTA */}
+          <div className="home-grid-cell-dark">
+            <div>
+              <span
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '10px',
+                  color: '#666666',
+                  letterSpacing: '0.15em',
+                  display: 'block',
+                  marginBottom: '20px',
+                }}
+              >
+                // PROMISE
+              </span>
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(26px, 3vw, 36px)',
+                  fontWeight: 600,
+                  lineHeight: 1.15,
+                  margin: 0,
+                  color: '#FFFFFF',
+                }}
+              >
+                Focused progress.<br />Measurable results.
+              </h3>
+            </div>
+            <Link
+              to="/consult"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.15em',
+                textTransform: 'uppercase',
+                background: '#C8F135',
+                color: '#0A0A0A',
+                padding: '12px 24px',
+                textDecoration: 'none',
+                fontWeight: 700,
+                alignSelf: 'flex-start',
+                marginTop: '32px',
+                transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+            >
+              WORK WITH US →
+            </Link>
           </div>
+        </div>
+      </section>
+
+
+      {/* ── BOTTOM CTA ───────────────────────────────────────────────────── */}
+      <section ref={ctaRef} className="home-cta-section">
+        <div>
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '10px',
+              letterSpacing: '0.18em',
+              color: '#C8F135',
+              textTransform: 'uppercase',
+              marginBottom: '20px',
+              fontWeight: 600,
+            }}
+          >
+            Get in touch
+          </div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(38px, 5vw, 64px)',
+              fontWeight: 600,
+              lineHeight: 1.05,
+              color: '#FFFFFF',
+              margin: 0,
+            }}
+          >
+            Ready to build<br />
+            something worth<br />
+            <span style={{ fontStyle: 'italic', color: '#C8F135' }}>remembering?</span>
+          </h2>
+        </div>
+        <div>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '15px',
+              lineHeight: 1.7,
+              color: 'rgba(255,255,255,0.45)',
+              marginBottom: '36px',
+            }}
+          >
+            We align our capabilities with your growth objectives. Let's design, code, and execute systems that establish lasting value for your brand.
+          </p>
           <Link
             to="/consult"
             style={{
@@ -823,360 +1098,22 @@ const clientsAnimRef = useRef(null);
               fontSize: '11px',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              color: 'var(--accent)',
+              background: '#C8F135',
+              color: '#0A0A0A',
+              padding: '16px 36px',
               textDecoration: 'none',
-              borderBottom: '1px solid var(--accent)',
-              paddingBottom: '2px',
-            }}
-          >
-            VIEW ALL →
-          </Link>
-        </div>
-
-        <div
-          style={{
-            position: 'relative',
-            height: '36vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'visible',
-            width: '100%',
-          }}
-        >
-          <div
-            ref={servicesCardsRef}
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '100%',
-              display: 'grid',
-              placeItems: 'center',
-              overflow: 'visible',
-            }}
-          >
-            {SERVICES.map(({ index, title, to, description, tags, color, accentLine }, cardIndex) => (
-              <Link
-                key={index}
-                to={to}
-                className="service-card"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                background: 'rgba(255,255,255,0.7)',
-                border: 'none',
-                padding: '30px',
-                textDecoration: 'none',
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                overflow: 'hidden',
-                width: 'min(340px, 26vw)',
-                aspectRatio: '1 / 1',
-                cursor: 'pointer',
-                opacity: 0,
-                willChange: 'transform, opacity',
-                zIndex: 10 + cardIndex,
-                boxShadow: '0 24px 60px rgba(0,0,0,0.14)',
-                borderRadius: '28px',
-                color: '#D32F2F',
-                fontFamily: 'var(--font-body)',
-                transformStyle: 'preserve-3d',
-                transform: 'translate(-50%, -50%)',
-              }}
-            >
-              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, background: 'radial-gradient(circle at 30% 35%, rgba(255, 209, 178, 0.32), transparent 42%)' }} />
-              <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0, boxShadow: '0 0 120px rgba(255, 210, 178, 0.28)', filter: 'blur(20px)' }} />
-              <div style={{ position: 'relative', zIndex: 1, width: '100%', height: '100%' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    marginBottom: '40px',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      letterSpacing: '0.18em',
-                      color: '#138808',
-                      opacity: 0.95,
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    /{index}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '18px',
-                      color: '#138808',
-                      opacity: 0.95,
-                      transition: 'opacity 0.3s, transform 0.3s',
-                    }}
-                  >
-                    ↗
-                  </span>
-                </div>
-
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(28px, 3vw, 44px)',
-                    fontWeight: 700,
-                    letterSpacing: '-0.02em',
-                    textTransform: 'uppercase',
-                    color: '#FF8900',
-                    margin: '0 0 20px',
-                    lineHeight: 1,
-                  }}
-                >
-                  {title}
-                </h3>
-
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '15px',
-                    lineHeight: 1.7,
-                    color: '#138808',
-                    opacity: 0.95,
-                    margin: '0 0 32px',
-                    maxWidth: '380px',
-                  }}
-                >
-                  {description}
-                </p>
-
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  {tags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '10px',
-                        letterSpacing: '0.18em',
-                        textTransform: 'uppercase',
-                        color: '#FFFFFF',
-                        opacity: 0.95,
-                        border: '1px solid rgba(0,0,0,0.3)',
-                        background: '#000000',
-                        padding: '4px 10px',
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-      </section>
-
-      {/* ── PROCESS ──────────────────────────────────────────────────────── */}
-      <section
-        ref={processRef}
-        data-section="process"
-        style={{
-          padding: 'clamp(80px, 10vw, 120px) 40px',
-          backgroundImage: `url(${PROCESS_BG_IMAGE})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '80px',
-            alignItems: 'start',
-          }}
-        >
-          <div>
-            <SectionLabel index="004" label="PROCESS" />
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(36px, 5vw, 64px)',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                textTransform: 'uppercase',
-                margin: '20px 0 0',
-                lineHeight: 0.95,
-                color: 'var(--fg)',
-              }}
-            >
-              HOW WE
-              <br />
-              <span style={{ color: 'var(--accent)' }}>OPERATE.</span>
-            </h2>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            {PROCESS.map(({ step, heading, body }, i) => (
-              <div
-                key={step}
-                className="process-step"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '80px 1fr',
-                  gap: '24px',
-                  padding: '36px',
-                  borderBottom: i < PROCESS.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none',
-                  background: '#000000',
-                  borderRadius: '18px',
-                  alignItems: 'start',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '13px',
-                    letterSpacing: '0.1em',
-                    color: 'var(--accent)',
-                    paddingTop: '4px',
-                  }}
-                >
-                  {step}
-                </span>
-                <div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '18px',
-                      fontWeight: 700,
-                      letterSpacing: '-0.01em',
-                      textTransform: 'uppercase',
-                      color: 'var(--fg)',
-                      marginBottom: '10px',
-                    }}
-                  >
-                    {heading}
-                  </div>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '15px',
-                      lineHeight: 1.75,
-                      color: 'var(--fg)',
-                      margin: 0,
-                    }}
-                  >
-                    {body}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA BANNER ───────────────────────────────────────────────────── */}
-      <section
-        ref={ctaRef}
-        style={{
-          margin: 'clamp(60px, 8vw, 100px) 40px',
-          background: 'var(--muted)',
-          border: '1px solid var(--border)',
-          padding: 'clamp(60px, 8vw, 100px) 60px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '40px',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Accent blob behind CTA */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-60px',
-            right: '-60px',
-            width: '300px',
-            height: '300px',
-            borderRadius: '50%',
-            background: 'var(--accent)',
-            opacity: 0.06,
-            filter: 'blur(60px)',
-            pointerEvents: 'none',
-          }}
-        />
-
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <SectionLabel index="005" label="START" />
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(40px, 6vw, 88px)',
               fontWeight: 700,
-              letterSpacing: '-0.03em',
-              textTransform: 'uppercase',
-              margin: '16px 0 0',
-              lineHeight: 0.92,
-              color: 'var(--fg)',
+              display: 'inline-block',
+              transition: 'opacity 0.2s',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
           >
-            READY TO<br />
-            <span style={{ color: 'var(--accent)' }}>BUILD?</span>
-          </h2>
-        </div>
-
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-            maxWidth: '320px',
-          }}
-        >
-          <p
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '16px',
-              lineHeight: 1.7,
-              color: 'var(--fg)',
-              margin: 0,
-            }}
-          >
-            Tell us what you're working on. We'll tell you if we're the right fit — honestly.
-          </p>
-          <Link
-            to="/consult"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              alignSelf: 'flex-start',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '12px',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--bg)',
-              background: 'var(--accent)',
-              padding: '16px 32px',
-              textDecoration: 'none',
-              fontWeight: 500,
-              transition: 'opacity 0.2s, transform 0.2s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
-          >
-            LET'S TALK →
+            START PROJECT →
           </Link>
         </div>
       </section>
 
-      </div>
     </div>
   );
 }

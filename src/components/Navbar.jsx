@@ -24,17 +24,17 @@ export default function Navbar() {
 
   const location = useLocation();
 
-  // ── Close mobile menu on route change ──────────────────────────────────
+  // Close mobile menu on route change
   useEffect(() => { setMenuOpen(false); }, [location]);
 
-  // ── Scroll listener ─────────────────────────────────────────────────────
+  // Scroll listener
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // ── Entry animation ─────────────────────────────────────────────────────
+  // Entry animation
   useEffect(() => {
     const targets = [
       logoRef.current,
@@ -49,13 +49,12 @@ export default function Navbar() {
     );
   }, []);
 
-  // ── Mobile overlay open/close ────────────────────────────────────────────
+  // Mobile overlay open/close
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
 
     if (menuOpen) {
-      // lock body scroll
       document.body.style.overflow = 'hidden';
       gsap.killTweensOf([overlay, ...mobileLinkRefs.current]);
       gsap.fromTo(overlay, { x: '100%' }, { x: '0%', duration: 0.45, ease: 'power3.out' });
@@ -70,7 +69,22 @@ export default function Navbar() {
     }
   }, [menuOpen]);
 
-  // ── Styles ───────────────────────────────────────────────────────────────
+  // Homepage has full-screen dark video hero, development/marketing/production are dark pages
+  const isDarkPage = ['/', '/development', '/marketing', '/production'].includes(location.pathname);
+
+  // Logo color: white on dark hero, dark when scrolled to cream bg
+  const logoColor = scrolled
+    ? '#F5F2EB'
+    : (isDarkPage ? '#FFFFFF' : '#0A0A0A');
+
+  // Nav link color
+  const getNavLinkColor = (isActive) => {
+    if (isActive) return '#C8F135';
+    return scrolled
+      ? 'rgba(245,242,235,0.75)'
+      : (isDarkPage ? 'rgba(255,255,255,0.75)' : '#0A0A0A');
+  };
+
   const navStyle = {
     position: 'fixed',
     top: 0,
@@ -80,41 +94,40 @@ export default function Navbar() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '22px 40px',
-    transition: 'background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease',
-    background:     scrolled ? 'rgba(7, 10, 15, 0.88)' : 'transparent',
-    backdropFilter: scrolled ? 'blur(20px)'             : 'none',
-    WebkitBackdropFilter: scrolled ? 'blur(20px)'       : 'none',
-    borderBottom:   scrolled ? '1px solid var(--border)' : '1px solid transparent',
+    padding: '24px 60px',
+    transition: 'background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
+    background:     scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
+    backdropFilter: scrolled ? 'blur(12px)'          : 'none',
+    WebkitBackdropFilter: scrolled ? 'blur(12px)'   : 'none',
+    borderBottom:   scrolled ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
   };
 
   return (
     <>
       <nav style={navStyle} aria-label="Main navigation">
-
-        {/* ── Logo ─────────────────────────────────────────────────── */}
+        {/* Logo */}
         <Link
           ref={logoRef}
           to="/"
           aria-label={`${COMPANY.name} - Home`}
           style={{
             fontFamily:     'var(--font-display)',
-            fontSize:       '20px',
-            fontWeight:     700,
+            fontSize:       '22px',
+            fontWeight:     600,
             letterSpacing:  '-0.02em',
-            color:          'var(--fg)',
+            color:          logoColor,
             textDecoration: 'none',
             transition:     'color 0.2s',
             zIndex:         101,
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--accent)')}
-          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--fg)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = logoColor)}
         >
-          T&amp;L
+          Thrust &amp; Logic
         </Link>
 
-        {/* ── Desktop nav ──────────────────────────────────────────── */}
-        <ul className="desktop-nav" style={{ listStyle: 'none', display: 'flex', alignItems: 'center', gap: '32px', margin: 0, padding: 0 }}>
+        {/* Desktop nav */}
+        <ul className="desktop-nav" style={{ listStyle: 'none', display: 'flex', alignItems: 'center', gap: '36px', margin: 0, padding: 0 }}>
           {NAV_LINKS.map(({ to, label, end }, i) => (
             <li key={to}>
               <NavLink
@@ -125,11 +138,11 @@ export default function Navbar() {
                 style={({ isActive }) => ({
                   fontFamily:     'var(--font-mono)',
                   fontSize:       '11px',
-                  letterSpacing:  '0.12em',
+                  letterSpacing:  '0.14em',
                   textDecoration: 'none',
-                  color:          isActive ? 'var(--accent)' : 'var(--fg)',
-                  opacity:        isActive ? 1 : 0.6,
-                  transition:     'color 0.2s, opacity 0.2s',
+                  color:          getNavLinkColor(isActive),
+                  opacity:        isActive ? 1 : 0.7,
+                  transition:     'color 0.25s, opacity 0.25s',
                 })}
               >
                 {label}
@@ -146,22 +159,22 @@ export default function Navbar() {
               style={{
                 fontFamily:     'var(--font-mono)',
                 fontSize:       '11px',
-                letterSpacing:  '0.12em',
+                letterSpacing:  '0.14em',
                 textTransform:  'uppercase',
-                color:          'var(--accent)',
-                border:         '1px solid var(--accent)',
-                padding:        '8px 20px',
+                background:     '#C8F135',
+                color:          '#0A0A0A',
+                border:         '1px solid #C8F135',
+                padding:        '10px 24px',
                 textDecoration: 'none',
                 display:        'inline-block',
-                transition:     'background 0.25s, color 0.25s',
+                transition:     'opacity 0.25s',
+                fontWeight:     700,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--accent)';
-                e.currentTarget.style.color      = 'var(--bg)';
+                e.currentTarget.style.opacity = '0.85';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color      = 'var(--accent)';
+                e.currentTarget.style.opacity = '1';
               }}
             >
               CONSULT NOW
@@ -169,7 +182,7 @@ export default function Navbar() {
           </li>
         </ul>
 
-        {/* ── Hamburger ────────────────────────────────────────────── */}
+        {/* Hamburger */}
         <button
           className="hamburger"
           onClick={() => setMenuOpen((v) => !v)}
@@ -179,26 +192,26 @@ export default function Navbar() {
         >
           <span style={{
             display: 'block', width: '24px', height: '1.5px',
-            background: menuOpen ? 'var(--accent)' : 'var(--fg)',
+            background: menuOpen ? '#C8F135' : '#FFFFFF',
             transition: 'transform 0.3s, background 0.2s',
             transform: menuOpen ? 'translateY(6.5px) rotate(45deg)' : 'none',
           }} />
           <span style={{
             display: 'block', width: '24px', height: '1.5px',
-            background: menuOpen ? 'var(--accent)' : 'var(--fg)',
+            background: menuOpen ? '#C8F135' : '#FFFFFF',
             transition: 'opacity 0.3s, background 0.2s',
             opacity: menuOpen ? 0 : 1,
           }} />
           <span style={{
             display: 'block', width: '24px', height: '1.5px',
-            background: menuOpen ? 'var(--accent)' : 'var(--fg)',
+            background: menuOpen ? '#C8F135' : '#FFFFFF',
             transition: 'transform 0.3s, background 0.2s',
             transform: menuOpen ? 'translateY(-6.5px) rotate(-45deg)' : 'none',
           }} />
         </button>
       </nav>
 
-      {/* ── Mobile full-screen overlay ──────────────────────────────── */}
+      {/* Mobile full-screen overlay */}
       <div
         ref={overlayRef}
         className="mobile-overlay"
@@ -215,7 +228,6 @@ export default function Navbar() {
           borderLeft:     '1px solid var(--border)',
         }}
       >
-        {/* Accent blob inside mobile menu */}
         <div style={{
           position:     'absolute',
           top:          '-80px',
@@ -243,7 +255,7 @@ export default function Navbar() {
                   letterSpacing:  '-0.02em',
                   textTransform:  'uppercase',
                   textDecoration: 'none',
-                  color:          isActive ? 'var(--accent)' : 'var(--fg)',
+                  color:          isActive ? 'var(--accent)' : 'var(--text-h)',
                   lineHeight:     1.1,
                   display:        'block',
                   opacity:        isActive ? 1 : 0.85,
@@ -263,7 +275,7 @@ export default function Navbar() {
           fontFamily: 'var(--font-mono)',
           fontSize:   '10px',
           letterSpacing: '0.15em',
-          color:      'var(--fg)',
+          color:      'var(--text-h)',
           opacity:    0.25,
         }}>
           {COMPANY.name.toUpperCase()} - EST. 2018

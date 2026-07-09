@@ -5,34 +5,32 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { COMPANY } from '../lib/company';
 import './Footer.css';
 
-const NAV_LINKS = [
-  { to: '/',            label: 'Home'        },
+const SERVICES_LINKS = [
   { to: '/development', label: 'Development' },
-  { to: '/marketing',   label: 'Marketing'   },
-  { to: '/production',  label: 'Production'  },
-  { to: '/about',       label: 'About'       },
-  { to: '/consult',     label: 'Consult'     },
+  { to: '/marketing',   label: 'Creative & Marketing' },
+  { to: '/production',  label: 'Production' },
+  { to: '/',            label: 'Tech Stack' },
+  { to: '/',            label: 'Value Scale' },
+];
+
+const COMPANY_LINKS = [
+  { to: '/about',       label: 'About Us' },
+  { to: '/consult',     label: 'Consult Now' },
+  { to: '/',            label: 'Case Studies' },
+  { to: '/consult',     label: 'Contact' },
 ];
 
 const SOCIALS = [
-  { href: 'https://instagram.com', label: 'Instagram', abbr: 'IG' },
-  { href: 'https://linkedin.com',  label: 'LinkedIn',  abbr: 'LI' },
-  { href: 'https://behance.net',   label: 'Behance',   abbr: 'BE' },
-];
-
-const STATS = [
-  { value: '48+',  label: '// Projects Delivered' },
-  { value: '100%', label: '// Client Retention'   },
-  { value: '6',    label: '// Years Building'      },
-  { value: '3',    label: '// Cities Active'       },
+  { href: 'https://instagram.com', label: 'Instagram' },
+  { href: 'https://linkedin.com',  label: 'LinkedIn' },
+  { href: 'https://behance.net',   label: 'Behance' },
 ];
 
 export default function Footer() {
   const { pathname } = useLocation();
   const footerRef   = useRef(null);
   const brandRef    = useRef(null);
-  const navColRef   = useRef(null);
-  const statsRef    = useRef(null);
+  const linksGridRef = useRef(null);
   const bottomRef   = useRef(null);
 
   useEffect(() => {
@@ -40,30 +38,20 @@ export default function Footer() {
       // Brand block
       gsap.fromTo(
         brandRef.current,
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: brandRef.current, start: 'top 85%' },
-        }
-      );
-
-      // Nav column
-      gsap.fromTo(
-        navColRef.current?.querySelectorAll('.footer-link-item') ?? [],
-        { y: 20, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'power2.out',
-          scrollTrigger: { trigger: navColRef.current, start: 'top 85%' },
-        }
-      );
-
-      // Stats
-      gsap.fromTo(
-        statsRef.current?.querySelectorAll('.stat-col') ?? [],
         { y: 30, opacity: 0 },
         {
-          y: 0, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: statsRef.current, start: 'top 90%' },
+          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+          scrollTrigger: { trigger: brandRef.current, start: 'top 90%' },
+        }
+      );
+
+      // Links columns
+      gsap.fromTo(
+        linksGridRef.current?.querySelectorAll('.footer-col') ?? [],
+        { y: 30, opacity: 0 },
+        {
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: linksGridRef.current, start: 'top 90%' },
         }
       );
 
@@ -83,282 +71,163 @@ export default function Footer() {
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
-
     return () => cancelAnimationFrame(frame);
   }, [pathname]);
 
   return (
-    <footer ref={footerRef} style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', position: 'relative', zIndex: 9999 }}>
-
-      {/* ── TOP SECTION ─────────────────────────────────────────────────── */}
+    <footer
+      ref={footerRef}
+      style={{
+        background: '#F5F2EB', // Light cream background
+        borderTop: '1px solid rgba(0, 0, 0, 0.08)',
+        position: 'relative',
+        zIndex: 90,
+        padding: '80px 60px 40px',
+        color: '#2D2D2D',
+      }}
+    >
       <div
         style={{
-          display:       'grid',
-          gridTemplateColumns: '1fr auto auto',
-          gap:           '80px',
-          padding:       'clamp(60px, 8vw, 100px) 40px 60px',
-          alignItems:    'flex-start',
+          display: 'grid',
+          gridTemplateColumns: '1.5fr repeat(3, 1fr)',
+          gap: '60px',
+          alignItems: 'start',
+          marginBottom: '60px',
         }}
         className="footer-top"
       >
-        {/* ── Left: Brand ────────────────────────────────────────────── */}
-        <div ref={brandRef}>
+        {/* Brand Column */}
+        <div ref={brandRef} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <Link
             to="/"
-            style={{ textDecoration: 'none', display: 'inline-block' }}
-            onMouseEnter={(e) => (e.currentTarget.querySelector('.brand-text').style.color = 'var(--accent)')}
-            onMouseLeave={(e) => (e.currentTarget.querySelector('.brand-text').style.color = 'var(--fg)')}
+            style={{
+              textDecoration: 'none',
+              fontFamily: 'var(--font-display)',
+              fontSize: '28px',
+              fontWeight: 600,
+              letterSpacing: '-0.02em',
+              color: '#0A0A0A',
+            }}
           >
-            <div
-              className="brand-text"
-              style={{
-                fontFamily:    'var(--font-display)',
-                fontSize:      'clamp(40px, 6vw, 68px)',
-                fontWeight:    700,
-                letterSpacing: '-0.03em',
-                textTransform: 'uppercase',
-                lineHeight:    0.92,
-                color:         'var(--fg)',
-                transition:    'color 0.25s',
-              }}
-            >
-              THRUST<br />
-              <span style={{ color: 'var(--accent)' }}>&amp;</span>{' '}
-              LOGIC
-            </div>
+            Thrust &amp; Logic
           </Link>
-
           <p
             style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '12px',
-              letterSpacing: '0.12em',
-              color:         'var(--fg)',
-              marginTop:     '20px',
-              marginBottom:  0,
-              lineHeight:    1.8,
+              fontFamily: 'var(--font-body)',
+              fontSize: '14px',
+              lineHeight: 1.6,
+              color: '#555555',
+              maxWidth: '300px',
             }}
           >
-            Move fast. Think clearly.
-            <br />
-            Build systems that last.
+            A senior-only digital agency building high-performance web systems and marketing architectures.
           </p>
-
-          {/* ── Socials ──────────────────────────────────────────────── */}
-          <div style={{ display: 'flex', gap: '12px', marginTop: '32px' }}>
-            {SOCIALS.map(({ href, label, abbr }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="social-link"
-                style={{
-                  fontFamily:     'var(--font-mono)',
-                  fontSize:       '10px',
-                  letterSpacing:  '0.15em',
-                  color:          'var(--fg)',
-                  opacity:        1,
-                  textDecoration: 'none',
-                  border:         '1px solid var(--border)',
-                  padding:        '7px 14px',
-                  transition:     'color 0.2s, opacity 0.2s, border-color 0.2s',
-                  display:        'inline-block',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color        = 'var(--accent)';
-                  e.currentTarget.style.opacity      = '1';
-                  e.currentTarget.style.borderColor  = 'var(--accent)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color        = 'var(--fg)';
-                  e.currentTarget.style.opacity      = '0.4';
-                  e.currentTarget.style.borderColor  = 'var(--border)';
-                }}
-              >
-                {abbr}
-              </a>
-            ))}
+          <div
+            style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '11px',
+              letterSpacing: '0.05em',
+              color: '#777777',
+              lineHeight: 1.6,
+              textTransform: 'uppercase',
+            }}
+          >
+            {COMPANY.registeredOffice}
+            <br />
+            <a href={`mailto:${COMPANY.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{COMPANY.email}</a>
+            <br />
+            Ph: {COMPANY.phone}
           </div>
         </div>
 
-        {/* ── Right: Nav links ───────────────────────────────────────── */}
-        <div ref={navColRef}>
-          <div
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '10px',
-              letterSpacing: '0.2em',
-              color:         'var(--accent)',
-              textTransform: 'uppercase',
-              marginBottom:  '20px',
-            }}
-          >
-            / SITEMAP
+        {/* Links Columns Container */}
+        <div
+          ref={linksGridRef}
+          style={{
+            display: 'contents',
+          }}
+        >
+          {/* Services Column */}
+          <div className="footer-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 600 }}>
+              Services
+            </div>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {SERVICES_LINKS.map(({ to, label }) => (
+                <li key={label}>
+                  <Link to={to} style={{ fontFamily: 'var(--font-body)', fontSize: '13px', textDecoration: 'none', color: '#555555', transition: 'color 0.2s' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#0A0A0A'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#555555'}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            {NAV_LINKS.map(({ to, label }) => (
-              <li key={to} className="footer-link-item">
-                <NavLink
-                  to={to}
-                  end={to === '/'}
-                  style={({ isActive }) => ({
-                    fontFamily:     'var(--font-mono)',
-                    fontSize:       '12px',
-                    letterSpacing:  '0.1em',
-                    textDecoration: 'none',
-                    color:          isActive ? 'var(--accent)' : 'var(--fg)',
-                    opacity:        isActive ? 1 : 0.5,
-                    textTransform:  'uppercase',
-                    transition:     'color 0.2s, opacity 0.2s',
-                    display:        'inline-flex',
-                    alignItems:     'center',
-                    gap:            '8px',
-                  })}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.opacity = '1';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color   = '';
-                    e.currentTarget.style.opacity = '';
-                  }}
-                >
-                  <span style={{ color: 'var(--accent)', opacity: 1, fontSize: '9px' }}>→</span>
-                  {label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        <div>
-          <div
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '10px',
-              letterSpacing: '0.2em',
-              color:         'var(--accent)',
-              textTransform: 'uppercase',
-              marginBottom:  '20px',
-            }}
-          >
-            / CONTACT
+          {/* Company Column */}
+          <div className="footer-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 600 }}>
+              Company
+            </div>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {COMPANY_LINKS.map(({ to, label }) => (
+                <li key={label}>
+                  <Link to={to} style={{ fontFamily: 'var(--font-body)', fontSize: '13px', textDecoration: 'none', color: '#555555', transition: 'color 0.2s' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#0A0A0A'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#555555'}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <address
-            style={{
-              fontFamily:    'var(--font-mono)',
-              fontSize:      '11px',
-              letterSpacing: '0.08em',
-              lineHeight:    1.8,
-              color:         'var(--fg)',
-              opacity:       0.62,
-              fontStyle:     'normal',
-              maxWidth:      '280px',
-              textTransform: 'uppercase',
-            }}
-          >
-            <span style={{ display: 'block', color: 'var(--fg)', opacity: 1 }}>{COMPANY.name}</span>
-            <span style={{ display: 'block' }}>{COMPANY.registeredOffice}</span>
-            <a href={`mailto:${COMPANY.email}`} style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>{COMPANY.email}</a>
-            <a href={COMPANY.phoneHref} style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>Ph: {COMPANY.phone}</a>
-            <a href={COMPANY.websiteHref} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}>{COMPANY.website}</a>
-          </address>
+
+          {/* Connect Column */}
+          <div className="footer-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', textTransform: 'uppercase', fontWeight: 600 }}>
+              Connect
+            </div>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {SOCIALS.map(({ href, label }) => (
+                <li key={label}>
+                  <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', textDecoration: 'none', color: '#555555', transition: 'color 0.2s' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#0A0A0A'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#555555'}
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
-      {/* ── DIVIDER ─────────────────────────────────────────────────────── */}
-      <div style={{ height: '1px', background: 'var(--border)', margin: '0 40px' }} />
+      {/* Divider */}
+      <div style={{ height: '1px', background: 'rgba(0, 0, 0, 0.08)', marginBottom: '30px' }} />
 
-      {/* ── STATS STRIP ─────────────────────────────────────────────────── */}
-      <div
-        ref={statsRef}
-        style={{
-          display:             'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          padding:             'clamp(40px, 5vw, 60px) 40px',
-          gap:                 '2px',
-        }}
-        className="footer-stats"
-      >
-        {STATS.map(({ value, label }, i) => (
-          <div
-            key={label}
-            className="stat-col"
-            style={{
-              borderLeft:  i === 0 ? 'none' : '1px solid var(--border)',
-              paddingLeft: i === 0 ? '0'    : '32px',
-              paddingRight:'32px',
-            }}
-          >
-            <div
-              style={{
-                fontFamily:    'var(--font-display)',
-                fontSize:      'clamp(36px, 4vw, 56px)',
-                fontWeight:    700,
-                letterSpacing: '-0.03em',
-                lineHeight:    1,
-                color:         'var(--fg)',
-              }}
-            >
-              {value}
-            </div>
-            <div
-              style={{
-                fontFamily:    'var(--font-mono)',
-                fontSize:      '11px',
-                letterSpacing: '0.1em',
-                color:         'var(--fg)',
-                marginTop:     '10px',
-                lineHeight:    1.6,
-              }}
-            >
-              {label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── DIVIDER ─────────────────────────────────────────────────────── */}
-      <div style={{ height: '1px', background: 'var(--border)', margin: '0 40px' }} />
-
-      {/* ── BOTTOM BAR ──────────────────────────────────────────────────── */}
+      {/* Bottom Bar */}
       <div
         ref={bottomRef}
         style={{
-          display:        'flex',
+          display: 'flex',
           justifyContent: 'space-between',
-          alignItems:     'center',
-          padding:        '24px 40px',
-          flexWrap:       'wrap',
-          gap:            '12px',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px',
         }}
       >
-        <span
-          style={{
-            fontFamily:    'var(--font-mono)',
-            fontSize:      '11px',
-            letterSpacing: '0.1em',
-            color:         'var(--fg)',
-            opacity:       0.25,
-          }}
-        >
-          © {new Date().getFullYear()} {COMPANY.name}. All rights reserved.
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.05em', color: '#888888' }}>
+          &copy; {new Date().getFullYear()} Thrust &amp; Logic. All rights reserved.
         </span>
-
-        <span
-          style={{
-            fontFamily:    'var(--font-mono)',
-            fontSize:      '11px',
-            letterSpacing: '0.1em',
-            color:         'var(--fg)',
-            opacity:       0.25,
-          }}
-        >
-          Built with logic.
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.05em', color: '#888888', display: 'flex', gap: '20px' }}>
+          <span>Privacy Policy</span>
+          <span>Terms of Service</span>
         </span>
       </div>
-
     </footer>
   );
 }

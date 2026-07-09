@@ -1,576 +1,735 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SectionLabel from '../components/SectionLabel';
 import PremiumCaseCard from '../components/PremiumCaseCard';
 import CASE_STUDIES from '../data/caseStudies';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── Palette ───────────────────────────────────────────────────────────────────
-const C = {
-  bg:       '#0D1117',
-  surface:  '#161B22',
-  border:   '#30363D',
-  keyword:  '#FF7B72',   // red  — function, const, return
-  type:     '#79C0FF',   // blue — types, imports
-  string:   '#A5D6FF',   // light-blue strings
-  fn:       '#D2A8FF',   // purple — function names
-  comment:  '#8B949E',   // gray comments
-  num:      '#F2CC60',   // yellow numbers
-  prop:     '#7EE787',   // green — props / vars
-  fg:       '#E6EDF3',   // primary text
-  accent:   '#C8F135',   // brand lime
-  dim:      'rgba(230,237,243,0.4)',
+/* ─── Design tokens ─────────────────────────────────────── */
+const T = {
+  bg:      '#04060A',
+  panel:   '#080C14',
+  card:    '#0D1321',
+  border:  '#1A2535',
+  accent:  '#C8F135',
+  cyan:    '#22D3EE',
+  purple:  '#A855F7',
+  rose:    '#FB7185',
+  amber:   '#F59E0B',
+  green:   '#34D399',
+  dim:     '#475569',
+  muted:   '#64748B',
+  body:    '#94A3B8',
+  fg:      '#E2E8F0',
+  white:   '#F8FAFC',
 };
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-
-const CAPABILITIES = [
+/* ─── Services ───────────────────────────────────────────── */
+const SERVICES = [
   {
-    index: '01',
-    title: 'Frontend Engineering',
-    code: `const UI = buildWith({
-  framework: "React / Next.js",
-  style: "performance-obsessed",
-  a11y: true,
-  ttfb: "< 200ms",
-});`,
-    desc: 'Interfaces that load instantly and feel native. Accessibility-first, performance-obsessed.',
-    tags: ['React', 'Next.js', 'TypeScript', 'Vite'],
+    id: '01', title: 'SaaS Products', tag: 'FULL-STACK', color: T.accent,
+    desc: 'End-to-end SaaS platforms — onboarding flows, subscription billing, multi-tenant databases, and analytics dashboards.',
+    stack: ['Next.js', 'PostgreSQL', 'Stripe', 'Auth.js'],
+    stat: { label: 'Avg. time-to-launch', value: '8 wks' },
   },
   {
-    index: '02',
-    title: 'Backend & APIs',
-    code: `async function handleScale() {
-  const api = new Service({
-    type: "REST | GraphQL",
-    db: "PostgreSQL + Redis",
-    infra: "serverless-ready",
+    id: '02', title: 'AI & LLM Pipelines', tag: 'INTELLIGENCE', color: T.cyan,
+    desc: 'Custom RAG architectures, fine-tuned LLM integrations, vector search, and production-grade AI agents that do real work.',
+    stack: ['OpenAI', 'LangChain', 'Pinecone', 'Python'],
+    stat: { label: 'Latency target', value: '< 800ms' },
+  },
+  {
+    id: '03', title: 'Custom Web & Mobile', tag: 'PRODUCT', color: T.purple,
+    desc: 'High-performance React / Next.js web apps and React Native products built with pixel-perfect fidelity and sub-second load times.',
+    stack: ['React', 'React Native', 'TypeScript', 'Expo'],
+    stat: { label: 'Lighthouse score', value: '100/100' },
+  },
+  {
+    id: '04', title: 'UI / UX Engineering', tag: 'INTERFACE', color: T.rose,
+    desc: 'Design systems, component libraries, and polished micro-interaction layers that make products feel alive and instinctively usable.',
+    stack: ['Figma', 'GSAP', 'Framer Motion', 'Radix UI'],
+    stat: { label: 'Components shipped', value: '200+' },
+  },
+  {
+    id: '05', title: 'AI Automation', tag: 'AUTOMATION', color: T.amber,
+    desc: 'Intelligent workflow automation — CRM sync, document parsing, AI-scheduled jobs, and API orchestration eliminating manual work.',
+    stack: ['n8n', 'Make', 'Zapier', 'Python'],
+    stat: { label: 'Hours saved / month', value: '300+' },
+  },
+];
+
+/* ─── Tech ticker ────────────────────────────────────────── */
+const TICKER = [
+  'NEXT.JS', 'REACT NATIVE', 'POSTGRESQL', 'OPENAI API', 'LANGCHAIN',
+  'PINECONE', 'STRIPE', 'AWS', 'DOCKER', 'TYPESCRIPT', 'GRAPHQL',
+  'SUPABASE', 'REDIS', 'TERRAFORM', 'FIGMA', 'GSAP', 'FRAMER',
+];
+
+/* ─── Typewriter code ────────────────────────────────────── */
+const HERO_CODE =
+`> thrust.init({
+    services: ["saas", "ai-llm", "web", "mobile", "automation"],
+    engineers: "senior-only",
+    techDebt: false,
+    delivery: "production-grade",
   });
-  return api.deploy(); // zero-downtime
-}`,
-    desc: 'Robust APIs and microservices built to handle real traffic from day one.',
-    tags: ['Node.js', 'PostgreSQL', 'Redis', 'GraphQL'],
-  },
-  {
-    index: '03',
-    title: 'Headless Commerce',
-    code: `// Conversion-engineered storefront
-export const store = {
-  platform: "Shopify Plus",
-  frontend: "Custom Next.js",
-  search: "Algolia",
-  payments: "Stripe",
-  speed: "< 1s load", // guaranteed
-};`,
-    desc: 'Shopify Plus and custom storefronts engineered for conversion and speed.',
-    tags: ['Shopify', 'Commerce.js', 'Stripe', 'Algolia'],
-  },
-  {
-    index: '04',
-    title: 'Cloud & DevOps',
-    code: `pipeline:
-  trigger: on-push
-  steps:
-    - name: test
-      run: npm test --coverage
-    - name: build
-      run: docker build .
-    - name: deploy
-      env: AWS_ECS # zero-downtime`,
-    desc: 'CI/CD pipelines and containerised deployments that scale without drama.',
-    tags: ['AWS', 'Docker', 'GitHub Actions', 'Terraform'],
-  },
+
+✓  Stack configured. Ready to ship.`;
+
+/* ─── Process ────────────────────────────────────────────── */
+const PROCESS = [
+  { num: '01', title: 'Discovery',    desc: 'Map product goals, user flows, and technical constraints in a focused 2-day sprint.' },
+  { num: '02', title: 'Architecture', desc: 'System design, schema planning, and API contracts — all documented before a line is written.' },
+  { num: '03', title: 'Build',        desc: 'Two-week sprints with demo checkpoints so you always know exactly where the product stands.' },
+  { num: '04', title: 'Launch',       desc: 'CI/CD pipelines, edge deployments, and zero-downtime rollouts to production.' },
+  { num: '05', title: 'Scale',        desc: 'Performance monitoring, feature iteration, and infrastructure scaling as users grow.' },
 ];
 
-const STACK = [
-  { name: 'React',        color: C.type   },
-  { name: 'Next.js',      color: C.fg     },
-  { name: 'TypeScript',   color: C.type   },
-  { name: 'Node.js',      color: C.prop   },
-  { name: 'PostgreSQL',   color: C.type   },
-  { name: 'Redis',        color: C.keyword },
-  { name: 'AWS',          color: C.num    },
-  { name: 'Docker',       color: C.type   },
-  { name: 'GraphQL',      color: C.fn     },
-  { name: 'Shopify',      color: C.prop   },
-  { name: 'Stripe',       color: C.fn     },
-  { name: 'Terraform',    color: C.num    },
-];
-
-const WORK = CASE_STUDIES;
-
-// ── Mini syntax highlighter ───────────────────────────────────────────────────
-function CodeBlock({ code, lang = 'js' }) {
-  const lines = code.split('\n');
-  return (
-    <div style={{
-      fontFamily: '"Fira Code", "Cascadia Code", "Consolas", monospace',
-      fontSize: '10px',
-      lineHeight: 1.5,
-      color: C.fg,
-      padding: '12px',
-      background: C.bg,
-      border: `1px solid ${C.border}`,
-      borderRadius: '6px',
-      overflowX: 'auto',
-    }}>
-      {lines.map((line, i) => (
-        <div key={i} style={{ display: 'flex', gap: '16px' }}>
-          <span style={{ color: C.comment, userSelect: 'none', minWidth: '16px', textAlign: 'right' }}>{i + 1}</span>
-          <span dangerouslySetInnerHTML={{ __html: highlightLine(line, lang) }} />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function highlightLine(line, lang) {
-  if (lang === 'yaml') {
-    return line
-      .replace(/^(\s*)([\w-]+)(:)/g, `$1<span style="color:${C.prop}">$2</span><span style="color:${C.fg}">$3</span>`)
-      .replace(/#.+$/g, `<span style="color:${C.comment}">$&</span>`)
-      .replace(/\bon-([\w-]+)\b/g, `<span style="color:${C.string}">on-$1</span>`);
-  }
-  // JS
-  return line
-    .replace(/\b(const|let|var|async|function|return|export|import|from|new|true|false|await)\b/g, `<span style="color:${C.keyword}">$1</span>`)
-    .replace(/\b(string|number|boolean|null|undefined)\b/g, `<span style="color:${C.type}">$1</span>`)
-    .replace(/"([^"]+)"/g, `<span style="color:${C.string}">"$1"</span>`)
-    .replace(/'([^']+)'/g, `<span style="color:${C.string}">'$1'</span>`)
-    .replace(/\/\/.+$/g, `<span style="color:${C.comment}">$&</span>`)
-    .replace(/\b([A-Z][A-Za-z]+)\s*\(/g, `<span style="color:${C.fn}">$1</span>(`)
-    .replace(/\b(\d+)\b/g, `<span style="color:${C.num}">$1</span>`);
-}
-
-// ── Component ────────────────────────────────────────────────────────────────
+/* ════════════════════════════════════════════════════════════
+   COMPONENT
+═══════════════════════════════════════════════════════════ */
 export default function DevelopmentPage() {
-  const heroRef  = useRef(null);
-  const capsRef  = useRef(null);
-  const stackRef = useRef(null);
-  const workRef  = useRef(null);
-  const ctaRef   = useRef(null);
-  const bgRef    = useRef(null);
-  const [typed, setTyped] = useState('');
-  const [openProject, setOpenProject] = useState(null);
-  const TYPED_CODE = `> thrust.init({
-    team: "senior-only",
-    stack: ["React","Node","AWS"],
-    shipping: true,
-  })`;
 
-  // Typewriter effect in hero
+  /* refs */
+  const heroBgRef     = useRef(null);
+  const heroOverRef   = useRef(null);
+  const heroTextRef   = useRef(null);
+  const tickerRef     = useRef(null);
+  const svcRef        = useRef(null);
+  const procRef       = useRef(null);
+  const workRef       = useRef(null);
+  const ctaRef        = useRef(null);
+
+  /* typewriter */
+  const [typed,    setTyped]    = useState('');
+  const [blink,    setBlink]    = useState(true);
+
   useEffect(() => {
     let i = 0;
-    const interval = setInterval(() => {
-      setTyped(TYPED_CODE.slice(0, i));
-      i++;
-      if (i > TYPED_CODE.length) clearInterval(interval);
-    }, 28);
-    return () => clearInterval(interval);
+    const iv = setInterval(() => { setTyped(HERO_CODE.slice(0, i++)); if (i > HERO_CODE.length) clearInterval(iv); }, 20);
+    const bl = setInterval(() => setBlink(b => !b), 530);
+    return () => { clearInterval(iv); clearInterval(bl); };
   }, []);
 
+  /* GSAP */
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const ctx = gsap.context(() => {
-      gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.2 }
+
+      /* ── HERO PARALLAX ─ bg image moves up slower than scroll */
+      gsap.to(heroBgRef.current, {
+        y: '28%',
+        scale: 1.08,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+
+      /* ── HERO OVERLAY – deepens as you scroll away */
+      gsap.to(heroOverRef.current, {
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: 'top top',
+          end: '60% top',
+          scrub: true,
+        },
+      });
+
+      /* ── HERO TEXT – rise & fade out on scroll */
+      gsap.to(heroTextRef.current, {
+        y: -60,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: '20% top',
+          end: '70% top',
+          scrub: 1.2,
+        },
+      });
+
+      /* ── HERO TEXT entrance (first load) */
+      gsap.fromTo(
+        heroTextRef.current?.querySelectorAll('.h-in') ?? [],
+        { y: 70, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.13, ease: 'power3.out', delay: 0.15 },
       );
 
-      // Enhanced cinematic capability cards animation - scroll synced
-      const capCards = capsRef.current?.querySelectorAll('.cap-card') ?? [];
-      capCards.forEach((card, index) => {
-        // Different animations for each quadrant
-        let fromVars = { opacity: 0, scale: 0.85, rotateY: 45 };
-        
-        if (index === 0) {
-          fromVars = { x: -80, y: 80, opacity: 0, scale: 0.75, rotateY: -45 };
-        } else if (index === 1) {
-          fromVars = { x: 80, y: 80, opacity: 0, scale: 0.75, rotateY: 45 };
-        } else if (index === 2) {
-          fromVars = { x: -80, y: -80, opacity: 0, scale: 0.75, rotateX: -45 };
-        } else {
-          fromVars = { x: 80, y: -80, opacity: 0, scale: 0.75, rotateX: 45 };
-        }
+      /* ── TICKER */
+      if (tickerRef.current) {
+        gsap.to(tickerRef.current, { x: '-50%', duration: 22, ease: 'none', repeat: -1 });
+      }
 
-        // Group by row: top 2 cards (0,1) animate together, bottom 2 cards (2,3) animate together
-        const rowIndex = index < 2 ? 0 : 1;
-        const startOffset = rowIndex * 300;
+      /* ── SERVICES header */
+      gsap.fromTo(
+        svcRef.current?.querySelectorAll('.svc-hd') ?? [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: svcRef.current, start: 'top 80%' } },
+      );
 
-        gsap.fromTo(
-          card,
-          fromVars,
-          {
-            x: 0,
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 2.5,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: capsRef.current,
-              start: `top+=${startOffset} center`,
-              end: `top+=${startOffset + 500} center`,
-              scrub: 1.5,
-              markers: false,
-            },
-          }
+      /* ── SERVICE rows – clip-path reveal */
+      svcRef.current?.querySelectorAll('.svc-row').forEach((row, i) => {
+        gsap.fromTo(row,
+          { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
+          { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power3.out',
+            scrollTrigger: { trigger: row, start: 'top 88%' } },
         );
       });
 
-      gsap.fromTo(stackRef.current?.querySelectorAll('.stack-tag') ?? [],
-        { scale: 0.85, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.4, stagger: 0.04, ease: 'back.out(1.4)',
-          scrollTrigger: { trigger: stackRef.current, start: 'top 80%' } }
+      /* ── PROCESS line scrub */
+      gsap.fromTo(
+        procRef.current?.querySelector('.proc-line-fill'),
+        { scaleX: 0 },
+        { scaleX: 1, ease: 'none',
+          scrollTrigger: { trigger: procRef.current, start: 'top 65%', end: 'bottom 65%', scrub: 2 } },
       );
 
-      gsap.fromTo(workRef.current?.querySelectorAll('.work-card') ?? [],
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.13, ease: 'power2.out',
-          scrollTrigger: { trigger: workRef.current, start: 'top 75%' } }
+      /* ── PROCESS cards */
+      gsap.fromTo(
+        procRef.current?.querySelectorAll('.proc-card') ?? [],
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: procRef.current, start: 'top 72%' } },
       );
 
+      /* ── WORK cards */
+      gsap.fromTo(
+        workRef.current?.querySelectorAll('.wk-card') ?? [],
+        { y: 55, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: { trigger: workRef.current, start: 'top 75%' } },
+      );
+
+      /* ── CTA */
       gsap.fromTo(ctaRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
-          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } }
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power2.out',
+          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } },
       );
 
-      // Deep zoom parallax background animation
-      if (bgRef.current) {
-        gsap.to(bgRef.current, {
-          scale: 1.8,
-          yPercent: 50,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: bgRef.current.parentElement,
-            start: 'top top',
-            end: 'bottom center',
-            scrub: 1,
-            markers: false,
-          },
-        });
-      }
     });
+
     return () => ctx.revert();
   }, []);
 
+  /* ─────────────────────────────────────────────────────── */
   return (
-    <div style={{ background: C.bg, paddingTop: '80px', minHeight: '100vh', position: 'relative' }}>
-      {/* ── Full page cinematic zoom overlay ── */}
-      <div
-        ref={bgRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 'auto',
-          width: '100%',
-          height: '100vh',
-          zIndex: 0,
-          backgroundImage: `url('/pexels-steve-34205959.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          willChange: 'transform',
-          transformOrigin: 'center center',
-          pointerEvents: 'none',
-        }}
-      />
+    <div style={{ background: T.bg, color: T.fg, overflowX: 'hidden' }}>
 
-      {/* ── Content wrapper with proper z-index ── */}
+      {/* subtle grid overlay */}
+      <div style={{
+        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+        backgroundImage: `linear-gradient(${T.border}44 1px,transparent 1px),linear-gradient(90deg,${T.border}44 1px,transparent 1px)`,
+        backgroundSize: '48px 48px',
+        maskImage: 'radial-gradient(ellipse 90% 70% at 50% 0%,black 30%,transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 0%,black 30%,transparent 100%)',
+      }} />
+
       <div style={{ position: 'relative', zIndex: 2 }}>
 
-      {/* ── HERO ────────────────────────────────────────────────────────── */}
-      <section
-        ref={heroRef}
-        data-section="hero"
-        style={{
-          padding: 'clamp(80px,12vw,140px) 40px clamp(60px,8vw,100px)',
-          borderBottom: `1px solid ${C.border}`,
+        {/* ══════════ CINEMATIC HERO ══════════════════════════ */}
+        <section style={{
           position: 'relative',
+          height: '100svh',
+          minHeight: '700px',
           overflow: 'hidden',
-          background: 'transparent',
-          minHeight: '100vh',
-        }}
-      >
-        {/* Grid overlay */}
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: `linear-gradient(${C.border}33 1px, transparent 1px), linear-gradient(90deg, ${C.border}33 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
-        }} />
-
-        {/* Glow blob */}
-        <div style={{
-          position: 'absolute', top: '-80px', right: '-60px',
-          width: '500px', height: '500px', borderRadius: '50%',
-          background: `radial-gradient(circle, ${C.fn}18 0%, transparent 65%)`,
-          filter: 'blur(60px)', pointerEvents: 'none',
-        }} />
-
-        <div className="anim" style={{ position: 'relative', zIndex: 1 }}>
-          {/* VS Code style window bar */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '24px',
-            background: C.surface, border: `1px solid ${C.border}`,
-            borderBottom: 'none', padding: '10px 20px',
-            borderRadius: '8px 8px 0 0', marginBottom: '0',
-          }}>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FF5F57' }} />
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FFBD2E' }} />
-              <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28C840' }} />
-            </div>
-            <span style={{ fontFamily: 'monospace', fontSize: '11px', color: C.dim }}>
-              thrust-logic — terminal
-            </span>
-          </div>
-
-          {/* Terminal body */}
-          <div style={{
-            background: C.surface, border: `1px solid ${C.border}`,
-            borderRadius: '0 8px 8px 8px', padding: '24px 28px',
-            fontFamily: '"Fira Code","Cascadia Code","Consolas",monospace',
-            fontSize: 'clamp(12px,1.2vw,15px)', lineHeight: 2,
-            minHeight: '160px', maxWidth: '640px',
-          }}>
-            <pre style={{ margin: 0, whiteSpace: 'pre-wrap', color: C.prop }}>
-              {typed}
-              <span style={{ borderRight: `2px solid ${C.accent}`, animation: 'blink 1s step-end infinite', marginLeft: '1px' }}>&nbsp;</span>
-            </pre>
-          </div>
-        </div>
-
-        <div className="anim" style={{ position: 'relative', zIndex: 1, marginTop: '52px' }}>
-          <div style={{ fontFamily: 'monospace', fontSize: '11px', letterSpacing: '0.18em', color: C.comment, marginBottom: '16px' }}>
-            // 001 — DEVELOPMENT
-          </div>
-          <h1 style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(52px,9vw,120px)',
-            fontWeight: 700, letterSpacing: '-0.03em',
-            textTransform: 'uppercase', lineHeight: 0.92,
-            margin: '0 0 40px', color: C.fg,
-          }}>
-            WE ENGINEER<br />
-            DIGITAL<br />
-            <span style={{ color: C.accent }}>SYSTEMS.</span>
-          </h1>
-        </div>
-
-        <div className="anim" style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px',
-          position: 'relative', zIndex: 1,
+          display: 'flex',
+          alignItems: 'center',
         }}>
-          <p style={{
-            fontFamily: 'monospace', fontSize: '14px', lineHeight: 1.9,
-            color: C.comment, margin: 0, maxWidth: '420px',
-          }}>
-            <span style={{ color: C.keyword }}>function</span>{' '}
-            <span style={{ color: C.fn }}>buildYourProduct</span>(){' {'}<br />
-            &nbsp;&nbsp;<span style={{ color: C.comment }}>// Senior engineers. Clean arch.</span><br />
-            &nbsp;&nbsp;<span style={{ color: C.keyword }}>return</span>{' '}
-            <span style={{ color: C.string }}>"zero technical debt"</span>;<br />
-            {'}'}
-          </p>
-          <Link to="/consult" style={{
-            fontFamily: 'monospace', fontSize: '12px', letterSpacing: '0.15em',
-            textTransform: 'uppercase', color: C.bg, background: C.accent,
-            padding: '14px 28px', textDecoration: 'none', transition: 'opacity 0.2s',
-            fontWeight: 700,
-          }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.82')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+
+          {/* ── Photo background (parallax target) */}
+          <div
+            ref={heroBgRef}
+            style={{
+              position: 'absolute',
+              inset: '-20% 0',
+              backgroundImage: 'url(/pexels-asim-razan-32997.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 30%',
+              willChange: 'transform',
+            }}
+          />
+
+          {/* ── Cinematic dark overlay (gradient) */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: `linear-gradient(
+              105deg,
+              rgba(4,6,10,0.92) 0%,
+              rgba(4,6,10,0.65) 55%,
+              rgba(4,6,10,0.30) 100%
+            )`,
+          }} />
+
+          {/* ── Scroll-deepening overlay (starts transparent) */}
+          <div
+            ref={heroOverRef}
+            style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(4,6,10,0.5)',
+              opacity: 0,
+              willChange: 'opacity',
+            }}
+          />
+
+          {/* ── Scan-line texture */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            backgroundImage: 'repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.06) 2px,rgba(0,0,0,0.06) 4px)',
+          }} />
+
+          {/* ── Accent glow bottom-left corner */}
+          <div style={{
+            position: 'absolute', bottom: '-60px', left: '-60px',
+            width: '400px', height: '400px', borderRadius: '50%',
+            background: `radial-gradient(circle, ${T.accent}22 0%, transparent 70%)`,
+            pointerEvents: 'none',
+          }} />
+
+          {/* ── Hero content */}
+          <div
+            ref={heroTextRef}
+            style={{
+              position: 'relative', zIndex: 5,
+              padding: 'clamp(120px,15vw,160px) clamp(24px,6vw,80px) 80px',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '60px',
+              alignItems: 'center',
+              width: '100%',
+              boxSizing: 'border-box',
+            }}
           >
-            $ START A PROJECT →
-          </Link>
-        </div>
+            {/* LEFT: headline */}
+            <div>
+              <div className="h-in" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }}>
+                <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
+                <span style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '10px',
+                  letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent, fontWeight: 700,
+                }}>
+                  DEVELOPMENT SERVICES
+                </span>
+              </div>
 
-        <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
-      </section>
-
-      {/* ── CAPABILITIES ──────────────────────────────────────────────────── */}
-      <section ref={capsRef} data-section="capabilities" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
-        <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
-          // 001 — CAPABILITIES
-        </div>
-        <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4vw,52px)',
-          fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
-          margin: '0 0 56px', lineHeight: 0.95, color: C.fg,
-        }}>
-          WHAT WE<br /><span style={{ color: C.accent }}>BUILD.</span>
-        </h2>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '28px', perspective: '1200px' }}>
-          {CAPABILITIES.map(({ index, title, code, desc, tags }, cardIndex) => (
-            <motion.div
-              key={index}
-              className="cap-card"
-              style={{
-                background: C.surface, border: `1px solid ${C.border}`,
-                padding: '24px', position: 'relative',
-                transition: 'border-color 0.3s',
-                transformStyle: 'preserve-3d',
-              }}
-              initial={{ opacity: 0, y: 28, rotateX: 5 }}
-              whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.65, ease: 'easeOut', delay: cardIndex * 0.08 }}
-              whileHover={{ y: -10, scale: 1.01, boxShadow: '0 28px 80px rgba(0,0,0,0.18)' }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.accent; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; }}
-            >
-              {/* Editor tab */}
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '8px',
-                marginBottom: '12px',
+              <h1 className="h-in" style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(60px, 8.5vw, 124px)',
+                fontWeight: 700,
+                letterSpacing: '-0.03em',
+                lineHeight: 0.85,
+                textTransform: 'uppercase',
+                color: T.white,
+                margin: '0 0 32px',
+                textShadow: '0 4px 40px rgba(0,0,0,0.6)',
               }}>
-                <span style={{ fontFamily: 'monospace', fontSize: '9px', color: C.comment }}>
-                  /{index}
-                </span>
-                <span style={{ fontFamily: 'monospace', fontSize: '9px', color: C.dim, letterSpacing: '0.08em' }}>
-                  {title.toLowerCase().replace(/ /g, '-')}.ts
+                WE BUILD<br />
+                PRODUCTS<br />
+                <span style={{
+                  color: T.accent,
+                  textShadow: `0 0 60px ${T.accent}55`,
+                }}>THAT SHIP.</span>
+              </h1>
+
+              <p className="h-in" style={{
+                fontFamily: 'var(--font-body)', fontSize: '17px', lineHeight: 1.8,
+                color: 'rgba(226,232,240,0.78)', maxWidth: '480px', marginBottom: '44px',
+              }}>
+                Senior engineers building SaaS platforms, AI pipelines, custom web & mobile apps, and intelligent automation — with zero tolerance for technical debt.
+              </p>
+
+              <div className="h-in" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+                <Link to="/consult" style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.22em',
+                  textTransform: 'uppercase', color: T.bg, background: T.accent,
+                  padding: '18px 38px', textDecoration: 'none', fontWeight: 700,
+                  transition: 'opacity 0.2s, transform 0.2s', display: 'inline-block',
+                  boxShadow: `0 0 32px ${T.accent}44`,
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.transform = 'translateY(0)'; }}
+                >
+                  START A PROJECT →
+                </Link>
+                <a href="#work" style={{
+                  fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.22em',
+                  textTransform: 'uppercase', color: T.fg,
+                  border: `1px solid rgba(255,255,255,0.2)`, backdropFilter: 'blur(8px)',
+                  padding: '18px 38px', textDecoration: 'none', fontWeight: 600,
+                  transition: 'border-color 0.2s, color 0.2s', display: 'inline-block',
+                  background: 'rgba(255,255,255,0.04)',
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.accent; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = T.fg; }}
+                >
+                  VIEW WORK ↓
+                </a>
+              </div>
+            </div>
+
+            {/* RIGHT: Terminal */}
+            <div className="h-in" style={{
+              background: 'rgba(2,4,9,0.82)',
+              border: `1px solid ${T.border}`,
+              borderRadius: '6px',
+              overflow: 'hidden',
+              backdropFilter: 'blur(20px)',
+              boxShadow: `0 0 0 1px ${T.border}, 0 32px 80px rgba(0,0,0,0.7), 0 0 80px ${T.accent}08`,
+            }}>
+              {/* title bar */}
+              <div style={{
+                background: 'rgba(10,13,20,0.9)', borderBottom: `1px solid ${T.border}`,
+                padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '8px',
+              }}>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  {['#FF5F57','#FFBD2E','#28C840'].map(c => (
+                    <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
+                  ))}
+                </div>
+                <span style={{ marginLeft: '8px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: T.muted }}>
+                  thrust ~ /workspace/your-project
                 </span>
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <CodeBlock code={code} lang={index === '04' ? 'yaml' : 'js'} />
+              {/* code */}
+              <div style={{
+                padding: '24px', minHeight: '260px',
+                fontFamily: '"Fira Code","Cascadia Code",Consolas,monospace',
+                fontSize: '12.5px', lineHeight: 1.7, color: T.green,
+              }}>
+                <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  <span style={{ color: T.muted }}>{'// Initialising development stack\n'}</span>
+                  {typed}
+                  <span style={{
+                    display: 'inline-block', width: '2px', height: '1em',
+                    background: T.accent, verticalAlign: 'text-bottom',
+                    opacity: blink ? 1 : 0, marginLeft: '1px', transition: 'opacity 0.1s',
+                  }} />
+                </pre>
               </div>
 
-              <h3 style={{
-                fontFamily: 'var(--font-display)', fontSize: '15px',
-                fontWeight: 700, textTransform: 'uppercase',
-                color: C.fg, margin: '0 0 8px', letterSpacing: '-0.01em',
-              }}>{title}</h3>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '13px', lineHeight: 1.6, color: C.dim, margin: '0 0 14px' }}>{desc}</p>
-
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {tags.map((t) => (
-                  <span key={t} style={{
-                    fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.08em',
-                    color: C.prop, background: `${C.prop}18`,
-                    border: `1px solid ${C.prop}40`, padding: '3px 10px', borderRadius: '4px',
-                  }}>{t}</span>
+              {/* status bar */}
+              <div style={{
+                borderTop: `1px solid ${T.border}`, padding: '8px 20px',
+                display: 'flex', gap: '20px', background: 'rgba(6,8,16,0.9)',
+              }}>
+                {[
+                  { label: 'Branch', val: 'main',     color: T.accent },
+                  { label: 'Status', val: '● Active',  color: T.green  },
+                  { label: 'Node',   val: 'v22.3',     color: T.muted  },
+                ].map(({ label, val, color }) => (
+                  <span key={label} style={{ fontFamily: 'var(--font-mono)', fontSize: '10px' }}>
+                    <span style={{ color: T.dim }}>{label}: </span>
+                    <span style={{ color }}>{val}</span>
+                  </span>
                 ))}
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── TECH STACK ────────────────────────────────────────────────────── */}
-      <section ref={stackRef} data-section="stack" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
-        <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
-          // 002 — TECH STACK
-        </div>
-        <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4vw,52px)',
-          fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
-          margin: '0 0 48px', color: C.fg, lineHeight: 0.95,
-        }}>
-          TOOLS WE<br /><span style={{ color: C.accent }}>TRUST.</span>
-        </h2>
-
-        {/* Import-statement style */}
-        <div style={{
-          background: 'transparent', border: `1px solid ${C.border}`,
-          borderRadius: '8px', padding: '28px 32px', marginBottom: '32px',
-          fontFamily: 'monospace', fontSize: '13px', lineHeight: 2.2,
-        }}>
-          {STACK.map((tech, i) => (
-            <div key={tech.name} className="stack-tag" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span style={{ color: tech.color, fontWeight: 700, fontFamily: 'var(--font-display)', minWidth: '80px', fontSize: '12px' }}>
-                {tech.name}
-              </span>
-              <span style={{ color: C.keyword }}>import</span>
-              <span style={{ color: tech.color, fontWeight: 600 }}>{tech.name}</span>
-              <span style={{ color: C.fg }}>from</span>
-              <span style={{ color: C.string }}>'{tech.name.toLowerCase().replace('.', '').replace(/\s+/g, '-')}'</span>
-              <span style={{ color: C.comment }}>// {['frontend', 'frontend', 'type-safety', 'runtime', 'database', 'cache', 'cloud', 'containers', 'api', 'commerce', 'payments', 'infra'][i]}</span>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
 
-      {/* ── OUR WORK ──────────────────────────────────────────────────────── */}
-      <section ref={workRef} data-section="work" style={{ padding: 'clamp(80px,10vw,120px) 40px' }}>
-        <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
-          // 003 — OUR WORK
-        </div>
-        <h2 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,4vw,52px)',
-          fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
-          margin: '0 0 56px', lineHeight: 0.95, color: C.fg,
+          {/* ── Scroll indicator */}
+          <div style={{
+            position: 'absolute', bottom: '36px', left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+            zIndex: 5, opacity: 0.55,
+          }}>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.25em', color: T.fg, textTransform: 'uppercase' }}>
+              SCROLL
+            </span>
+            <div style={{ width: '1px', height: '48px', background: `linear-gradient(${T.accent}, transparent)` }} />
+          </div>
+        </section>
+
+        {/* ══════════ TICKER ════════════════════════════════ */}
+        <div style={{
+          borderTop: `1px solid ${T.border}`, borderBottom: `1px solid ${T.border}`,
+          overflow: 'hidden', padding: '18px 0', background: T.panel,
         }}>
-          PROJECTS WE'VE<br /><span style={{ color: C.accent }}>SHIPPED.</span>
-        </h2>
-
-        {/* Premium teaser cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', margin: '28px 0' }}>
-          {WORK.map((p) => (
-            <PremiumCaseCard key={p.id} project={p} />
-          ))}
+          <div ref={tickerRef} style={{ display: 'flex', gap: '48px', whiteSpace: 'nowrap', width: 'max-content' }}>
+            {[...TICKER, ...TICKER].map((item, i) => (
+              <span key={i} style={{
+                fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em',
+                color: i % 3 === 0 ? T.accent : T.dim, textTransform: 'uppercase',
+              }}>
+                {item}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Legacy detailed cards removed — premium teasers only */}
-      </section>
+        {/* ══════════ SERVICES ══════════════════════════════ */}
+        <section
+          ref={svcRef}
+          style={{ padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)', borderBottom: `1px solid ${T.border}` }}
+        >
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '72px' }}>
+            <div>
+              <div className="svc-hd" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent }}>
+                  CORE CAPABILITIES
+                </span>
+              </div>
+              <h2 className="svc-hd" style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5.5vw,76px)',
+                fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
+                lineHeight: 0.88, color: T.white, margin: 0,
+              }}>
+                WHAT WE<br /><span style={{ color: T.accent }}>BUILD.</span>
+              </h2>
+            </div>
+            <p className="svc-hd" style={{
+              fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8,
+              color: T.body, maxWidth: '480px', alignSelf: 'end',
+            }}>
+              Five high-value engineering disciplines, each delivering production-ready systems with a direct line to measurable business outcomes.
+            </p>
+          </div>
 
-      {/* Modal removed — case studies open on dedicated pages now */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {SERVICES.map((s) => (
+              <div
+                key={s.id}
+                className="svc-row"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '80px 1fr auto',
+                  gap: '40px',
+                  alignItems: 'start',
+                  padding: '36px 16px',
+                  borderTop: `1px solid ${T.border}`,
+                  cursor: 'default',
+                  transition: 'background 0.3s, padding 0.3s',
+                  borderRadius: '2px',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = `${s.color}09`; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+              >
+                <div>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: s.color, fontWeight: 700, display: 'block', marginBottom: '6px' }}>{s.id}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.15em', color: s.color, textTransform: 'uppercase', opacity: 0.65 }}>{s.tag}</span>
+                </div>
 
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section
-        ref={ctaRef}
-        style={{
-          padding: 'clamp(80px,10vw,120px) 40px',
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'center', flexWrap: 'wrap', gap: '40px',
-          borderTop: `1px solid ${C.border}`,
-          position: 'relative',
-          zIndex: 1,
-        }}
-      >
-        <div>
-          <div style={{ fontFamily: 'monospace', fontSize: '10px', letterSpacing: '0.18em', color: C.comment, marginBottom: '8px' }}>
-            // 004 — START
+                <div>
+                  <h3 style={{
+                    fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,2.8vw,40px)',
+                    fontWeight: 700, textTransform: 'uppercase', letterSpacing: '-0.02em',
+                    color: T.white, margin: '0 0 12px', lineHeight: 1.05,
+                  }}>{s.title}</h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: T.body, maxWidth: '640px', margin: '0 0 18px' }}>{s.desc}</p>
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    {s.stack.map(t => (
+                      <span key={t} style={{
+                        fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.12em',
+                        color: s.color, textTransform: 'uppercase',
+                        background: `${s.color}10`, border: `1px solid ${s.color}30`,
+                        padding: '4px 10px', borderRadius: '2px',
+                      }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right', minWidth: '120px' }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '34px', fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.stat.value}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.1em', color: T.muted, marginTop: '6px', textTransform: 'uppercase' }}>{s.stat.label}</div>
+                </div>
+              </div>
+            ))}
+            <div style={{ borderTop: `1px solid ${T.border}` }} />
+          </div>
+        </section>
+
+        {/* ══════════ CINEMATIC FULL-BLEED IMAGE BREAK ════════ */}
+        <div style={{
+          position: 'relative', height: 'clamp(340px,40vw,520px)', overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', inset: '-30% 0',
+            backgroundImage: 'url(/pexels-asim-razan-32997.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 60%',
+            filter: 'brightness(0.28) saturate(0.6)',
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: `linear-gradient(${T.bg}, transparent 30%, transparent 70%, ${T.bg})`,
+          }} />
+          {/* center quote */}
+          <div style={{
+            position: 'absolute', inset: 0, display: 'flex',
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px',
+          }}>
+            <div style={{ width: '1px', height: '50px', background: `linear-gradient(transparent, ${T.accent})` }} />
+            <p style={{
+              fontFamily: 'var(--font-display)', fontSize: 'clamp(22px,3.5vw,46px)',
+              color: T.white, letterSpacing: '-0.02em', fontWeight: 600,
+              textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.2,
+              margin: 0, maxWidth: '700px', padding: '0 24px',
+            }}>
+              "CODE THAT RUNS IN PRODUCTION<br />
+              <span style={{ color: T.accent }}>IS THE ONLY KIND THAT MATTERS."</span>
+            </p>
+            <div style={{ width: '1px', height: '50px', background: `linear-gradient(${T.accent}, transparent)` }} />
+          </div>
+        </div>
+
+        {/* ══════════ PROCESS ═══════════════════════════════ */}
+        <section
+          ref={procRef}
+          style={{ padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)', borderBottom: `1px solid ${T.border}`, background: T.panel }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+            <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent }}>HOW WE WORK</span>
           </div>
           <h2 style={{
-            fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,6vw,80px)',
+            fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5.5vw,76px)',
             fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
-            margin: '12px 0 0', lineHeight: 0.92, color: C.fg,
+            lineHeight: 0.88, color: T.white, margin: '0 0 64px',
           }}>
-            GOT A BUILD<br /><span style={{ color: C.accent }}>IN MIND?</span>
+            THE BUILD<br /><span style={{ color: T.accent }}>SEQUENCE.</span>
           </h2>
-          <div style={{
-            fontFamily: 'monospace', fontSize: '13px', color: C.comment,
-            marginTop: '20px', lineHeight: 2,
-          }}>
-            <span style={{ color: C.keyword }}>await</span>{' '}
-            <span style={{ color: C.fn }}>thrust</span>.
-            <span style={{ color: C.prop }}>consult</span>({' '}
-            <span style={{ color: C.string }}>"your-project"</span>{' '});
+
+          {/* Scrub-animated line */}
+          <div style={{ height: '1px', background: T.border, marginBottom: '48px', position: 'relative' }}>
+            <div className="proc-line-fill" style={{
+              position: 'absolute', top: 0, left: 0, height: '1px', width: '100%',
+              background: `linear-gradient(90deg,${T.accent},${T.cyan})`,
+              transformOrigin: 'left center',
+            }} />
           </div>
-        </div>
-        <Link to="/consult" style={{
-          fontFamily: 'monospace', fontSize: '12px', letterSpacing: '0.15em',
-          textTransform: 'uppercase', color: C.bg, background: C.accent,
-          padding: '18px 36px', textDecoration: 'none', fontWeight: 700,
-          transition: 'opacity 0.2s, transform 0.2s',
-        }}
-          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'translateY(0)'; }}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '28px' }}>
+            {PROCESS.map(step => (
+              <div
+                key={step.num}
+                className="proc-card"
+                style={{
+                  background: T.card, border: `1px solid ${T.border}`,
+                  padding: '28px 22px', borderRadius: '2px',
+                  display: 'flex', flexDirection: 'column', gap: '14px',
+                  transition: 'border-color 0.25s, box-shadow 0.25s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.boxShadow = `0 0 32px ${T.accent}18`; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = T.border; e.currentTarget.style.boxShadow = 'none'; }}
+              >
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: T.accent, fontWeight: 700 }}>{step.num}</span>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, textTransform: 'uppercase', color: T.white, margin: 0, letterSpacing: '-0.01em' }}>{step.title}</h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', lineHeight: 1.75, color: T.body, margin: 0 }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════ WORK ══════════════════════════════════ */}
+        <section
+          id="work"
+          ref={workRef}
+          style={{ padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)', borderBottom: `1px solid ${T.border}` }}
         >
-          $ LET'S TALK →
-        </Link>
-      </section>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '56px', flexWrap: 'wrap', gap: '24px' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent }}>CASE STUDIES</span>
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5.5vw,76px)',
+                fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
+                lineHeight: 0.88, color: T.white, margin: 0,
+              }}>
+                SHIPPED &amp;<br /><span style={{ color: T.accent }}>LIVE.</span>
+              </h2>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.green, display: 'inline-block', boxShadow: `0 0 8px ${T.green}` }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>DEPLOYMENT_STATUS: ACTIVE</span>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '24px' }}>
+            {CASE_STUDIES.map(p => (
+              <div key={p.id} className="wk-card">
+                <PremiumCaseCard project={p} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════ CTA ═══════════════════════════════════ */}
+        <section
+          ref={ctaRef}
+          style={{
+            position: 'relative', overflow: 'hidden',
+            padding: 'clamp(100px,12vw,160px) clamp(24px,6vw,80px)',
+          }}
+        >
+          {/* faint bg image echo */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0,
+            backgroundImage: 'url(/pexels-asim-razan-32997.jpg)',
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            filter: 'brightness(0.12) saturate(0.4)',
+          }} />
+          <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(${T.bg} 0%, rgba(4,6,10,0.88) 100%)`, zIndex: 1 }} />
+
+          <div style={{
+            position: 'relative', zIndex: 2,
+            display: 'grid', gridTemplateColumns: '1fr auto', gap: '48px',
+            alignItems: 'center', flexWrap: 'wrap',
+          }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent }}>READY TO BUILD?</span>
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(48px,7vw,100px)',
+                fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
+                lineHeight: 0.88, color: T.white, margin: '0 0 28px',
+                textShadow: '0 4px 40px rgba(0,0,0,0.5)',
+              }}>
+                GOT A PRODUCT<br /><span style={{ color: T.accent }}>IN MIND?</span>
+              </h2>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: T.muted, lineHeight: 2 }}>
+                <span style={{ color: '#FB7185' }}>await </span>
+                <span style={{ color: '#A855F7' }}>thrust</span>
+                <span style={{ color: T.fg }}>.</span>
+                <span style={{ color: '#22D3EE' }}>initialize</span>
+                <span style={{ color: T.fg }}>({'{ '})</span>
+                <span style={{ color: '#F59E0B' }}>project</span>
+                <span style={{ color: T.fg }}>: </span>
+                <span style={{ color: '#34D399' }}>"your-idea"</span>
+                <span style={{ color: T.fg }}>{' });'}</span>
+              </div>
+            </div>
+
+            <Link to="/consult" style={{
+              fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.22em',
+              textTransform: 'uppercase', color: T.bg, background: T.accent,
+              padding: '22px 52px', textDecoration: 'none', fontWeight: 700,
+              whiteSpace: 'nowrap', display: 'inline-block',
+              transition: 'opacity 0.2s, transform 0.2s',
+              boxShadow: `0 0 48px ${T.accent}44`,
+            }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.transform = 'translateY(0)'; }}
+            >
+              INITIATE BUILD →
+            </Link>
+          </div>
+        </section>
+
       </div>
     </div>
   );

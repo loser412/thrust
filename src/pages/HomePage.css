@@ -1,4 +1,4 @@
-/* ── Blob background ─────────────────────────────────────────────────────── */
+/* ── Hero Video Background ──────────────────────────────────────────────── */
 .hero-video-bg {
   position: absolute;
   inset: 0;
@@ -16,100 +16,180 @@
   pointer-events: none;
 }
 
-.blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(90px);
-  pointer-events: none;
-  z-index: 0;
+/* ── Homepage Responsive Grids ───────────────────────────────────────────── */
+
+.home-marquee {
+  background: #0A0A0A;
+  padding: 20px 0;
+  overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
 }
 
-.blob-1 {
-  width: 640px;
-  height: 640px;
-  background: radial-gradient(circle, rgba(200, 241, 53, 0.14) 0%, transparent 70%);
-  top: -120px;
-  right: -80px;
-  animation: blobFloat1 14s ease-in-out infinite alternate;
+.home-stats-tabs {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 60px;
+  overflow-x: auto;
+  gap: 30px;
+  background: #0A0A0A;
 }
 
-.blob-2 {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(80, 120, 240, 0.09) 0%, transparent 70%);
-  bottom: 80px;
-  left: -100px;
-  animation: blobFloat2 18s ease-in-out infinite alternate;
+.home-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background: #F5F2EB;
 }
 
-.blob-3 {
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(200, 241, 53, 0.07) 0%, transparent 70%);
-  top: 45%;
-  left: 42%;
-  animation: blobFloat3 11s ease-in-out infinite alternate;
+.home-stats-col {
+  padding: 48px 60px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+.home-stats-col:last-child {
+  border-right: none;
 }
 
-@keyframes blobFloat1 {
-  0%   { transform: translate(0px, 0px) scale(1); }
-  100% { transform: translate(-40px, 50px) scale(1.12); }
+.home-grid-section {
+  padding: 100px 60px;
+  background: #F5F2EB;
 }
 
-@keyframes blobFloat2 {
-  0%   { transform: translate(0px, 0px) scale(1.1); }
-  100% { transform: translate(50px, -40px) scale(1); }
+.home-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 60px;
 }
 
-@keyframes blobFloat3 {
-  0%   { transform: translate(0px, 0px) scale(1); }
-  100% { transform: translate(-25px, -50px) scale(1.2); }
+.home-grid-cell {
+  padding: 52px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+  box-sizing: border-box;
+  background: #F5F2EB;
+  transition: background 0.3s ease;
+  text-decoration: none;
 }
 
-/* ── Grid removed ── */
-
-/* ── Scroll indicator ────────────────────────────────────────────────────── */
-.scroll-line {
-  width: 1px;
-  height: 64px;
-  background: linear-gradient(to bottom, var(--accent), transparent);
-  animation: scrollPulse 2.2s ease-in-out infinite;
+.home-grid-cell:hover {
+  background: #EAE6DF;
 }
 
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.25; transform: scaleY(1);    }
-  50%       { opacity: 0.75; transform: scaleY(0.65); }
+.home-grid-cell-dark {
+  background: #0A0A0A;
+  color: #F5F2EB;
+  padding: 52px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 320px;
+  box-sizing: border-box;
 }
 
-/* ── Responsive grid overrides ───────────────────────────────────────────── */
+.home-cta-section {
+  background: #0A0A0A;
+  color: #F5F2EB;
+  padding: 120px 60px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  align-items: center;
+  gap: 80px;
+}
+
+/* ── Icon Shapes ────────────────────────────────────────────────────────── */
+.icon-shape {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 28px;
+  opacity: 0.8;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  animation: marquee 40s linear infinite;
+  gap: 60px;
+  padding-right: 60px;
+  will-change: transform;
+}
+
+/* ── Mobile Breakpoints ─────────────────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .home-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home-stats-col:nth-child(2) {
+    border-right: none;
+  }
+  .home-stats-col:nth-child(even) {
+    border-right: none;
+  }
+  .home-stats-col {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .home-stats-col:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  .home-grid-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
-  .mission-grid   { grid-template-columns: 1fr !important; }
-  .stats-grid     { grid-template-columns: repeat(2, 1fr) !important; }
-  .services-grid  { grid-template-columns: 1fr !important; }
-  .process-grid   { grid-template-columns: 1fr !important; }
+  .home-stats-tabs {
+    padding: 20px 24px;
+    gap: 20px;
+  }
+  .home-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-stats-col {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 30px 32px;
+  }
+  .home-stats-col:last-child {
+    border-bottom: none;
+  }
+  .home-grid-layout {
+    grid-template-columns: 1fr;
+  }
+  .home-grid-cell, .home-grid-cell-dark {
+    padding: 36px;
+    min-height: 260px;
+  }
+  .home-cta-section {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 80px 32px;
+  }
+  .home-grid-section {
+    padding: 80px 32px;
+  }
+  .home-stats-tabs {
+    display: none;
+  }
 }
 
-/* ── Paused play state for blobs ── */
-.paused-blobs .blob {
-  animation-play-state: paused !important;
-}
-
-/* ── Hide scrollbar ────────────────────────────────────────────────────────── */
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
-  background: transparent;
-}
-
-.hide-scrollbar::-webkit-scrollbar-thumb {
-  background: transparent;
-}
-
-.hide-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+/* ── Client Logo Marquee ─────────────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }

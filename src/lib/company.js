@@ -9,3 +9,4 @@ export const COMPANY = {
   website: 'www.thrustandlogic.com',
   websiteHref: 'https://www.thrustandlogic.com',
 };
+

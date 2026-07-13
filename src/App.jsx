@@ -14,23 +14,29 @@ import AboutPage from './pages/AboutPage';
 import ConsultPage from './pages/ConsultPage';
 import CaseStudyPage from './pages/CaseStudyPage';
 
-const COLORS = [
-  '#C8F135', '#F135A0', '#35A0F1', '#F1A035',
+const DARK_BG_COLORS = [
+  '#4A6B2F', '#F135A0', '#35A0F1', '#F1A035',
   '#A035F1', '#35F1D4', '#F16035', '#35F160',
   '#F1D435', '#D435F1', '#35C8F1', '#F13535',
 ];
 
+const LIGHT_BG_COLORS = [
+  '#5C0E3E', '#0D3D61', '#663B00', '#3E0D66',
+  '#006655', '#7A2207', '#0A5C1B', '#5C4A00',
+  '#560066', '#005366', '#660D0D',
+];
+
 let lastIdx = -1;
-function pickColor() {
+function pickColor(colorsList) {
   let idx;
-  do { idx = Math.floor(Math.random() * COLORS.length); }
+  do { idx = Math.floor(Math.random() * colorsList.length); }
   while (idx === lastIdx);
   lastIdx = idx;
-  return COLORS[idx];
+  return colorsList[idx];
 }
 
-// Broad selector — filter happens at hover time via isPureWhite()
-const SEL = 'h1,h2,h3,h4,h5,h6,p,span,a,li,button,label,strong,em,div';
+// Broad selector — target only h1 hero titles
+const SEL = 'h1';
 
 /**
  * Returns true only if:
@@ -95,18 +101,12 @@ function findBackgroundColor(el) {
   return parseRGB(window.getComputedStyle(document.body).backgroundColor) || null;
 }
 
-function isNearWhite(el) {
-  const style = window.getComputedStyle(el);
-  if (parseFloat(style.opacity) < 0.99) return false;
-  const rgb = parseRGB(style.color);
-  return rgb && rgb.a >= 0.99 && rgb.r >= 220 && rgb.g >= 220 && rgb.b >= 220;
-}
-
-function isNearBlack(el) {
-  const style = window.getComputedStyle(el);
-  if (parseFloat(style.opacity) < 0.99) return false;
-  const rgb = parseRGB(style.color);
-  return rgb && rgb.a >= 0.99 && rgb.r <= 30 && rgb.g <= 30 && rgb.b <= 30;
+function isNeutralColor(colorStr) {
+  const rgb = parseRGB(colorStr);
+  if (!rgb) return false;
+  const max = Math.max(rgb.r, rgb.g, rgb.b);
+  const min = Math.min(rgb.r, rgb.g, rgb.b);
+  return (max - min) < 50;
 }
 
 function chooseAccessibleTextColor(bgColor) {
@@ -114,13 +114,19 @@ function chooseAccessibleTextColor(bgColor) {
 }
 
 function safePickColor(bgColor) {
-  if (!bgColor) return pickColor();
-  const fallback = chooseAccessibleTextColor(bgColor);
-  for (let i = 0; i < COLORS.length; i += 1) {
-    const candidate = COLORS[i];
+  const isDark = bgColor ? isColorDark(bgColor) : true;
+  const candidates = isDark ? DARK_BG_COLORS : LIGHT_BG_COLORS;
+  
+  if (!bgColor) return pickColor(candidates);
+  
+  const fallback = isDark ? '#FFFFFF' : '#111111';
+  
+  const shuffled = [...candidates].sort(() => Math.random() - 0.5);
+  for (let i = 0; i < shuffled.length; i += 1) {
+    const candidate = shuffled[i];
     const rgb = parseRGB(candidate);
     if (!rgb) continue;
-    if (contrastRatio(rgb, bgColor) >= 7) return candidate;
+    if (contrastRatio(rgb, bgColor) >= 4.5) return candidate;
   }
   return fallback;
 }
@@ -129,10 +135,18 @@ function useColorHover() {
   useEffect(() => {
     const onEnter = (e) => {
       const el = e.currentTarget;
-      if (!isNearWhite(el) && !isNearBlack(el)) return;
+      
+      const style = window.getComputedStyle(el);
+      const opacity = parseFloat(style.opacity);
+      if (opacity < 0.3) return;
+      
+      const textColor = style.color;
+      if (!isNeutralColor(textColor)) return;
+      
       const bgColor = findBackgroundColor(el);
       const safeColor = safePickColor(bgColor);
       if (!safeColor) return;
+      
       el.style.color = safeColor;
       el.style.transition = 'color 0.2s ease';
     };
@@ -202,3 +216,4 @@ export default function App() {
     </BrowserRouter>
   );
 }
+

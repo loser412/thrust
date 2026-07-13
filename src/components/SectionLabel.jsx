@@ -13,3 +13,4 @@ export default function SectionLabel({ index, label }) {
     </span>
   );
 }
+

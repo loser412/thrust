@@ -10,7 +10,7 @@ export const CASE_STUDIES = [
     tags: ['React', 'Node.js', 'API', 'CRM'],
     metric: 'Real-time listings',
     year: '2024',
-    accent: '#C8F135',
+    accent: '#4A6B2F',
     image: '/icons/property masters.png',
     imageAlt: 'Property Masters logo',
     screenshots: [
@@ -69,3 +69,4 @@ export const CASE_STUDIES = [
 ];
 
 export default CASE_STUDIES;
+

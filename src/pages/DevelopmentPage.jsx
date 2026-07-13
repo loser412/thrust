@@ -13,7 +13,7 @@ const T = {
   panel:   '#080C14',
   card:    '#0D1321',
   border:  '#1A2535',
-  accent:  '#C8F135',
+  accent:  '#4A6B2F',
   cyan:    '#22D3EE',
   purple:  '#A855F7',
   rose:    '#FB7185',
@@ -224,7 +224,15 @@ export default function DevelopmentPage() {
 
   /* ─────────────────────────────────────────────────────── */
   return (
-    <div style={{ background: T.bg, color: T.fg, overflowX: 'hidden' }}>
+    <div style={{
+      background: T.bg,
+      color: T.fg,
+      overflowX: 'hidden',
+      '--font-display': "'Space Grotesk', sans-serif",
+      '--font-body': "'Space Grotesk', sans-serif",
+      '--font-mono': "'Space Mono', monospace",
+      fontFamily: 'var(--font-body)',
+    }}>
 
       {/* subtle grid overlay */}
       <div style={{
@@ -734,3 +742,4 @@ export default function DevelopmentPage() {
     </div>
   );
 }
+

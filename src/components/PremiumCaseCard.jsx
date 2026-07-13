@@ -34,3 +34,4 @@ export default function PremiumCaseCard({ project }) {
     </Link>
   );
 }
+

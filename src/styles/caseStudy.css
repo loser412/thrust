@@ -3,7 +3,7 @@
   --cs-bg: #0d1117;
   --cs-surface: #0f1720;
   --cs-muted: #8b949e;
-  --cs-accent: #C8F135;
+  --cs-accent: #4A6B2F;
 }
 .premium-card-link{ text-decoration:none; color:inherit }
 .premium-card{ display:block; width:100%; border-radius:18px; overflow:hidden; background:#f3f4f6; box-shadow:0 10px 28px rgba(15,23,42,0.12); transition:transform .28s ease, box-shadow .28s ease; }
@@ -64,3 +64,4 @@
   .cs-container{ flex-direction:column; padding:0 16px }
   .cs-sticky-nav{ display:none }
 }
+

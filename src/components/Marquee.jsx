@@ -56,3 +56,4 @@ export default function Marquee({ items = [], speed = 40 }) {
     </div>
   );
 }
+

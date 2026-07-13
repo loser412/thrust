@@ -177,14 +177,14 @@ export default function ConsultPage() {
         {submitted ? (
           <div style={{ marginTop: '60px', maxWidth: '560px' }}>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 0.95, color: '#FFFFFF', marginBottom: '24px' }}>
-              Got It.<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)', color: '#C8F135' }}>Talk Soon.</span>
+              Got It.<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)', color: '#4A6B2F' }}>Talk Soon.</span>
             </div>
             <div style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '11px',
               letterSpacing: '0.15em',
               color: '#0A0A0A',
-              background: '#C8F135',
+              background: '#4A6B2F',
               padding: '16px 24px',
               display: 'inline-block',
               marginBottom: '24px',
@@ -206,7 +206,7 @@ export default function ConsultPage() {
                   <label htmlFor={`field-${name}`} style={labelStyle}>{name.toUpperCase()}</label>
                   <input id={`field-${name}`} name={name} type={type} placeholder={ph} required value={form[name]} onChange={handleChange}
                     style={inputStyle}
-                    onFocus={(e)  => (e.currentTarget.style.borderBottomColor = '#C8F135')}
+                    onFocus={(e)  => (e.currentTarget.style.borderBottomColor = '#4A6B2F')}
                     onBlur={(e)   => (e.currentTarget.style.borderBottomColor = 'rgba(255, 255, 255, 0.15)')} />
                 </div>
               ))}
@@ -217,7 +217,7 @@ export default function ConsultPage() {
               <label htmlFor="field-email" style={labelStyle}>EMAIL</label>
               <input id="field-email" name="email" type="email" placeholder="your@email.com" required value={form.email} onChange={handleChange}
                 style={inputStyle}
-                onFocus={(e)  => (e.currentTarget.style.borderBottomColor = '#C8F135')}
+                onFocus={(e)  => (e.currentTarget.style.borderBottomColor = '#4A6B2F')}
                 onBlur={(e)   => (e.currentTarget.style.borderBottomColor = 'rgba(255, 255, 255, 0.15)')} />
             </div>
 
@@ -236,8 +236,8 @@ export default function ConsultPage() {
                         textTransform: 'uppercase',
                         padding: '10px 20px',
                         border: '1px solid',
-                        borderColor: isSelected ? '#C8F135' : 'rgba(255, 255, 255, 0.15)',
-                        background: isSelected ? '#C8F135' : 'transparent',
+                        borderColor: isSelected ? '#4A6B2F' : 'rgba(255, 255, 255, 0.15)',
+                        background: isSelected ? '#4A6B2F' : 'transparent',
                         color: isSelected ? '#0A0A0A' : 'rgba(255, 255, 255, 0.7)',
                         opacity: isSelected ? 1 : 0.8,
                         cursor: 'pointer',
@@ -272,8 +272,8 @@ export default function ConsultPage() {
                         textTransform: 'uppercase',
                         padding: '10px 20px',
                         border: '1px solid',
-                        borderColor: isSelected ? '#C8F135' : 'rgba(255, 255, 255, 0.15)',
-                        background: isSelected ? '#C8F135' : 'transparent',
+                        borderColor: isSelected ? '#4A6B2F' : 'rgba(255, 255, 255, 0.15)',
+                        background: isSelected ? '#4A6B2F' : 'transparent',
                         color: isSelected ? '#0A0A0A' : 'rgba(255, 255, 255, 0.7)',
                         opacity: isSelected ? 1 : 0.8,
                         cursor: 'pointer',
@@ -304,7 +304,7 @@ export default function ConsultPage() {
                   padding: '16px',
                   boxSizing: 'border-box',
                 }}
-                onFocus={(e)  => (e.currentTarget.style.borderColor = '#C8F135')}
+                onFocus={(e)  => (e.currentTarget.style.borderColor = '#4A6B2F')}
                 onBlur={(e)   => (e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)')} />
             </div>
 
@@ -332,7 +332,7 @@ export default function ConsultPage() {
                 letterSpacing: '0.18em',
                 textTransform: 'uppercase',
                 color: '#0A0A0A',
-                background: '#C8F135',
+                background: '#4A6B2F',
                 padding: '16px 36px',
                 border: 'none',
                 fontWeight: 700,
@@ -408,3 +408,4 @@ export default function ConsultPage() {
     </div>
   );
 }
+

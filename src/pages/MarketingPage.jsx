@@ -67,6 +67,9 @@ const AYURVEDA_OUTCOME = [
 
 export default function MarketingPage() {
   const heroRef = useRef(null);
+  const heroBgRef = useRef(null);
+  const heroOverRef = useRef(null);
+  const heroTextRef = useRef(null);
   const graphPathRef = useRef(null);
   const graphSectionRef = useRef(null);
   const servicesRef = useRef(null);
@@ -81,8 +84,46 @@ export default function MarketingPage() {
     window.scrollTo(0, 0);
 
     const ctx = gsap.context(() => {
+      // ── HERO PARALLAX ─ bg image moves up slower than scroll
+      gsap.to(heroBgRef.current, {
+        y: '28%',
+        scale: 1.08,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+
+      // ── HERO OVERLAY – deepens as you scroll away
+      gsap.to(heroOverRef.current, {
+        opacity: 0.8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: 'top top',
+          end: '60% top',
+          scrub: true,
+        },
+      });
+
+      // ── HERO TEXT – rise & fade out on scroll
+      gsap.to(heroTextRef.current, {
+        y: -60,
+        opacity: 0.1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroBgRef.current.parentElement,
+          start: '20% top',
+          end: '70% top',
+          scrub: 1.2,
+        },
+      });
+
       // Hero entrance
-      gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
+      gsap.fromTo(heroTextRef.current?.querySelectorAll('.anim') ?? [],
         { y: 50, opacity: 0 }, 
         { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out' }
       );
@@ -220,32 +261,68 @@ export default function MarketingPage() {
   }, []);
 
   return (
-    <div style={{ background: '#F5F2EB', position: 'relative', color: '#0A0A0A', overflow: 'hidden' }}>
+    <div style={{
+      background: '#0A0A0A', // Dark root background
+      position: 'relative',
+      color: '#FFFFFF',
+      overflow: 'hidden',
+      '--font-display': "'Syne', sans-serif",
+      '--font-body': "'Outfit', sans-serif",
+      '--font-mono': "'Space Mono', monospace",
+      fontFamily: 'var(--font-body)',
+    }}>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section 
         ref={heroRef}
         style={{ 
-          padding: 'clamp(140px, 16vw, 220px) clamp(24px, 6vw, 80px) clamp(60px, 8vw, 100px)',
+          minHeight: '100vh',
           position: 'relative',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
-          background: '#FFFFFF',
-          borderBottom: '1px solid rgba(0,0,0,0.08)'
+          justifyContent: 'flex-end',
+          overflow: 'hidden',
+          borderBottom: '1px solid rgba(0,0,0,0.12)'
         }}
       >
-        {/* Subtle dot pattern background */}
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.03, pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(#0A0A0A 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
-        }} />
+        {/* Full-bleed parallax background image */}
+        <div
+          ref={heroBgRef}
+          style={{
+            position: 'absolute',
+            inset: '-15%',
+            backgroundImage: 'url(/PURE_YELLOW_BG_WITH_(MAN_202606181135.jpeg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            willChange: 'transform',
+            zIndex: 0,
+          }}
+        />
 
-        <div style={{ position: 'relative', zIndex: 2 }}>
+        {/* Dark gradient overlay – left-to-right, deep at bottom */}
+        <div
+          ref={heroOverRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 55%, rgba(0,0,0,0.04) 100%), linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.10) 60%, transparent 100%)',
+            opacity: 0.55,
+            zIndex: 1,
+          }}
+        />
+
+        {/* Text content */}
+        <div
+          ref={heroTextRef}
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            padding: 'clamp(140px, 16vw, 220px) clamp(24px, 6vw, 80px) clamp(60px, 8vw, 100px)',
+          }}
+        >
           <div className="anim" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#7A9A00' }} />
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600 }}>
+            <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#C8F135' }} />
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600 }}>
               GROWTH ARCHITECTURE
             </span>
           </div>
@@ -253,17 +330,18 @@ export default function MarketingPage() {
           <h1 className="anim" style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(52px, 8vw, 110px)',
-            fontWeight: 700,
+            fontWeight: 800,
             letterSpacing: '-0.03em',
             textTransform: 'uppercase',
             lineHeight: 0.9,
             margin: '0 0 36px',
             maxWidth: '1200px',
-            color: '#0A0A0A'
+            color: '#FFFFFF',
+            textShadow: '0 2px 40px rgba(0,0,0,0.4)',
           }}>
             WE BUILD<br />
             MOMENTUM<br />
-            <span style={{ color: '#7A9A00' }}>THAT LASTS.</span>
+            <span style={{ color: '#C8F135' }}>THAT LASTS.</span>
           </h1>
 
           <div className="anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '40px', marginTop: '16px' }}>
@@ -271,16 +349,17 @@ export default function MarketingPage() {
               fontFamily: 'var(--font-body)',
               fontSize: 'clamp(16px, 1.8vw, 20px)',
               lineHeight: 1.7,
-              color: '#4B5563',
-              maxWidth: '620px',
-              margin: 0
+              color: 'rgba(255,255,255,0.85)',
+              maxWidth: '560px',
+              margin: 0,
+              textShadow: '0 1px 12px rgba(0,0,0,0.5)',
             }}>
               High-performance marketing engineered for strategic clarity, modern distribution, and organic velocity. We strip away the fluff to build systems that scale.
             </p>
             <Link to="/consult"
               style={{
                 fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase',
-                color: '#FFFFFF', background: '#0A0A0A', padding: '18px 36px', textDecoration: 'none', fontWeight: 600,
+                color: '#0A0A0A', background: '#C8F135', padding: '18px 36px', textDecoration: 'none', fontWeight: 600,
                 transition: 'opacity 0.2s, transform 0.2s', display: 'inline-block',
                 borderRadius: '0px'
               }}
@@ -297,7 +376,7 @@ export default function MarketingPage() {
       <section 
         ref={graphSectionRef}
         style={{ 
-          background: '#0A0A0A', 
+          background: '#000000', // Pure black section
           color: '#FFFFFF',
           padding: 'clamp(80px, 10vw, 120px) clamp(24px, 6vw, 80px)',
           position: 'relative',
@@ -362,13 +441,13 @@ export default function MarketingPage() {
             {/* SVG Path */}
             <svg style={{ width: '100%', height: '100%', overflow: 'visible', position: 'relative', zIndex: 2 }}>
               <path
-                ref={graphPathRef}
-                d="M 0 280 C 120 280, 180 200, 300 180 C 420 160, 480 80, 680 20"
-                fill="none"
-                stroke="#C8F135"
-                strokeWidth="4"
-                strokeLinecap="round"
-                style={{ vectorEffect: 'non-scaling-stroke' }}
+                 ref={graphPathRef}
+                 d="M 0 280 C 120 280, 180 200, 300 180 C 420 160, 480 80, 680 20"
+                 fill="none"
+                 stroke="#C8F135"
+                 strokeWidth="4"
+                 strokeLinecap="round"
+                 style={{ vectorEffect: 'non-scaling-stroke' }}
               />
               
               {/* Highlight growth dots */}
@@ -387,17 +466,17 @@ export default function MarketingPage() {
       <section 
         ref={servicesRef}
         style={{ 
-          background: '#FFFFFF', 
+          background: '#0E1217', // Dark slate blue/grey background
           padding: 'clamp(80px, 10vw, 120px) clamp(24px, 6vw, 80px)',
-          borderBottom: '1px solid rgba(0,0,0,0.08)'
+          borderBottom: '1px solid rgba(255,255,255,0.05)'
         }}
       >
         <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr', gap: '80px', alignItems: 'start' }}>
           {/* Left Sticky Header */}
           <div style={{ position: 'sticky', top: '100px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#7A9A00' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600 }}>
+              <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#C8F135' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600 }}>
                 Capabilities
               </span>
             </div>
@@ -409,17 +488,17 @@ export default function MarketingPage() {
               textTransform: 'uppercase', 
               margin: '0 0 24px', 
               lineHeight: 0.9, 
-              color: '#0A0A0A' 
+              color: '#FFFFFF' 
             }}>
               GROWTH<br />CAPABILITIES.
             </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: '#4B5563', margin: 0, maxWidth: '320px' }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: 'rgba(255,255,255,0.6)', margin: 0, maxWidth: '320px' }}>
               We build custom pipelines tailored to your business profile. No pre-packaged packages, just conversion engines that perform.
             </p>
           </div>
 
           {/* Right Services Rows */}
-          <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid rgba(0,0,0,0.08)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
             {SERVICES.map(({ title, desc, metric }, idx) => (
               <div
                 key={title}
@@ -431,10 +510,10 @@ export default function MarketingPage() {
                   gridTemplateColumns: '60px 1.5fr 1fr',
                   gap: '32px',
                   padding: '36px 0',
-                  borderBottom: '1px solid rgba(0,0,0,0.08)',
+                  borderBottom: '1px solid rgba(255,255,255,0.08)',
                   alignItems: 'start',
                   transition: 'background 0.25s ease',
-                  background: hoveredService === idx ? 'rgba(122,154,0,0.04)' : 'transparent',
+                  background: hoveredService === idx ? 'rgba(200,241,53,0.06)' : 'transparent',
                   paddingLeft: hoveredService === idx ? '16px' : '0px',
                   paddingRight: hoveredService === idx ? '16px' : '0px',
                   cursor: 'default'
@@ -444,7 +523,7 @@ export default function MarketingPage() {
                 <span style={{
                   fontFamily: 'var(--font-mono)',
                   fontSize: '13px',
-                  color: hoveredService === idx ? '#7A9A00' : 'rgba(0,0,0,0.3)',
+                  color: hoveredService === idx ? '#C8F135' : 'rgba(255,255,255,0.3)',
                   fontWeight: 600,
                   marginTop: '4px',
                   transition: 'color 0.25s ease'
@@ -458,13 +537,13 @@ export default function MarketingPage() {
                     fontFamily: 'var(--font-display)',
                     fontSize: 'clamp(20px, 2.2vw, 30px)',
                     fontWeight: 700,
-                    color: '#0A0A0A',
+                    color: '#FFFFFF',
                     margin: '0 0 10px',
                     lineHeight: 1.1
                   }}>
                     {title}
                   </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: '#4B5563', margin: 0 }}>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: 'rgba(255,255,255,0.6)', margin: 0 }}>
                     {desc}
                   </p>
                 </div>
@@ -475,9 +554,9 @@ export default function MarketingPage() {
                     fontFamily: 'var(--font-mono)',
                     fontSize: '11px',
                     letterSpacing: '0.12em',
-                    color: hoveredService === idx ? '#FFFFFF' : '#0A0A0A',
-                    background: hoveredService === idx ? '#0A0A0A' : 'rgba(0,0,0,0.04)',
-                    border: '1px solid rgba(0,0,0,0.08)',
+                    color: hoveredService === idx ? '#0A0A0A' : '#FFFFFF',
+                    background: hoveredService === idx ? '#C8F135' : 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(255,255,255,0.1)',
                     padding: '8px 16px',
                     textTransform: 'uppercase',
                     fontWeight: 600,
@@ -496,17 +575,18 @@ export default function MarketingPage() {
       <section 
         ref={workRef}
         style={{ 
-          background: '#F5F2EB', 
+          background: '#12161A', // Dark midnight slate background
+          color: '#FFFFFF',
           padding: 'clamp(80px, 10vw, 120px) clamp(24px, 6vw, 80px)',
-          borderBottom: '1px solid rgba(0,0,0,0.08)'
+          borderBottom: '1px solid rgba(255,255,255,0.05)'
         }}
       >
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '64px' }}>
           {/* Header */}
           <div style={{ maxWidth: '820px' }} className="work-fade">
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#7A9A00' }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600 }}>
+              <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#C8F135' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600 }}>
                 CASE STUDY
               </span>
             </div>
@@ -518,12 +598,12 @@ export default function MarketingPage() {
               textTransform: 'uppercase',
               lineHeight: 0.9,
               margin: '0 0 20px',
-              color: '#0A0A0A'
+              color: '#FFFFFF'
             }}>
               AYURVEDA ORGANICS.<br />
-              <span style={{ color: '#7A9A00' }}>AUDIENCE EVOLUTION.</span>
+              <span style={{ color: '#C8F135' }}>AUDIENCE EVOLUTION.</span>
             </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, color: '#4B5563', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8, color: 'rgba(255,255,255,0.7)', margin: 0 }}>
               A holistic brand positioning and creative execution program that aligned product authenticity with modern social distributions.
             </p>
           </div>
@@ -534,20 +614,20 @@ export default function MarketingPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }} className="work-fade">
               {/* Challenge */}
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600, marginBottom: '12px' }}>THE CHALLENGE</div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.8, color: '#374151', margin: 0 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600, marginBottom: '12px' }}>THE CHALLENGE</div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.8, color: '#D1D5DB', margin: 0 }}>
                   Ayurveda Organics needed a consistent, premium online presence that reflected organic product values while establishing platform visibility.
                 </p>
               </div>
 
               {/* What We Did */}
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600, marginBottom: '16px' }}>THE INTERVENTION</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600, marginBottom: '16px' }}>THE INTERVENTION</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
                   {AYURVEDA_WHAT_WE_DID.map((item, idx) => (
                     <div key={item} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#7A9A00', fontWeight: 600 }}>0{idx + 1}</span>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#374151' }}>{item}</span>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#C8F135', fontWeight: 600 }}>0{idx + 1}</span>
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#D1D5DB' }}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -555,12 +635,12 @@ export default function MarketingPage() {
 
               {/* Outcomes */}
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600, marginBottom: '16px' }}>THE VELOCITY OUTCOME</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#C8F135', fontWeight: 600, marginBottom: '16px' }}>THE VELOCITY OUTCOME</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {AYURVEDA_OUTCOME.map((item) => (
                     <div key={item} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#7A9A00' }} />
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#374151', fontWeight: 600 }}>{item}</span>
+                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#C8F135' }} />
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#FFFFFF', fontWeight: 600 }}>{item}</span>
                     </div>
                   ))}
                 </div>
@@ -569,25 +649,25 @@ export default function MarketingPage() {
 
             {/* Right Work Screenshots (Kept identical as requested but styled in minimal frames) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }} className="work-fade">
-              <div style={{ background: '#FFFFFF', border: '1px solid rgba(0,0,0,0.08)', padding: '16px', borderRadius: '4px', boxShadow: '0 20px 48px rgba(0,0,0,0.05)' }}>
+              <div style={{ background: '#1A212A', border: '1px solid rgba(255,255,255,0.08)', padding: '16px', borderRadius: '4px', boxShadow: '0 20px 48px rgba(0,0,0,0.3)' }}>
                 <img
                   src="/devpage/propertymsters/mm/smm%20ss.PNG"
                   alt="Organic Performance Stat Screenshot 1"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(0,0,0,0.4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
                   <span>IG METRIC OVERVIEW</span>
                   <span>VERIFIED INSTAGRAM REACH</span>
                 </div>
               </div>
 
-              <div style={{ background: '#FFFFFF', border: '1px solid rgba(0,0,0,0.08)', padding: '16px', borderRadius: '4px', boxShadow: '0 20px 48px rgba(0,0,0,0.05)' }}>
+              <div style={{ background: '#1A212A', border: '1px solid rgba(255,255,255,0.08)', padding: '16px', borderRadius: '4px', boxShadow: '0 20px 48px rgba(0,0,0,0.3)' }}>
                 <img
                   src="/devpage/propertymsters/mm/smm%20ss%202.PNG"
                   alt="Organic Performance Stat Screenshot 2"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(0,0,0,0.4)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '16px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.4)' }}>
                   <span>FB ENGAGEMENT OVERVIEW</span>
                   <span>VERIFIED AUDIENCE GROWTH</span>
                 </div>
@@ -601,14 +681,14 @@ export default function MarketingPage() {
       <section 
         ref={processRef}
         style={{ 
-          background: '#FFFFFF', 
+          background: '#D8DDD5', // Muted sage green background
           padding: 'clamp(80px, 10vw, 120px) clamp(24px, 6vw, 80px)',
           borderBottom: '1px solid rgba(0,0,0,0.08)'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-          <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#7A9A00' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#7A9A00', fontWeight: 600 }}>
+          <span style={{ display: 'inline-block', width: '32px', height: '1px', background: '#4A6000' }} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#4A6000', fontWeight: 600 }}>
             Execution Sequence
           </span>
         </div>
@@ -623,7 +703,7 @@ export default function MarketingPage() {
           lineHeight: 0.9
         }}>
           THE CONVERSION<br />
-          <span style={{ color: '#7A9A00' }}>FRAMEWORK.</span>
+          <span style={{ color: '#4A6000' }}>FRAMEWORK.</span>
         </h2>
 
         {/* Staggered process cards grid */}
@@ -633,8 +713,8 @@ export default function MarketingPage() {
               key={step}
               className="process-card"
               style={{
-                background: '#F5F2EB',
-                border: '1px solid rgba(0,0,0,0.06)',
+                background: '#FFFFFF', // Clean white card against sage green bg
+                border: '1px solid rgba(0,0,0,0.04)',
                 padding: '24px',
                 minHeight: '260px',
                 display: 'flex',
@@ -647,7 +727,7 @@ export default function MarketingPage() {
                 fontFamily: 'var(--font-mono)',
                 fontSize: '11px',
                 letterSpacing: '0.12em',
-                color: '#7A9A00',
+                color: '#4A6000',
                 fontWeight: 600
               }}>
                 {step}
@@ -677,7 +757,7 @@ export default function MarketingPage() {
       <section 
         ref={testimonialsRef}
         style={{ 
-          background: '#0A0A0A', 
+          background: '#0A0E0B', // Deep dark forest green/black
           color: '#FFFFFF',
           padding: 'clamp(80px, 10vw, 120px) clamp(24px, 6vw, 80px)'
         }}

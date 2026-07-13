@@ -198,7 +198,15 @@ export default function ProductionPage() {
   }, []);
 
   return (
-    <div style={{ background: '#F5F2EB', position: 'relative', color: '#0A0A0A' }}>
+    <div style={{
+      background: '#F5F2EB',
+      position: 'relative',
+      color: '#0A0A0A',
+      '--font-display': "'Cinzel', serif",
+      '--font-body': "'Plus Jakarta Sans', sans-serif",
+      '--font-mono': "'Space Mono', monospace",
+      fontFamily: 'var(--font-body)',
+    }}>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section

@@ -43,7 +43,7 @@ const CAPABILITIES = [
     desc: 'Full-stack systems engineered for scale. Web apps, APIs, headless commerce, and bespoke platforms built to last.',
     to: '/development',
     shape: 'square',
-    accent: '#C8F135',
+    accent: '#4A6B2F',
   },
   {
     index: '02',
@@ -70,7 +70,7 @@ const CAPABILITIES = [
     desc: 'Strategic clarity for complex problems. Fractional leadership, audits, and roadmaps that unlock real momentum.',
     to: '/about',
     shape: 'triangle',
-    accent: '#C8F135',
+    accent: '#4A6B2F',
   },
   {
     index: '05',
@@ -338,7 +338,7 @@ export default function HomePage() {
               fontFamily: 'var(--font-mono)',
               fontSize: '11px',
               letterSpacing: '0.2em',
-              color: '#C8F135',
+              color: '#4A6B2F',
               textTransform: 'uppercase',
               marginBottom: '24px',
               fontWeight: 600,
@@ -362,7 +362,7 @@ export default function HomePage() {
             }}
           >
             We Build<br />
-            <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Digital</span><br />
+            <span style={{ color: '#4A6B2F', fontStyle: 'italic' }}>Digital</span><br />
             Engines.
           </h1>
 
@@ -398,7 +398,7 @@ export default function HomePage() {
                     fontSize: '11px',
                     letterSpacing: '0.15em',
                     textTransform: 'uppercase',
-                    background: '#C8F135',
+                    background: '#4A6B2F',
                     color: '#0A0A0A',
                     padding: '14px 32px',
                     textDecoration: 'none',
@@ -620,7 +620,7 @@ export default function HomePage() {
                   whiteSpace: 'nowrap',
                 }}
               >
-                <span style={{ color: '#C8F135' }}>{num}</span> / {label}
+                <span style={{ color: '#4A6B2F' }}>{num}</span> / {label}
               </span>
             );
           })}
@@ -694,7 +694,7 @@ export default function HomePage() {
               }}
             >
               What We<br />
-              <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Do Best.</span>
+              <span style={{ color: '#4A6B2F', fontStyle: 'italic' }}>Do Best.</span>
             </h2>
             <p
               style={{
@@ -747,7 +747,7 @@ export default function HomePage() {
             desc: 'We bring senior-level thinking to every engagement. No juniors, no hand-offs, no excuses.',
             to: '/consult',
             shape: 'square',
-            accent: '#C8F135',
+            accent: '#4A6B2F',
             isDark: true,
           }].map(({ index, title, subtitle, desc, to, shape, accent, isDark }, i) => {
             const CARD_W = 380;
@@ -779,7 +779,7 @@ export default function HomePage() {
               >
                 <div>
                   <div style={{ marginBottom: '24px' }}>
-                    {SHAPES[shape](isDark ? '#C8F135' : accent)}
+                    {SHAPES[shape](isDark ? '#4A6B2F' : accent)}
                   </div>
                   <span
                     style={{
@@ -823,7 +823,7 @@ export default function HomePage() {
                       fontFamily: 'var(--font-mono)',
                       fontSize: '10px',
                       letterSpacing: '0.14em',
-                      background: '#C8F135',
+                      background: '#4A6B2F',
                       color: '#0A0A0A',
                       padding: '10px 20px',
                       display: 'inline-block',
@@ -903,7 +903,7 @@ export default function HomePage() {
             }}
           >
             How We<br />
-            <span style={{ color: '#C8F135', fontStyle: 'italic' }}>Operate.</span>
+            <span style={{ color: '#4A6B2F', fontStyle: 'italic' }}>Operate.</span>
           </h2>
           <p
             style={{
@@ -1029,7 +1029,7 @@ export default function HomePage() {
                 fontSize: '10px',
                 letterSpacing: '0.15em',
                 textTransform: 'uppercase',
-                background: '#C8F135',
+                background: '#4A6B2F',
                 color: '#0A0A0A',
                 padding: '12px 24px',
                 textDecoration: 'none',
@@ -1056,7 +1056,7 @@ export default function HomePage() {
               fontFamily: 'var(--font-mono)',
               fontSize: '10px',
               letterSpacing: '0.18em',
-              color: '#C8F135',
+              color: '#4A6B2F',
               textTransform: 'uppercase',
               marginBottom: '20px',
               fontWeight: 600,
@@ -1076,7 +1076,7 @@ export default function HomePage() {
           >
             Ready to build<br />
             something worth<br />
-            <span style={{ fontStyle: 'italic', color: '#C8F135' }}>remembering?</span>
+            <span style={{ fontStyle: 'italic', color: '#4A6B2F' }}>remembering?</span>
           </h2>
         </div>
         <div>
@@ -1098,7 +1098,7 @@ export default function HomePage() {
               fontSize: '11px',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              background: '#C8F135',
+              background: '#4A6B2F',
               color: '#0A0A0A',
               padding: '16px 36px',
               textDecoration: 'none',
@@ -1117,3 +1117,4 @@ export default function HomePage() {
     </div>
   );
 }
+

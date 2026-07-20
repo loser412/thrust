@@ -71,9 +71,19 @@ export default function AboutPage() {
       gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
         { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
 
-      gsap.fromTo(valRef.current?.querySelectorAll('.val-card') ?? [],
-        { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: valRef.current, start: 'top 80%' } });
+      // VALUES — alternating left/right scroll-triggered slide animation
+      valRef.current?.querySelectorAll('.val-card').forEach((card, i) => {
+        const fromX = i % 2 === 0 ? -60 : 60;
+        gsap.fromTo(card,
+          { x: fromX, opacity: 0, scale: 0.97 },
+          {
+            x: 0, opacity: 1, scale: 1,
+            duration: 0.9,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 85%', once: true },
+          }
+        );
+      });
 
       // ── Team cards: centre-locked stage, cards swap on scroll ──
       const stage = teamStageRef.current;
@@ -177,8 +187,8 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 48px', lineHeight: 0.95, color: '#0A0A0A' }}>
           What We<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Stand For.</span>
         </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          {VALUES.map(({ index, title, body, bg, textColor, labelColor }) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {VALUES.map(({ index, title, body, bg, textColor, labelColor }, i) => (
             <div
               key={index}
               className="val-card"
@@ -188,22 +198,21 @@ export default function AboutPage() {
                 gap: '40px',
                 padding: '44px 40px',
                 background: bg,
-                border: '1px solid rgba(0, 0, 0, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.06)',
                 boxSizing: 'border-box',
                 alignItems: 'start',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.04)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                position: 'relative',
+                overflow: 'hidden',
+                /* GSAP handles transform — no CSS transition on transform */
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.1em', color: labelColor, paddingTop: '4px', fontWeight: 600 }}>{index}</span>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 600, color: textColor, lineHeight: 1.2 }}>{title}</div>
+              {/* Retro accent stripe on left edge */}
+              <div style={{
+                position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px',
+                background: labelColor, opacity: 0.7,
+              }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.1em', color: labelColor, paddingTop: '4px', fontWeight: 700 }}>{index}</span>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: textColor, lineHeight: 1.2, letterSpacing: '-0.01em' }}>{title}</div>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.65, color: textColor, opacity: 0.8, margin: 0 }}>{body}</p>
             </div>
           ))}
@@ -319,7 +328,7 @@ export default function AboutPage() {
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 48px', lineHeight: 0.95, color: '#0A0A0A' }}>
           The Honest<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Difference.</span>
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '32px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
           {DIFFERENTIATORS.map(({ label, desc, bg }) => (
             <div
               key={label}
@@ -333,19 +342,11 @@ export default function AboutPage() {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 boxSizing: 'border-box',
-                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.06)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                /* No hover animation — static card as requested */
               }}
             >
               <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', marginBottom: '16px', fontWeight: 600 }}>{label}</div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', marginBottom: '16px', fontWeight: 700 }}>{label}</div>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.65, color: '#333333', margin: 0 }}>{desc}</p>
               </div>
             </div>

@@ -1,576 +1,421 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── DESIGN TOKENS ──────────────────────────────────────── */
-const T = {
-  cream:    '#F7F0E3',
-  darkCream:'#EDE4CF',
-  amber:    '#E8860A',
-  amberL:   '#FFB347',
-  burgundy: '#2C0A0A',
-  darkWarm: '#1A0C06',
-  rust:     '#C44A1E',
-  sand:     '#D4B896',
-  offBlack: '#110905',
-};
+/* ─── COLOR PALETTE (DARK RETRO WITH VINTAGE GROWTH ACCENTS) ─── */
+const BG_DARK   = '#12100E';       // deep vintage bronze-charcoal
+const BG_LIGHT  = '#EFEADF';       // warm retro cream
+const BG_ACCENT = '#1C1916';       // deep warm mahogany highlights
+const ACCENT    = '#2DCC70';       // retro phosphor mint green (growth)
+const AMBER     = '#E59A3B';       // retro amber gold (trajectory)
+const RUST      = '#C25942';       // retro terracotta/rust
+const WHITE     = '#EFEADF';       // warm cream-white text on dark
+const DARK_TXT  = '#1D1714';       // stark dark brown-black text on cream
+const MUTED_D   = '#9E938B';       // warm muted text on dark
+const MUTED_L   = '#7C7066';       // warm muted text on light
+const BORDER_D  = 'rgba(239,234,223,0.06)';
+const BORDER_L  = 'rgba(29,23,20,0.08)';
 
-const FONT_DISPLAY = "'Syne', sans-serif";
-const FONT_BODY    = "'Outfit', sans-serif";
-const FONT_MONO    = "'Space Mono', monospace";
+/* ─── FONTS ─── */
+const FD = 'var(--font-display)';   // Cormorant Garamond
+const FB = 'var(--font-body)';      // Plus Jakarta Sans
+const FM = 'var(--font-mono)';      // monospace
 
-/* ─── DATA ───────────────────────────────────────────────── */
-const SERVICES = [
-  { title: 'Paid Media Architecture',      desc: 'Thoughtful campaign frameworks across search, social, and display. We architect setups focused on high-intent relevance, capital efficiency, and customer retention.',      metric: '+142% avg CTR'    },
-  { title: 'Organic Search Optimization',  desc: 'Search visibility built around modern brand signals, clear content design, and long-term keyword authority. No hacks, just high-relevance visibility.',                    metric: 'Top-3 rankings'   },
-  { title: 'Content & Narrative Systems',  desc: 'A creative framework for brand stories, strategic product launches, and editorial rhythms that make your brand feel premium and distinct.',                               metric: 'Multi-channel'    },
-  { title: 'Conversion Experience Design', desc: 'Polished digital touchpoints and user journeys optimized to eliminate friction, respect visitor attention, and maximize organic action.',                                  metric: '3.8% → 7.2% CR'  },
-  { title: 'Integrated Growth Strategy',   desc: 'Market positioning, audience mapping, and campaign narratives that align product values with real-world customer expectations.',                                          metric: 'Strategic clarity' },
-];
-
-const PROCESS = [
-  { step: '01', title: 'DISCOVER & AUDIT',   desc: 'We dissect your audience, current metrics, and market category. A deep analysis reveals exactly where capital is wasted.' },
-  { step: '02', title: 'GROWTH PLAN',        desc: 'A clear, measurable campaign roadmap details the pathways, media allocations, and measurement goals.' },
-  { step: '03', title: 'CREATIVE BUILD',     desc: 'We design high-fidelity visual assets, copywriting frameworks, and digital touchpoints that command attention.' },
-  { step: '04', title: 'LAUNCH & STAGE',     desc: 'Rollouts are staged and monitored in real-time. We direct resources to high-performing subsets without delay.' },
-  { step: '05', title: 'MEASURE & EXPAND',   desc: 'Continuous optimization cycles. We refine messaging, double-down on winners, and consistently scale.' },
-];
-
-const TESTIMONIALS = [{
-  name: 'Gurnam Saini',
-  role: 'Founder, Ayurveda Organics',
-  quote: 'They transformed our organic story into a highly premium social footprint. The creative direction and consistent rhythm brought stronger audience engagement and brand authority than anything we had launched previously.',
-}];
-
-const AYURVEDA_WHAT_WE_DID = [
+/* ─── DATA ─── */
+const WHAT_WE_DID = [
   'Social Media Account Direction',
   'Content Rhythm & Scheduling',
   'High-Fidelity Visual Design',
   'Unified Brand Identity Systems',
-  'Organic Reach Optimization',
+  'Organic Reach Optimisation',
 ];
 
-const AYURVEDA_OUTCOME = [
-  'Elevated Brand Trust & Profile',
-  'Consistent Audience Retention',
-  'Deepened Platform Reach',
-  'Stabilized Posting Cadence',
+const CAPS = [
+  { n:'01', t:'Social Media'     },
+  { n:'02', t:'SEO'              },
+  { n:'03', t:'Content Systems'  },
+  { n:'04', t:'Web Architecture' },
+  { n:'05', t:'Brand Identity'   },
+  { n:'06', t:'Paid Media'       },
 ];
 
-/* ─── COMPONENT ──────────────────────────────────────────── */
+const SS = ['smm%20ss.PNG','smm%20ss%202.PNG'];
+
 export default function MarketingPage() {
-  const heroBgRef       = useRef(null);
-  const heroVideoRef    = useRef(null);
-  const heroOverRef     = useRef(null);
-  const heroTextRef     = useRef(null);
-  const graphPathRef    = useRef(null);
-  const graphSectionRef = useRef(null);
-  const servicesRef     = useRef(null);
-  const processRef      = useRef(null);
-  const workRef         = useRef(null);
-  const testimonialsRef = useRef(null);
-  const ctaRef          = useRef(null);
-  const marqueeRef      = useRef(null);
-  const [hoveredService, setHoveredService] = useState(null);
+  const heroRef     = useRef(null);
+  const caseRef     = useRef(null);
+  const p1Ref       = useRef(null);
+  const p2Ref       = useRef(null);
+  const f1Ref       = useRef(null);
+  const f2Ref       = useRef(null);
+  const heroPathRef = useRef(null);
+  const hc1Ref      = useRef(null);
+  const hc2Ref      = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Auto-play hero video
-    const vid = heroVideoRef.current;
-    if (vid) {
-      vid.muted = true;
-      vid.loop  = true;
-      vid.playsInline = true;
-      vid.play().catch(() => {});
-    }
-
     const ctx = gsap.context(() => {
 
-      /* ── HERO PARALLAX */
-      gsap.to(heroBgRef.current, {
-        y: '28%', scale: 1.08, ease: 'none',
-        scrollTrigger: { trigger: heroBgRef.current?.parentElement, start: 'top top', end: 'bottom top', scrub: 1.5 },
-      });
-      gsap.to(heroOverRef.current, {
-        opacity: 0.85, ease: 'none',
-        scrollTrigger: { trigger: heroBgRef.current?.parentElement, start: 'top top', end: '60% top', scrub: true },
-      });
-      gsap.to(heroTextRef.current, {
-        y: -60, opacity: 0.05, ease: 'none',
-        scrollTrigger: { trigger: heroBgRef.current?.parentElement, start: '20% top', end: '70% top', scrub: 1.2 },
-      });
-
-      /* ── HERO TEXT ENTRANCE */
-      gsap.fromTo(heroTextRef.current?.querySelectorAll('.anim') ?? [],
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out' }
-      );
-
-      /* ── MARQUEE TICKER */
-      if (marqueeRef.current) {
-        gsap.to(marqueeRef.current, {
-          xPercent: -50, ease: 'none', repeat: -1,
-          duration: 22,
-        });
-      }
-
-      /* ── SVG GRAPH DRAW */
-      if (graphPathRef.current && graphSectionRef.current) {
-        const path = graphPathRef.current;
-        const len  = path.getTotalLength();
-        path.style.strokeDasharray  = len;
-        path.style.strokeDashoffset = len;
-        gsap.to(path, {
-          strokeDashoffset: 0, ease: 'none',
-          scrollTrigger: { trigger: graphSectionRef.current, start: 'top 70%', end: 'bottom 40%', scrub: 1.2 },
-        });
-        gsap.fromTo(graphSectionRef.current.querySelectorAll('.grid-line'),
-          { opacity: 0 },
-          { opacity: 0.12, duration: 1, stagger: 0.05, scrollTrigger: { trigger: graphSectionRef.current, start: 'top 75%' } }
-        );
-        gsap.fromTo(graphSectionRef.current.querySelectorAll('.metric-box'),
-          { y: 30, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out', scrollTrigger: { trigger: graphSectionRef.current, start: 'top 65%' } }
-        );
-      }
-
-      /* ── SERVICES STAGGER */
-      gsap.fromTo(servicesRef.current?.querySelectorAll('.srv-row') ?? [],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.1, ease: 'power2.out', scrollTrigger: { trigger: servicesRef.current, start: 'top 72%' } }
-      );
-
-      /* ── PROCESS CARDS */
-      gsap.fromTo(processRef.current?.querySelectorAll('.proc-card') ?? [],
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.75, stagger: 0.12, ease: 'power2.out', scrollTrigger: { trigger: processRef.current, start: 'top 72%' } }
-      );
-
-      /* ── WORK FADE */
-      gsap.fromTo(workRef.current?.querySelectorAll('.work-fade') ?? [],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power2.out', scrollTrigger: { trigger: workRef.current, start: 'top 75%' } }
-      );
-
-      /* ── CTA */
-      gsap.fromTo(ctaRef.current,
+      /* Hero text entrance */
+      gsap.fromTo(
+        heroRef.current?.querySelectorAll('.ha') ?? [],
         { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, ease: 'power2.out', scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } }
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.12, ease: 'power3.out', delay: 0.15 }
       );
 
-    });
+      /* Animate hero growth bar (draw path) */
+      if (heroPathRef.current) {
+        try {
+          const len = heroPathRef.current.getTotalLength();
+          heroPathRef.current.style.strokeDasharray = len;
+          heroPathRef.current.style.strokeDashoffset = len;
+          
+          const tl = gsap.timeline({ delay: 0.6 });
+          tl.to(heroPathRef.current, {
+            strokeDashoffset: 0,
+            duration: 2.2,
+            ease: 'power2.inOut',
+          });
 
+          if (hc1Ref.current) {
+            tl.fromTo(hc1Ref.current, 
+              { scale: 0, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.5, ease: 'back.out(1.7)' },
+              '-=1.2'
+            );
+          }
+          if (hc2Ref.current) {
+            tl.fromTo(hc2Ref.current,
+              { scale: 0, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)' },
+              '-=0.4'
+            );
+          }
+        } catch (_) {}
+      }
+
+      /* Scroll-linked chart path draw (Case Study) */
+      [p1Ref.current, p2Ref.current].filter(Boolean).forEach((path, i) => {
+        try {
+          const len = path.getTotalLength();
+          path.style.strokeDasharray = len;
+          path.style.strokeDashoffset = len;
+          gsap.to(path, {
+            strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: i * 0.35,
+            scrollTrigger: { trigger: caseRef.current, start: 'top 72%', once: true },
+          });
+        } catch (_) {}
+      });
+      [f1Ref.current, f2Ref.current].filter(Boolean).forEach((el, i) => {
+        gsap.fromTo(el, { opacity: 0 }, {
+          opacity: 1, duration: 1.5, delay: 0.9 + i * 0.3,
+          scrollTrigger: { trigger: caseRef.current, start: 'top 72%', once: true },
+        });
+      });
+
+      /* Cine reveals (staggered scroll-reveals) */
+      document.querySelectorAll('.mkt-reveal').forEach((el) => {
+        gsap.fromTo(el,
+          { y: 36, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.95, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 86%', once: true } }
+        );
+      });
+
+      /* Floating aura animation */
+      gsap.to('.mkt-aura', { y: 15, duration: 4, repeat: -1, yoyo: true, ease: 'power1.inOut' });
+    });
     return () => ctx.revert();
   }, []);
 
-  /* ─── RENDER ─────────────────────────────────────────────── */
+  /* ── SHARED STYLES ── */
+  const sectionPad = { padding: '96px clamp(24px,6vw,80px)', boxSizing: 'border-box' };
+  const label = (color = ACCENT) => ({
+    display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px',
+  });
+  const labelLine = (color = ACCENT) => ({ width: '22px', height: '2px', background: color, flexShrink: 0 });
+  const labelText = (color = ACCENT) => ({
+    fontFamily: FM, fontSize: '10px', letterSpacing: '0.2em',
+    color, textTransform: 'uppercase', fontWeight: 700,
+  });
+
   return (
-    <div style={{
-      background: T.cream,
-      color: T.offBlack,
-      fontFamily: FONT_BODY,
-      '--font-display': FONT_DISPLAY,
-      '--font-body':    FONT_BODY,
-      '--font-mono':    FONT_MONO,
-      overflowX: 'hidden',
-    }}>
+    <div style={{ background: BG_DARK, color: WHITE, fontFamily: FB, overflowX: 'hidden' }}>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* HERO — full-bleed yellow photo + editorial overlay     */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section style={{ minHeight: '100vh', position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', overflow: 'hidden', background: T.darkWarm }}>
-        {/* Full-bleed background video */}
-        <div ref={heroBgRef} style={{
-          position: 'absolute', inset: '-15% -5%',
-          willChange: 'transform', zIndex: 0, overflow: 'hidden',
-        }}>
-          <video
-            ref={heroVideoRef}
-            autoPlay muted loop playsInline preload="auto"
-            style={{
-              width: '100%', height: '100%',
-              objectFit: 'cover',
-              filter: 'brightness(0.72) saturate(1.1)',
-            }}
-          >
-            <source src="/15681911_1920_1080_30fps.mp4" type="video/mp4" />
-          </video>
-        </div>
+      {/* ── Injected global styles ─────────────────────────── */}
+      <style>{`
+        .mkt-bg-grid {
+          background-image:
+            linear-gradient(rgba(45,204,112,0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(45,204,112,0.015) 1px, transparent 1px);
+          background-size: 60px 60px;
+        }
+        .mkt-btn-fill {
+          display: inline-block; text-decoration: none;
+          background: ${ACCENT};
+          color: ${BG_DARK};
+          font-family: ${FM}; font-size: 11px; font-weight: 700;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          padding: 16px 32px; border-radius: 2px;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .mkt-btn-fill:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(45,204,112,0.25); }
+        .mkt-btn-ghost {
+          display: inline-block; text-decoration: none;
+          border: 1px solid rgba(239,234,223,0.18); color: ${WHITE};
+          font-family: ${FM}; font-size: 11px; font-weight: 700;
+          letter-spacing: 0.1em; text-transform: uppercase;
+          padding: 16px 32px; background: transparent; border-radius: 2px;
+          transition: border-color 0.2s, color 0.2s;
+        }
+        .mkt-btn-ghost:hover { border-color: ${ACCENT}; color: ${ACCENT}; }
+        .mkt-cap-row {
+          display: flex; flex-direction: column; gap: 3px;
+          padding: 18px 0; border-bottom: 1px solid ${BORDER_L};
+        }
+        .mkt-cap-row:first-child { border-top: 1px solid ${BORDER_L}; }
+      `}</style>
 
-        {/* Gradient vignette */}
-        <div ref={heroOverRef} style={{
-          position: 'absolute', inset: 0, zIndex: 1, opacity: 0.5,
-          background: `
-            linear-gradient(to right,  ${T.darkWarm}DD 0%, ${T.darkWarm}66 50%, transparent 100%),
-            linear-gradient(to top,    ${T.darkWarm}F0 0%, ${T.darkWarm}55 55%, transparent 100%)
-          `,
-        }} />
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 01. HERO (CENTERED, RETRO PHOSPHOR GROWTH VISUAL)      */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section
+        ref={heroRef}
+        className="mkt-bg-grid"
+        style={{
+          minHeight: '100vh',
+          padding: '140px clamp(24px,6vw,80px) 100px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          boxSizing: 'border-box',
+          borderBottom: `1px solid ${BORDER_D}`,
+        }}
+      >
+        {/* Soft phosphor green glow sphere */}
+        <div className="mkt-aura" style={{ position:'absolute', top:'25%', left:'50%', transform:'translate(-50%,-50%)', width:'480px', height:'480px', borderRadius:'50%', background:`radial-gradient(circle, ${ACCENT}08 0%, ${AMBER}02 60%, transparent 80%)`, pointerEvents:'none', zIndex: 0 }} />
 
-        {/* Diagonal amber stripe */}
-        <div style={{
-          position: 'absolute', top: '8%', right: '-4%',
-          width: '40vw', height: '4px', background: T.amber,
-          transform: 'rotate(-8deg)', zIndex: 2, opacity: 0.9,
-        }} />
-
-        {/* Text content */}
-        <div ref={heroTextRef} style={{
-          position: 'relative', zIndex: 3,
-          padding: 'clamp(120px,14vw,200px) clamp(24px,6vw,80px) clamp(56px,7vw,90px)',
-        }}>
-          {/* Label */}
-          <div className="anim" style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px' }}>
-            <span style={{ width: '48px', height: '3px', background: T.amber, display: 'inline-block' }} />
-            <span style={{
-              fontFamily: FONT_MONO, fontSize: '10px', letterSpacing: '0.28em',
-              textTransform: 'uppercase', color: T.amberL, fontWeight: 700,
-            }}>Growth Architecture</span>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '32px', width: '100%', maxWidth: '900px', position: 'relative', zIndex: 2 }}>
+          
+          {/* Eyebrow tag */}
+          <div className="ha" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ width: '16px', height: '2px', background: AMBER }} />
+            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.22em', color: AMBER, textTransform: 'uppercase', fontWeight: 700 }}>
+              CONVERSION ARCHITECTURE
+            </span>
+            <span style={{ width: '16px', height: '2px', background: AMBER }} />
           </div>
 
-          {/* Big editorial heading */}
-          <h1 className="anim" style={{
-            fontFamily: FONT_DISPLAY,
-            fontSize: 'clamp(64px, 9.5vw, 128px)',
-            fontWeight: 800, letterSpacing: '-0.04em',
-            textTransform: 'uppercase', lineHeight: 0.88,
-            margin: '0 0 40px', color: T.cream,
-            textShadow: '0 4px 48px rgba(0,0,0,0.5)',
+          {/* Heading */}
+          <h1 className="ha" style={{
+            fontFamily: FD,
+            fontSize: 'clamp(52px, 7.5vw, 114px)',
+            fontWeight: 700,
+            lineHeight: 0.9,
+            letterSpacing: '-0.03em',
+            margin: 0,
+            color: WHITE,
           }}>
-            WE BUILD<br />
-            MOMENTUM<br />
-            <em style={{ color: T.amber, fontStyle: 'italic' }}>THAT LASTS.</em>
+            Systems built to<br />
+            hold at <span style={{ color: ACCENT, fontStyle: 'italic', textShadow: `0 0 30px ${ACCENT}15` }}>altitude.</span>
           </h1>
 
-          {/* Sub-row */}
-          <div className="anim" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '32px' }}>
-            <p style={{
-              fontFamily: FONT_BODY, fontSize: 'clamp(15px,1.6vw,19px)',
-              lineHeight: 1.75, color: 'rgba(247,240,227,0.85)',
-              maxWidth: '540px', margin: 0,
-              textShadow: '0 1px 12px rgba(0,0,0,0.6)',
-            }}>
-              High-performance marketing engineered for strategic clarity, modern distribution, and organic velocity. We strip away the fluff to build systems that scale.
-            </p>
-            <Link to="/consult" style={{
-              fontFamily: FONT_MONO, fontSize: '11px', letterSpacing: '0.22em',
-              textTransform: 'uppercase', fontWeight: 700,
-              color: T.offBlack, background: T.amber,
-              padding: '18px 40px', textDecoration: 'none',
-              transition: 'all 0.25s ease', display: 'inline-block',
-              boxShadow: `0 0 0 3px ${T.amberL}66`,
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = T.amberL; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = T.amber;  e.currentTarget.style.transform = 'translateY(0)'; }}
-            >
-              ARCHITECT YOUR GROWTH →
-            </Link>
-          </div>
-        </div>
-
-        {/* Bottom editorial corner tag */}
-        <div style={{
-          position: 'absolute', bottom: 32, right: 40, zIndex: 3,
-          fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.2em',
-          color: 'rgba(247,240,227,0.4)', textTransform: 'uppercase',
-        }}>
-          THRUST & LOGIC / MARKETING
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* AMBER TICKER STRIP                                    */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <div style={{
-        background: T.amber, overflow: 'hidden',
-        padding: '14px 0', borderTop: `3px solid ${T.rust}`,
-        borderBottom: `3px solid ${T.rust}`,
-      }}>
-        <div ref={marqueeRef} style={{ display: 'flex', whiteSpace: 'nowrap', width: 'max-content' }}>
-          {Array(8).fill(['PAID MEDIA', 'SEO', 'CONTENT SYSTEMS', 'GROWTH STRATEGY', 'BRAND AUTHORITY', 'CONVERSION CRO']).flat().map((t, i) => (
-            <span key={i} style={{
-              fontFamily: FONT_MONO, fontSize: '11px', fontWeight: 700,
-              letterSpacing: '0.2em', textTransform: 'uppercase',
-              color: T.offBlack, padding: '0 48px',
-            }}>
-              {t} <span style={{ color: T.burgundy, margin: '0 8px' }}>✦</span>
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* GROWTH CHART — deep warm dark                        */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={graphSectionRef} style={{
-        background: T.darkWarm,
-        color: T.cream,
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Decorative circle */}
-        <div style={{
-          position: 'absolute', right: '-8vw', top: '50%', transform: 'translateY(-50%)',
-          width: '36vw', height: '36vw', borderRadius: '50%',
-          border: `1px solid ${T.amber}22`, pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute', right: '-4vw', top: '50%', transform: 'translateY(-50%)',
-          width: '24vw', height: '24vw', borderRadius: '50%',
-          border: `1px solid ${T.amber}33`, pointerEvents: 'none',
-        }} />
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr', gap: '60px', alignItems: 'center', position: 'relative', zIndex: 2 }}>
-          {/* Left */}
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <span style={{ width: '36px', height: '3px', background: T.amber, display: 'inline-block' }} />
-              <span style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL }}>
-                Growth Trajectory
-              </span>
-            </div>
-            <h2 style={{
-              fontFamily: FONT_DISPLAY,
-              fontSize: 'clamp(32px,4.5vw,60px)',
-              fontWeight: 800, letterSpacing: '-0.03em',
-              textTransform: 'uppercase', lineHeight: 0.9,
-              margin: '0 0 24px', color: T.cream,
-            }}>
-              DATA-DRIVEN<br />
-              VISIBILITY.<br />
-              <em style={{ color: T.amber, fontStyle: 'italic' }}>ZERO ACCIDENT.</em>
-            </h2>
-            <p style={{ fontFamily: FONT_BODY, fontSize: '15px', lineHeight: 1.8, color: `${T.sand}CC`, margin: 0, maxWidth: '400px' }}>
-              We map search behaviors, keyword gaps, and media efficiency markers to drive predictable curves, not short-term spikes.
-            </p>
-
-            {/* Metrics */}
-            <div style={{ display: 'flex', gap: '40px', marginTop: '48px' }}>
-              <div className="metric-box">
-                <div style={{ fontFamily: FONT_DISPLAY, fontSize: '48px', fontWeight: 800, color: T.amber, lineHeight: 1 }}>3.4x</div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.14em', color: T.sand, marginTop: '8px', textTransform: 'uppercase' }}>Avg ROI Increase</div>
-              </div>
-              <div className="metric-box">
-                <div style={{ fontFamily: FONT_DISPLAY, fontSize: '48px', fontWeight: 800, color: T.cream, lineHeight: 1 }}>12M+</div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.14em', color: T.sand, marginTop: '8px', textTransform: 'uppercase' }}>Organic Impressions</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right — SVG chart */}
-          <div style={{
-            position: 'relative', height: '320px', width: '100%',
-            background: `${T.burgundy}33`,
-            border: `1px solid ${T.amber}22`,
-            padding: '24px',
+          {/* Body Text */}
+          <p className="ha" style={{
+            fontFamily: FB,
+            fontSize: 'clamp(15px, 1.4vw, 17px)',
+            lineHeight: 1.8,
+            color: MUTED_D,
+            maxWidth: '560px',
+            margin: 0,
           }}>
-            {/* Grid lines */}
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '36px 0', pointerEvents: 'none' }}>
-              {[1,2,3,4].map(i => <div key={i} className="grid-line" style={{ width: '100%', height: '1px', background: T.cream, opacity: 0 }} />)}
-            </div>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', justifyContent: 'space-between', padding: '0 48px', pointerEvents: 'none' }}>
-              {[1,2,3,4,5].map(i => <div key={i} className="grid-line" style={{ height: '100%', width: '1px', background: T.cream, opacity: 0 }} />)}
-            </div>
+            We design, scale, and optimize customer acquisition channels. Our conversion pipelines are built with vintage precision to ensure predictability, traffic velocity, and enterprise growth.
+          </p>
 
-            <svg style={{ width: '100%', height: '100%', overflow: 'visible', position: 'relative', zIndex: 2 }}>
-              <path ref={graphPathRef}
-                d="M 0 280 C 120 280, 180 200, 300 180 C 420 160, 480 80, 680 20"
-                fill="none" stroke={T.amber} strokeWidth="4" strokeLinecap="round"
-                style={{ vectorEffect: 'non-scaling-stroke' }}
-              />
-              <circle cx="300" cy="180" r="6" fill={T.amber} />
-              <circle cx="680" cy="20" r="8" fill={T.cream} stroke={T.amber} strokeWidth="4" />
+          {/* CTAs */}
+          <div className="ha" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Link to="/consult" className="mkt-btn-fill">
+              SCALE ACQUISITION →
+            </Link>
+            <a href="#flight-plan" className="mkt-btn-ghost">
+              VIEW FLIGHT PLAN
+            </a>
+          </div>
+
+          {/* Minimalist Graphic representation of growth curve inline */}
+          <div className="ha" style={{ width: '100%', maxWidth: '640px', marginTop: '20px', opacity: 0.8 }}>
+            <svg viewBox="0 0 600 120" width="100%" height="120" style={{ overflow: 'visible' }}>
+              <line x1="0" y1="110" x2="600" y2="110" stroke="rgba(239,234,223,0.02)" strokeWidth="1" />
+              <line x1="0" y1="60" x2="600" y2="60" stroke="rgba(239,234,223,0.02)" strokeWidth="1" />
+              {/* Path line with custom amber-to-mint gradient */}
+              <defs>
+                <linearGradient id="retroGrowthGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor={AMBER} />
+                  <stop offset="100%" stopColor={ACCENT} />
+                </linearGradient>
+              </defs>
+              <path ref={heroPathRef} d="M 0,110 C 120,105 240,75 360,55 S 480,20 600,10" fill="none" stroke="url(#retroGrowthGrad)" strokeWidth="3" />
+              <circle ref={hc1Ref} cx="360" cy="55" r="4" fill={AMBER} style={{ transformOrigin: '360px 55px' }} />
+              <circle ref={hc2Ref} cx="600" cy="10" r="5" fill="#EFEADF" stroke={ACCENT} strokeWidth="2.5" style={{ transformOrigin: '600px 10px' }} />
             </svg>
+          </div>
 
-            <div style={{ position: 'absolute', bottom: '24px', left: '24px', fontFamily: FONT_MONO, fontSize: '10px', color: `${T.sand}88` }}>Q1 AUDIT</div>
-            <div style={{ position: 'absolute', top: '24px', right: '24px', fontFamily: FONT_MONO, fontSize: '11px', color: T.amber, fontWeight: 700 }}>SCALED GROWTH</div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 02. THE FLIGHT PLAN — cream bg                        */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section id="flight-plan" style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
+        <div className="mkt-reveal" style={label(RUST)}>
+          <span style={labelLine(RUST)} />
+          <span style={labelText(RUST)}>The Strategy</span>
+        </div>
+        <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(38px,5.5vw,72px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 52px', color: DARK_TXT }}>
+          The flight plan.
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          {/* Card 1 — light */}
+          <div className="mkt-reveal" style={{ background: '#FFFFFF', border: `1px solid ${BORDER_L}`, padding: '44px 40px' }}>
+            <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '20px' }}>STEP 01</div>
+            <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: DARK_TXT, lineHeight: 1 }}>Discover & Audit</h3>
+            <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_L, margin: 0 }}>
+              We dissect your audience, current metrics, and market category. A deep analysis reveals exactly where capital is wasted and where growth is being left on the table.
+            </p>
+          </div>
+
+          {/* Card 2 — dark with grid */}
+          <div className="mkt-reveal" style={{ background: BG_DARK, border: `1px solid ${BORDER_D}`, padding: '44px 40px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', inset: 0, backgroundImage: `linear-gradient(rgba(45,204,112,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(45,204,112,0.015) 1px,transparent 1px)`, backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <span style={{ fontFamily: FM, fontSize: '9px', color: ACCENT, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>STEP 02</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span className="mkt-dot" style={{ width: '5px', height: '5px', borderRadius: '50%', background: ACCENT, display: 'inline-block' }} />
+                  <span style={{ fontFamily: FM, fontSize: '8px', color: ACCENT }}>LIVE</span>
+                </div>
+              </div>
+              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: WHITE, lineHeight: 1 }}>Growth Plan</h3>
+              <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_D, margin: 0 }}>
+                A clear, measurable revenue roadmap details the channels, media allocations, and performance targets. You'll know exactly what happens next.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* SERVICES — warm cream with amber row accents          */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={servicesRef} style={{
-        background: T.cream,
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)',
-        borderBottom: `1px solid ${T.sand}66`,
-      }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr', gap: '80px', alignItems: 'start' }}>
-          {/* Left sticky head */}
-          <div style={{ position: 'sticky', top: '100px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <span style={{ width: '36px', height: '3px', background: T.amber, display: 'inline-block' }} />
-              <span style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.rust, fontWeight: 700 }}>
-                Capabilities
-              </span>
-            </div>
-            <h2 style={{
-              fontFamily: FONT_DISPLAY,
-              fontSize: 'clamp(36px,4.5vw,64px)',
-              fontWeight: 800, letterSpacing: '-0.04em',
-              textTransform: 'uppercase', margin: '0 0 24px',
-              lineHeight: 0.9, color: T.burgundy,
-            }}>
-              GROWTH<br />
-              <em style={{ color: T.rust, fontStyle: 'italic' }}>CAPABILITIES.</em>
-            </h2>
-            <p style={{ fontFamily: FONT_BODY, fontSize: '14px', lineHeight: 1.9, color: '#5C3A28', margin: 0, maxWidth: '300px' }}>
-              We build custom pipelines tailored to your business profile. No pre-packaged packages — just conversion engines that perform.
-            </p>
-
-            {/* Big decorative number */}
-            <div style={{
-              fontFamily: FONT_DISPLAY, fontSize: '160px', fontWeight: 900,
-              color: `${T.amber}12`, lineHeight: 1, marginTop: '16px',
-              letterSpacing: '-0.06em', userSelect: 'none',
-            }}>05</div>
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 03. TESTIMONIAL — deep mahogany highlight section      */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section style={{ background: BG_ACCENT, ...sectionPad, borderTop: `1px solid ${BORDER_D}`, borderBottom: `1px solid ${BORDER_D}` }}>
+        <div style={{ maxWidth: '840px' }}>
+          <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
+            <span style={{ width: '22px', height: '2px', background: AMBER }} />
+            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: AMBER, textTransform: 'uppercase', fontWeight: 700 }}>
+              GURNAM SAINI / AYURVEDA ORGANICS
+            </span>
           </div>
-
-          {/* Right rows */}
-          <div style={{ display: 'flex', flexDirection: 'column', borderTop: `2px solid ${T.darkWarm}` }}>
-            {SERVICES.map(({ title, desc, metric }, idx) => (
-              <div key={title} className="srv-row"
-                onMouseEnter={() => setHoveredService(idx)}
-                onMouseLeave={() => setHoveredService(null)}
-                style={{
-                  display: 'grid', gridTemplateColumns: '52px 1.5fr 1fr',
-                  gap: '28px', padding: '32px 0',
-                  borderBottom: `1px solid ${T.sand}88`,
-                  alignItems: 'start',
-                  background: hoveredService === idx ? `${T.amber}0C` : 'transparent',
-                  paddingLeft:  hoveredService === idx ? '16px' : '0',
-                  paddingRight: hoveredService === idx ? '16px' : '0',
-                  transition: 'all 0.25s ease', cursor: 'default',
-                }}
-              >
-                <span style={{
-                  fontFamily: FONT_MONO, fontSize: '13px', fontWeight: 700,
-                  color: hoveredService === idx ? T.amber : `${T.burgundy}55`,
-                  marginTop: '4px', transition: 'color 0.25s ease',
-                }}>
-                  {String(idx + 1).padStart(2, '0')}
-                </span>
-                <div>
-                  <h3 style={{
-                    fontFamily: FONT_DISPLAY, fontSize: 'clamp(18px,2vw,26px)',
-                    fontWeight: 700, color: T.burgundy, margin: '0 0 10px', lineHeight: 1.1,
-                  }}>{title}</h3>
-                  <p style={{ fontFamily: FONT_BODY, fontSize: '14px', lineHeight: 1.8, color: '#6B4030', margin: 0 }}>{desc}</p>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: '100%' }}>
-                  <span style={{
-                    fontFamily: FONT_MONO, fontSize: '10px', letterSpacing: '0.12em',
-                    color: hoveredService === idx ? T.cream : T.burgundy,
-                    background: hoveredService === idx ? T.rust : `${T.amber}22`,
-                    border: `1px solid ${T.amber}55`,
-                    padding: '8px 16px', textTransform: 'uppercase', fontWeight: 700,
-                    transition: 'all 0.25s ease',
-                  }}>{metric}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <blockquote className="mkt-reveal" style={{ fontFamily: FD, fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(30px,4.2vw,58px)', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 36px', color: WHITE }}>
+            "The results outperformed anything we had launched previously."
+          </blockquote>
+          <p className="mkt-reveal" style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.14em', color: MUTED_D, textTransform: 'uppercase' }}>
+            Gurnam Saini — Founder, Ayurveda Organics
+          </p>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* CASE STUDY — deep burgundy dark                       */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={workRef} style={{
-        background: T.burgundy,
-        color: T.cream,
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)',
-        borderBottom: `1px solid ${T.rust}44`,
-        position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Decorative oversized text */}
-        <div style={{
-          position: 'absolute', bottom: '-4vw', right: '-2vw',
-          fontFamily: FONT_DISPLAY, fontSize: 'clamp(100px,16vw,220px)',
-          fontWeight: 900, color: `${T.rust}18`, lineHeight: 1,
-          pointerEvents: 'none', textTransform: 'uppercase', letterSpacing: '-0.05em',
-          userSelect: 'none',
-        }}>WORK</div>
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 04. CASE STUDY — cream bg                             */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section ref={caseRef} style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '64px', position: 'relative', zIndex: 2 }}>
-          {/* Header */}
-          <div className="work-fade" style={{ maxWidth: '820px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-              <span style={{ width: '36px', height: '3px', background: T.amber, display: 'inline-block' }} />
-              <span style={{ fontFamily: FONT_MONO, fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL, fontWeight: 700 }}>
-                CASE STUDY
-              </span>
+          {/* LEFT */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+            <div>
+              <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+                <span style={{ width: '22px', height: '2px', background: RUST }} />
+                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>CASE STUDY #001</span>
+              </div>
+              <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(28px,3.5vw,48px)', lineHeight: 1, letterSpacing: '-0.02em', margin: 0, color: DARK_TXT }}>
+                Ayurveda Organics —<br />audience evolution.
+              </h2>
             </div>
-            <h2 style={{
-              fontFamily: FONT_DISPLAY,
-              fontSize: 'clamp(36px,5vw,72px)',
-              fontWeight: 800, letterSpacing: '-0.04em',
-              textTransform: 'uppercase', lineHeight: 0.88,
-              margin: '0 0 20px', color: T.cream,
-            }}>
-              AYURVEDA ORGANICS.<br />
-              <em style={{ color: T.amber, fontStyle: 'italic' }}>AUDIENCE EVOLUTION.</em>
-            </h2>
-            <p style={{ fontFamily: FONT_BODY, fontSize: '16px', lineHeight: 1.8, color: `${T.sand}BB`, margin: 0 }}>
-              A holistic brand positioning and creative execution program that aligned product authenticity with modern social distributions.
+            <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_L, margin: 0 }}>
+              A holistic brand positioning and creative execution program that aligned organic product authenticity with modern social media distribution to drive consistent audience engagement and deeper platform reach.
             </p>
+            <div className="mkt-reveal">
+              <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '12px' }}>WHAT WE DID</div>
+              {WHAT_WE_DID.map((w) => (
+                <div key={w} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 0', borderBottom: `1px solid ${BORDER_L}` }}>
+                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: RUST, flexShrink: 0 }} />
+                  <span style={{ fontFamily: FB, fontSize: '13px', color: DARK_TXT }}>{w}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '60px', alignItems: 'start' }}>
-            {/* Left content */}
-            <div className="work-fade" style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
-              <div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL, fontWeight: 700, marginBottom: '12px' }}>THE CHALLENGE</div>
-                <p style={{ fontFamily: FONT_BODY, fontSize: '15px', lineHeight: 1.8, color: `${T.sand}CC`, margin: 0 }}>
-                  Ayurveda Organics needed a consistent, premium online presence that reflected organic product values while establishing platform visibility.
-                </p>
-              </div>
-              <div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL, fontWeight: 700, marginBottom: '16px' }}>THE INTERVENTION</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px' }}>
-                  {AYURVEDA_WHAT_WE_DID.map((item, idx) => (
-                    <div key={item} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                      <span style={{ fontFamily: FONT_MONO, fontSize: '11px', color: T.amber, fontWeight: 700 }}>0{idx + 1}</span>
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: T.sand }}>{item}</span>
-                    </div>
+          {/* RIGHT — chart + screenshots */}
+          <div className="mkt-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Chart panel */}
+            <div style={{ background: BG_DARK, padding: '28px', border: `1px solid ${BORDER_D}` }}>
+              {/* Header */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
+                <span style={{ fontFamily: FM, fontSize: '9px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700 }}>AUDIENCE GROWTH</span>
+                <div style={{ display: 'flex', gap: '14px' }}>
+                  {[{c:ACCENT,l:'Organic'},{c:`${AMBER}`,l:'Followers'}].map(({c,l}) => (
+                    <span key={l} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontFamily: FM, fontSize: '8px', color: c }}>
+                      <span style={{ width: '14px', height: '2px', background: c, display: 'inline-block' }} />{l}
+                    </span>
                   ))}
                 </div>
               </div>
-              <div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL, fontWeight: 700, marginBottom: '16px' }}>THE VELOCITY OUTCOME</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  {AYURVEDA_OUTCOME.map(item => (
-                    <div key={item} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: T.amber, flexShrink: 0 }} />
-                      <span style={{ fontFamily: FONT_BODY, fontSize: '14px', color: T.cream, fontWeight: 600 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            {/* Right screenshots */}
-            <div className="work-fade" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              {['smm%20ss.PNG', 'smm%20ss%202.PNG'].map((file, i) => (
-                <div key={file} style={{
-                  background: `${T.darkWarm}CC`,
-                  border: `1px solid ${T.amber}22`,
-                  padding: '12px',
-                  boxShadow: `0 24px 60px rgba(0,0,0,0.5)`,
-                }}>
-                  <img
-                    src={`/devpage/propertymsters/mm/${file}`}
-                    alt={`Screenshot ${i + 1}`}
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                  />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontFamily: FONT_MONO, fontSize: '9px', color: `${T.sand}66` }}>
-                    <span>{i === 0 ? 'IG METRIC OVERVIEW' : 'FB ENGAGEMENT OVERVIEW'}</span>
-                    <span>VERIFIED</span>
+              {/* SVG chart */}
+              <svg viewBox="0 0 540 180" width="100%" style={{ display: 'block', overflow: 'visible' }}>
+                <defs>
+                  <linearGradient id="mg1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={ACCENT} stopOpacity="0.25" />
+                    <stop offset="100%" stopColor={ACCENT} stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mg2" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={AMBER} stopOpacity="0.1" />
+                    <stop offset="100%" stopColor={AMBER} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {[40,80,120,160].map(y => <line key={y} x1="0" y1={y} x2="540" y2={y} stroke="rgba(239,234,223,0.02)" strokeWidth="1" />)}
+                <path ref={f1Ref} d="M0,165 C90,155 180,118 270,82 S450,28 540,10 L540,180 L0,180 Z" fill="url(#mg1)" opacity="0" />
+                <path ref={f2Ref} d="M0,172 C90,165 180,155 270,138 S450,105 540,78 L540,180 L0,180 Z" fill="url(#mg2)" opacity="0" />
+                <path ref={p1Ref} d="M0,165 C90,155 180,118 270,82 S450,28 540,10" fill="none" stroke={ACCENT} strokeWidth="2.5" strokeLinecap="round" />
+                <path ref={p2Ref} d="M0,172 C90,165 180,155 270,138 S450,105 540,78" fill="none" stroke={AMBER} strokeWidth="1.5" strokeLinecap="round" strokeDasharray="6 4" />
+                <circle cx="270" cy="82" r="4" fill={ACCENT} />
+                <circle cx="540" cy="10" r="5" fill="#EFEADF" stroke={ACCENT} strokeWidth="2.5" />
+              </svg>
+
+              {/* Metrics */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginTop: '18px', paddingTop: '16px', borderTop: `1px solid ${BORDER_D}` }}>
+                {[{l:'REACH / MO',v:'144.3k'},{l:'SAVES AVG',v:'4.5k'},{l:'IMPRESSIONS',v:'134.1k'}].map(({l,v}) => (
+                  <div key={l}>
+                    <div style={{ fontFamily: FM, fontSize: '8px', color: MUTED_D, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{l}</div>
+                    <div style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: WHITE, letterSpacing: '-0.01em' }}>{v}</div>
                   </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Screenshots */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {SS.map((f,i) => (
+                <div key={f} style={{ border: `1px solid ${BORDER_D}`, overflow: 'hidden' }}>
+                  <img src={`/devpage/propertymsters/mm/${f}`} alt={`Campaign ${i+1}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
                 </div>
               ))}
             </div>
@@ -578,166 +423,102 @@ export default function MarketingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* PROCESS — warm sand/cream alternating cards          */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={processRef} style={{
-        background: T.darkCream,
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)',
-        borderBottom: `1px solid ${T.sand}55`,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-          <span style={{ width: '36px', height: '3px', background: T.rust, display: 'inline-block' }} />
-          <span style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.rust, fontWeight: 700 }}>
-            Execution Sequence
-          </span>
-        </div>
-        <h2 style={{
-          fontFamily: FONT_DISPLAY,
-          fontSize: 'clamp(32px,4.5vw,68px)',
-          fontWeight: 800, letterSpacing: '-0.04em',
-          textTransform: 'uppercase', margin: '0 0 60px',
-          lineHeight: 0.88, color: T.burgundy,
-        }}>
-          THE CONVERSION<br />
-          <em style={{ color: T.rust, fontStyle: 'italic' }}>FRAMEWORK.</em>
-        </h2>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '16px' }}>
-          {PROCESS.map(({ step, title, desc }, idx) => (
-            <div key={step} className="proc-card" style={{
-              background: idx % 2 === 0 ? T.cream : T.burgundy,
-              padding: '28px 20px',
-              minHeight: '280px',
-              display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-              borderTop: `3px solid ${idx % 2 === 0 ? T.amber : T.rust}`,
-              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = `0 20px 48px rgba(0,0,0,0.15)`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)';    e.currentTarget.style.boxShadow = 'none'; }}
-            >
-              <span style={{
-                fontFamily: FONT_MONO, fontSize: '11px', letterSpacing: '0.12em',
-                color: idx % 2 === 0 ? T.rust : T.amberL, fontWeight: 700,
-              }}>{step}</span>
-              <div>
-                <h3 style={{
-                  fontFamily: FONT_DISPLAY, fontSize: '17px', fontWeight: 800,
-                  textTransform: 'uppercase', lineHeight: 1.1,
-                  color: idx % 2 === 0 ? T.burgundy : T.cream,
-                  margin: '0 0 10px',
-                }}>{title}</h3>
-                <p style={{
-                  fontFamily: FONT_BODY, fontSize: '13px', lineHeight: 1.75, margin: 0,
-                  color: idx % 2 === 0 ? '#6B4030' : `${T.sand}BB`,
-                }}>{desc}</p>
-              </div>
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 05. DATA VISIBILITY — dark                            */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section style={{ background: BG_DARK, ...sectionPad, borderTop: `1px solid ${BORDER_D}` }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+          {/* Left */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
+            <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ width: '22px', height: '2px', background: ACCENT }} />
+              <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Performance Metrics</span>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* TESTIMONIALS — amber accent on cream                 */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={testimonialsRef} style={{
-        background: T.amber,
-        padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Decorative bg quote mark */}
-        <div style={{
-          position: 'absolute', top: '-2vw', left: '-1vw',
-          fontFamily: FONT_DISPLAY, fontSize: 'clamp(200px,28vw,380px)',
-          fontWeight: 900, color: `${T.rust}22`, lineHeight: 1,
-          pointerEvents: 'none', userSelect: 'none',
-        }}>"</div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '60px', alignItems: 'start', position: 'relative', zIndex: 2 }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-              <span style={{ width: '36px', height: '3px', background: T.burgundy, display: 'inline-block' }} />
-              <span style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.burgundy, fontWeight: 700 }}>
-                Partnerships
-              </span>
-            </div>
-            <h2 style={{
-              fontFamily: FONT_DISPLAY,
-              fontSize: 'clamp(28px,4vw,52px)',
-              fontWeight: 800, letterSpacing: '-0.03em',
-              textTransform: 'uppercase', lineHeight: 0.92,
-              margin: 0, color: T.burgundy,
-            }}>
-              VERIFIED<br />REVIEWS.
+            <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(34px,4.5vw,64px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: 0, color: WHITE }}>
+              Data-driven<br />visibility.<br />
+              <em style={{ fontStyle: 'italic', color: ACCENT }}>Zero accident.</em>
             </h2>
+            <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: MUTED_D, maxWidth: '360px', margin: 0 }}>
+              We map conversion bottlenecks, find high-efficiency clusters in your data, and run efficiency audits. We trust data — always.
+            </p>
           </div>
-          <div>
-            {TESTIMONIALS.map(item => (
-              <div key={item.name}>
-                <p style={{
-                  fontFamily: FONT_DISPLAY,
-                  fontSize: 'clamp(20px,2.5vw,34px)',
-                  fontWeight: 600, fontStyle: 'italic',
-                  lineHeight: 1.4, color: T.burgundy, margin: '0 0 36px',
-                }}>
-                  "{item.quote}"
-                </p>
-                <div style={{ fontFamily: FONT_BODY, fontSize: '16px', fontWeight: 700, color: T.burgundy }}>{item.name}</div>
-                <div style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.14em', color: `${T.burgundy}88`, marginTop: '4px', textTransform: 'uppercase' }}>{item.role}</div>
+
+          {/* Right — circular metric cards */}
+          <div className="mkt-reveal" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            {[
+              { v: '3.4×',  l: 'AVG RETURN\nON AD SPEND',     big: true  },
+              { v: '13M+',  l: 'ORGANIC\nIMPRESSIONS / MO',   big: false },
+              { v: '+142%', l: 'AVERAGE CTR\nIMPROVEMENT',    big: true  },
+              { v: '7.2%',  l: 'AVERAGE\nCONVERSION RATE',   big: false },
+            ].map(({v,l,big}) => (
+              <div key={v} style={{
+                border: `1px solid ${BORDER_D}`,
+                borderRadius: '4px',
+                padding: '32px 24px',
+                display: 'flex', flexDirection: 'column', gap: '10px',
+                background: 'rgba(255,255,255,0.005)',
+              }}>
+                <div style={{ fontFamily: FD, fontSize: 'clamp(34px,3.8vw,52px)', fontWeight: 700, color: big ? ACCENT : WHITE, lineHeight: 1, letterSpacing: '-0.02em' }}>{v}</div>
+                <div style={{ fontFamily: FM, fontSize: '8px', color: MUTED_D, textTransform: 'uppercase', letterSpacing: '0.12em', lineHeight: 1.6, whiteSpace: 'pre-line' }}>{l}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* CTA — deep dark with amber action                    */}
-      {/* ══════════════════════════════════════════════════════ */}
-      <section ref={ctaRef} style={{
-        background: T.offBlack,
-        padding: 'clamp(80px,10vw,140px) clamp(24px,6vw,80px)',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        flexWrap: 'wrap', gap: '40px', position: 'relative', overflow: 'hidden',
-      }}>
-        {/* Decorative amber line */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          height: '4px', background: `linear-gradient(to right, ${T.amber}, ${T.rust})`,
-        }} />
-
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px' }}>
-            <span style={{ width: '36px', height: '3px', background: T.amber, display: 'inline-block' }} />
-            <span style={{ fontFamily: FONT_MONO, fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: T.amberL, fontWeight: 700 }}>
-              Get Started
-            </span>
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 06. GROWTH CAPABILITIES — cream bg                    */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '80px', alignItems: 'start' }}>
+          {/* Left */}
+          <div style={{ position: 'sticky', top: '90px' }}>
+            <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
+              <span style={{ width: '22px', height: '2px', background: RUST }} />
+              <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>Capabilities</span>
+            </div>
+            <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(34px,4.5vw,60px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 20px', color: DARK_TXT }}>
+              Growth<br />capabilities.
+            </h2>
+            <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: MUTED_L, margin: 0 }}>
+              We build custom-system solutions aligned to your business profile. Pre-advantage strategies — just momentum engines that flow.
+            </p>
           </div>
-          <h2 style={{
-            fontFamily: FONT_DISPLAY,
-            fontSize: 'clamp(40px,6vw,88px)',
-            fontWeight: 800, letterSpacing: '-0.04em',
-            textTransform: 'uppercase', lineHeight: 0.88,
-            margin: 0, color: T.cream,
-          }}>
-            READY TO STAGE<br />
-            <em style={{ color: T.amber, fontStyle: 'italic' }}>YOUR SCALE?</em>
-          </h2>
+
+          {/* Right — 3×2 grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0' }}>
+            {CAPS.map(({n,t}) => (
+              <div key={n} className="mkt-cap-row mkt-reveal">
+                <span style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.1em', fontWeight: 700 }}>{n} —</span>
+                <span style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(17px,2vw,24px)', letterSpacing: '-0.01em', color: DARK_TXT }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════ */}
+      {/* 07. CTA — dark                                        */}
+      {/* ═══════════════════════════════════════════════════════ */}
+      <section className="mkt-bg-grid" style={{ background: BG_DARK, ...sectionPad, paddingBottom: '140px', borderTop: `1px solid ${BORDER_D}` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }} className="mkt-reveal">
+          <span style={{ width: '22px', height: '2px', background: ACCENT }} />
+          <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Ready to Scale</span>
         </div>
 
-        <Link to="/consult" style={{
-          fontFamily: FONT_MONO, fontSize: '11px', letterSpacing: '0.22em',
-          textTransform: 'uppercase', fontWeight: 700,
-          color: T.offBlack, background: T.amber,
-          padding: '22px 48px', textDecoration: 'none',
-          transition: 'all 0.25s ease', display: 'inline-block',
-          boxShadow: `0 0 0 3px ${T.amberL}44`,
-        }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = T.amberL; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = T.amber;  e.currentTarget.style.transform = 'translateY(0)'; }}
-        >
-          LAUNCH CONSULTATION →
+        <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(52px,8vw,112px)', lineHeight: 0.87, letterSpacing: '-0.03em', margin: '0 0 32px', color: WHITE, maxWidth: '800px' }}>
+          We build momentum<br />that <em style={{ fontStyle: 'italic', color: ACCENT }}>lasts.</em>
+        </h2>
+
+        <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: MUTED_D, maxWidth: '440px', margin: '0 0 40px' }}>
+          High-performance marketing engineered for strategic vision, media distribution, and the only way to get it to work at scale.
+        </p>
+
+        <Link to="/consult" className="mkt-btn-fill mkt-reveal" style={{ fontSize: '11px', padding: '18px 36px' }}>
+          ARCHITECT YOUR GROWTH →
         </Link>
       </section>
+
     </div>
   );
 }

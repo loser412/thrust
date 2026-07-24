@@ -6,6 +6,10 @@
     gap: 48px !important;
   }
 
+  .footer-col {
+    width: 100%;
+  }
+
   .footer-stats {
     grid-template-columns: repeat(2, 1fr) !important;
   }

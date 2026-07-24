@@ -165,7 +165,7 @@ export default function AboutPage() {
     <div style={{ background: '#F5F2EB', position: 'relative', overflow: 'hidden' }}>
       
       {/* HERO */}
-      <section ref={heroRef} style={{ padding: '160px 60px 100px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
+      <section ref={heroRef} style={{ padding: '160px 24px 100px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
         <div className="anim"><SectionLabel index="ABT" label="ABOUT" /></div>
         <h1 className="anim" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(52px, 8vw, 100px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 0.95, margin: '24px 0 0', color: '#0A0A0A' }}>
           We Are Thrust<br />
@@ -182,7 +182,7 @@ export default function AboutPage() {
       </section>
 
       {/* VALUES: Static list of cards */}
-      <section ref={valRef} style={{ padding: '100px 60px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
+      <section ref={valRef} style={{ padding: '100px 24px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
         <SectionLabel index="001" label="VALUES" />
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 48px', lineHeight: 0.95, color: '#0A0A0A' }}>
           What We<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Stand For.</span>
@@ -225,7 +225,7 @@ export default function AboutPage() {
         style={{ background: '#F5F2EB', overflow: 'hidden' }}
       >
         {/* Section header */}
-        <div style={{ padding: '100px 60px 0', boxSizing: 'border-box' }}>
+        <div style={{ padding: '100px 24px 0', boxSizing: 'border-box' }}>
           <SectionLabel index="002" label="TEAM" />
           <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 40px', lineHeight: 0.95, color: '#0A0A0A' }}>
             The People<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Behind It.</span>

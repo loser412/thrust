@@ -142,7 +142,7 @@ export default function ConsultPage() {
     <div style={{ background: '#F5F2EB', position: 'relative', overflow: 'hidden' }}>
       
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section ref={heroRef} style={{ padding: '160px 60px 80px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
+      <section ref={heroRef} style={{ padding: '160px 24px 80px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
         <div>
           <div className="anim"><SectionLabel index="CST" label="CONSULT" /></div>
           <h1 className="anim" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(52px, 8vw, 100px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '24px 0 0', color: '#0A0A0A' }}>
@@ -171,7 +171,7 @@ export default function ConsultPage() {
       </section>
 
       {/* ── FORM: Black Background ───────────────────────────────────────── */}
-      <section style={{ padding: '100px 60px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', background: '#0A0A0A', color: '#FFFFFF' }}>
+      <section style={{ padding: '100px 24px', borderBottom: '1px solid rgba(255, 255, 255, 0.08)', background: '#0A0A0A', color: '#FFFFFF' }}>
         <SectionLabel index="001" label="INTAKE FORM" />
 
         {submitted ? (

@@ -95,7 +95,7 @@ export default function Navbar() {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '24px 60px',
+    padding: '24px clamp(20px, 4vw, 60px)',
     transition: 'background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
     background: isProductionPage
       ? '#000000'

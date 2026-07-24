@@ -157,6 +157,15 @@
     padding: 20px 24px;
     gap: 20px;
   }
+
+  .home-grid-section {
+    padding: 64px 20px;
+  }
+
+  .home-grid-cell, .home-grid-cell-dark {
+    padding: 28px;
+    min-height: 220px;
+  }
   .home-stats-grid {
     grid-template-columns: 1fr;
   }

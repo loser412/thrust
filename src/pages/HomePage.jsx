@@ -327,7 +327,7 @@ export default function HomePage() {
             position: 'relative',
             zIndex: 2,
             width: '100%',
-            padding: '120px 60px clamp(60px, 8vw, 100px)',
+            padding: '120px 24px clamp(60px, 8vw, 100px)',
             boxSizing: 'border-box',
           }}
         >

@@ -35,36 +35,19 @@ function pickColor(colorsList) {
   return colorsList[idx];
 }
 
-// Broad selector — target only h1 hero titles
 const SEL = 'h1';
 
-/**
- * Returns true only if:
- *  - computed color is close to pure white (R,G,B all ≥ 220)
- *  - computed opacity of the element itself is 1 (no fading)
- *  - color alpha channel is fully opaque
- */
 function parseRGB(color) {
   if (!color) return null;
   if (color.startsWith('#')) {
     let hex = color.slice(1);
     if (hex.length === 3) hex = hex.split('').map((c) => c + c).join('');
     const int = parseInt(hex, 16);
-    return {
-      r: (int >> 16) & 255,
-      g: (int >> 8) & 255,
-      b: int & 255,
-      a: 1,
-    };
+    return { r: (int >> 16) & 255, g: (int >> 8) & 255, b: int & 255, a: 1 };
   }
   const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
   if (!m) return null;
-  return {
-    r: parseInt(m[1], 10),
-    g: parseInt(m[2], 10),
-    b: parseInt(m[3], 10),
-    a: m[4] !== undefined ? parseFloat(m[4]) : 1,
-  };
+  return { r: parseInt(m[1], 10), g: parseInt(m[2], 10), b: parseInt(m[3], 10), a: m[4] !== undefined ? parseFloat(m[4]) : 1 };
 }
 
 function getLuminance(rgb) {
@@ -109,18 +92,12 @@ function isNeutralColor(colorStr) {
   return (max - min) < 50;
 }
 
-function chooseAccessibleTextColor(bgColor) {
-  return isColorDark(bgColor) ? '#FFFFFF' : '#111111';
-}
-
 function safePickColor(bgColor) {
   const isDark = bgColor ? isColorDark(bgColor) : true;
   const candidates = isDark ? DARK_BG_COLORS : LIGHT_BG_COLORS;
-  
   if (!bgColor) return pickColor(candidates);
-  
+
   const fallback = isDark ? '#FFFFFF' : '#111111';
-  
   const shuffled = [...candidates].sort(() => Math.random() - 0.5);
   for (let i = 0; i < shuffled.length; i += 1) {
     const candidate = shuffled[i];
@@ -131,22 +108,23 @@ function safePickColor(bgColor) {
   return fallback;
 }
 
-function useColorHover() {
+function useColorHover(enabled) {
   useEffect(() => {
+    if (!enabled) return;
+
     const onEnter = (e) => {
       const el = e.currentTarget;
-      
       const style = window.getComputedStyle(el);
       const opacity = parseFloat(style.opacity);
       if (opacity < 0.3) return;
-      
+
       const textColor = style.color;
       if (!isNeutralColor(textColor)) return;
-      
+
       const bgColor = findBackgroundColor(el);
       const safeColor = safePickColor(bgColor);
       if (!safeColor) return;
-      
+
       el.style.color = safeColor;
       el.style.transition = 'color 0.2s ease';
     };
@@ -175,7 +153,7 @@ function useColorHover() {
         delete el.dataset.cb;
       });
     };
-  }, []);
+  }, [enabled]);
 }
 
 // Scroll to top on route change
@@ -194,11 +172,14 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
-  useColorHover();
+function AppContent() {
+  const { pathname } = useLocation();
+  const isColorHoverEnabled = !['/about', '/consult'].includes(pathname);
+
+  useColorHover(isColorHoverEnabled);
 
   return (
-    <BrowserRouter>
+    <>
       <ScrollToTop />
       <MagneticCursor />
       <Navbar />
@@ -213,6 +194,14 @@ export default function App() {
         <Route path="/consult" element={<ConsultPage />} />
       </Routes>
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }

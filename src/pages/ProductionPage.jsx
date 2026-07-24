@@ -43,6 +43,7 @@ const FM = 'var(--font-mono)';
 
 export default function ProductionPage() {
   const heroRef        = useRef(null);
+  const heroBgRef      = useRef(null);
   const mainRef        = useRef(null);
   const videoRef       = useRef(null);
   const fitnessVidRef  = useRef(null);
@@ -73,6 +74,20 @@ export default function ProductionPage() {
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out', delay: 0.15 }
       );
+
+      if (heroBgRef.current) {
+        gsap.to(heroBgRef.current, {
+          yPercent: 18,
+          scale: 1.08,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      }
 
       // Section triggers
       gsap.fromTo(mainRef.current?.querySelectorAll('.sc-reveal') ?? [],
@@ -133,8 +148,24 @@ export default function ProductionPage() {
           display: 'flex',
           alignItems: 'center',
           borderBottom: `1px solid ${T.border}`,
+          position: 'relative',
+          overflow: 'hidden',
+          color: '#fff',
         }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '60px', width: '100%', alignItems: 'center' }}>
+          <div
+            ref={heroBgRef}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 0,
+              backgroundImage: `linear-gradient(110deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.38) 55%, rgba(0,0,0,0.64) 100%), url('/image3.jpeg')`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              willChange: 'transform',
+            }}
+          />
+          <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '60px', width: '100%', alignItems: 'center' }}>
             
             {/* Left Content */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
@@ -142,7 +173,7 @@ export default function ProductionPage() {
               {/* Status Badge */}
               <div className="h-anim" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span className="pulse-red" style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.red }} />
-                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', color: T.textDark, fontWeight: 700 }}>
+                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#fff', fontWeight: 700 }}>
                   STREAMING STATUS: LIVE
                 </span>
               </div>
@@ -155,7 +186,7 @@ export default function ProductionPage() {
                 lineHeight: 0.92,
                 letterSpacing: '-0.03em',
                 margin: 0,
-                color: T.textDark,
+                color: '#fff',
               }}>
                 Cinematic<br />
                 Production at Scale.
@@ -166,7 +197,7 @@ export default function ProductionPage() {
                 fontFamily: FB,
                 fontSize: '15px',
                 lineHeight: 1.8,
-                color: T.textMuted,
+                color: 'rgba(255,255,255,0.84)',
                 maxWidth: '480px',
                 margin: 0,
               }}>
@@ -176,56 +207,21 @@ export default function ProductionPage() {
               {/* KPI Badges */}
               <div className="h-anim" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 {SPECS.map(({ value, label }) => (
-                  <div key={label} style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '16px 24px', flex: '1 1 180px' }}>
-                    <span style={{ fontFamily: FM, fontSize: '8px', color: T.textMuted, letterSpacing: '0.1em', display: 'block', marginBottom: '4px' }}>{label}</span>
-                    <span style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: T.textDark }}>{value}</span>
+                  <div key={label} style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', padding: '16px 24px', flex: '1 1 180px', backdropFilter: 'blur(8px)' }}>
+                    <span style={{ fontFamily: FM, fontSize: '8px', color: 'rgba(255,255,255,0.72)', letterSpacing: '0.1em', display: 'block', marginBottom: '4px' }}>{label}</span>
+                    <span style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: '#fff' }}>{value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right Asset / Telemetry Video Card */}
             <div className="h-anim" style={{
-              background: T.cardBg,
-              border: `1px solid ${T.border}`,
-              padding: '30px',
-              minHeight: '380px',
+              minHeight: '320px',
               display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
+              alignItems: 'center',
+              justifyContent: 'center',
               position: 'relative',
-            }}>
-              {/* Terminal Code overlay */}
-              <div style={{
-                position: 'absolute',
-                top: '40px',
-                left: '40px',
-                zIndex: 10,
-                fontFamily: FM,
-                fontSize: '11px',
-                color: 'rgba(255,255,255,0.85)',
-                lineHeight: 1.6,
-                pointerEvents: 'none',
-                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-              }}>
-                {logLines.slice(0, logIndex).map((line, idx) => (
-                  <div key={idx}>{line}</div>
-                ))}
-              </div>
-
-              {/* Work Video Playing Inside styled container */}
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', background: '#EAEAEA' }}>
-                <video ref={videoRef} autoPlay muted loop playsInline preload="auto"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}>
-                  <source src="/13026224-hd_960_720_60fps.mp4" type="video/mp4" />
-                </video>
-              </div>
-
-              {/* Bottom tag identifier */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', fontFamily: FM, fontSize: '8px', color: T.textMuted, marginTop: '16px' }}>
-                <span>ARRI_LF PROT // 8K</span>
-              </div>
-            </div>
+            }} />
 
           </div>
         </section>
@@ -407,6 +403,7 @@ export default function ProductionPage() {
         {/* ══════════════════════════════════════════════════════ */}
         {/* 05. PROOF OF WORK (VIDEO GALLERY)                    */}
         {/* ══════════════════════════════════════════════════════ */}
+        {false && (
         <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderTop: `1px solid ${T.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
             <span style={{ width: '22px', height: '2px', background: T.accent }} />
@@ -534,6 +531,7 @@ export default function ProductionPage() {
             })}
           </div>
         </section>
+        )}
 
         {/* ══════════════════════════════════════════════════════ */}
         {/* 06. CTA WITH ANNIVERSARY VIDEO INTEGRATION            */}

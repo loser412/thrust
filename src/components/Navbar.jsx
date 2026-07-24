@@ -71,16 +71,17 @@ export default function Navbar() {
 
   // Homepage has full-screen dark video hero, development/marketing/production are dark pages
   const isDarkPage = ['/', '/development', '/marketing', '/production'].includes(location.pathname);
+  const isProductionPage = location.pathname === '/production';
 
   // Logo color: white on dark hero, dark when scrolled to cream bg
-  const logoColor = scrolled
+  const logoColor = scrolled || isProductionPage
     ? '#F5F2EB'
     : (isDarkPage ? '#FFFFFF' : '#0A0A0A');
 
   // Nav link color
   const getNavLinkColor = (isActive) => {
     if (isActive) return '#C8F135';
-    return scrolled
+    return scrolled || isProductionPage
       ? 'rgba(245,242,235,0.75)'
       : (isDarkPage ? 'rgba(255,255,255,0.75)' : '#0A0A0A');
   };
@@ -96,9 +97,11 @@ export default function Navbar() {
     justifyContent: 'space-between',
     padding: '24px 60px',
     transition: 'background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease',
-    background:     scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
-    backdropFilter: scrolled ? 'blur(12px)'          : 'none',
-    WebkitBackdropFilter: scrolled ? 'blur(12px)'   : 'none',
+    background: isProductionPage
+      ? '#000000'
+      : (scrolled ? 'rgba(10,10,10,0.92)' : 'transparent'),
+    backdropFilter: (scrolled || isProductionPage) ? 'blur(12px)' : 'none',
+    WebkitBackdropFilter: (scrolled || isProductionPage) ? 'blur(12px)' : 'none',
     borderBottom:   scrolled ? '1px solid rgba(255,255,255,0.07)' : '1px solid transparent',
   };
 

@@ -410,31 +410,6 @@ export default function HomePage() {
                 >
                   START PROJECT
                 </Link>
-                <Link
-                  to="/development"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '11px',
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    border: '1px solid rgba(255,255,255,0.3)',
-                    color: '#FFFFFF',
-                    padding: '14px 32px',
-                    textDecoration: 'none',
-                    fontWeight: 500,
-                    transition: 'border-color 0.2s, background 0.2s',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#FFFFFF';
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)';
-                    e.currentTarget.style.background = 'transparent';
-                  }}
-                >
-                  Our Services
-                </Link>
               </div>
 
               {/* Cap labels */}

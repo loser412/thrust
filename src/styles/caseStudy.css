@@ -17,12 +17,22 @@
 .premium-title{ margin-top:8px; font-family:var(--font-display); font-size:15px; font-weight:700 }
 .premium-summary{ margin-top:8px; color:var(--cs-muted); font-size:13px }
 .premium-cta{ margin-top:14px; display:inline-flex; align-items:center; gap:8px; color:var(--cs-accent); font-weight:700 }
+
+.development-case-grid .premium-card-link{ display:flex; justify-content:center; width:100%; }
+.development-case-grid .premium-card{ width:50%; max-width:220px; min-width:0; margin:0 auto; display:flex; flex-direction:column; }
+.development-case-grid .premium-hero{ padding:12px; }
+.development-case-grid .premium-hero img{ max-width:120px; }
+.development-case-grid .premium-card-body{ padding:10px 12px 14px; display:flex; flex-direction:column; gap:6px; color:#000; }
+.development-case-grid .premium-client{ font-size:12px; color:#000; }
+.development-case-grid .premium-title{ font-size:11px; margin-top:0; color:#000; }
+.development-case-grid .premium-summary{ font-size:10px; margin-top:0; line-height:1.35; color:#000; }
+.development-case-grid .premium-cta{ font-size:10px; margin-top:4px; color:#000; }
 .premium-cta .arrow{ display:inline-block; transform:translateX(0); transition:transform .22s ease }
 .premium-card:hover .premium-cta .arrow{ transform:translateX(6px) }
 
 /* Per-card background colors: 1st light blue, 2nd skin tone */
 .premium-card-link:nth-child(1) .premium-card{ background:#E6F7FF }
-.premium-card-link:nth-child(2) .premium-card{ background:#FFE8D6 }
+.premium-card-link:nth-child(2) .premium-card{ background:#FFE8D6; max-height: 240px; }
 
 .cs-page{ background:#fff; color:#111; min-height:100vh }
 .cs-hero{ background-size:cover; background-position:center; padding:120px 20px; color:#111; position:relative; overflow:hidden }

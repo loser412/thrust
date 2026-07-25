@@ -1,375 +1,481 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import SectionLabel from '../components/SectionLabel';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ─── COLOR PALETTE — VIBRANT, LUXURIOUS MULTI-TONE LIGHT DESIGN ─── */
+const BG_PAGE         = '#FDFCF7';       // soft warm porcelain
+const BG_LIGHT        = '#F4F2EB';       // warm sand grey
+const BG_DARK         = '#130F26';       // deep midnight violet for CTA
+const ACCENT_INDIGO   = '#5046E5';       // royal indigo
+const ACCENT_CORAL    = '#FF5938';       // energetic sunset coral
+const TEXT_DARK       = '#1C1613';       // rich dark espresso
+const TEXT_MID        = '#4B433E';       // warm charcoal
+const TEXT_MUTED      = '#857B74';       // soft earth grey
+const BORDER          = 'rgba(28,22,19,0.06)';
+
+/* Alternating premium pastel colors for cards */
+const BG_PASTELS = [
+  '#E3ECE8', // Soft Sage Green
+  '#F7EBE0', // Soft Peach
+  '#E6E4F0', // Soft Lavender
+  '#E2ECF2', // Soft Sky Blue
+];
+
+const TEXT_PASTELS = [
+  '#2C5243',
+  '#6B4423',
+  '#3C376B',
+  '#27475A',
+];
+
+const FD = 'var(--font-display)';
+const FB = 'var(--font-body)';
+const FM = 'var(--font-mono)';
+
+/* ─── DATA ─── */
 const VALUES = [
   {
     index: '/01',
     title: 'CLARITY OVER COMPLEXITY',
-    body: 'We don\'t add process for process\'s sake. Simple, direct, and well-reasoned beats elaborate and slow every time.',
-    bg: '#E8E3D7',      // Warm beige
-    textColor: '#1A1A1A',
-    labelColor: '#6B6252',
+    body: "We don't add process for process's sake. Simple, direct, and well-reasoned beats elaborate and slow every time.",
   },
   {
     index: '/02',
     title: 'SENIOR TALENT ONLY',
     body: 'Every engagement is run by people who have done it before — not managed by them. No juniors learning on your dime.',
-    bg: '#D2DDD0',      // Soft Sage
-    textColor: '#1A1A1A',
-    labelColor: '#4F5E4E',
   },
   {
     index: '/03',
     title: 'RADICAL TRANSPARENCY',
-    body: 'You know what we\'re doing, why we\'re doing it, and how it\'s tracking — in real time, always.',
-    bg: '#D5C0B5',      // Terracotta
-    textColor: '#1A1A1A',
-    labelColor: '#6B544A',
+    body: "You know what we're doing, why we're doing it, and how it's tracking — in real time, always.",
   },
   {
     index: '/04',
     title: 'OUTCOMES OVER OUTPUTS',
-    body: 'Deliverables matter less than results. We don\'t ship things. We move needles.',
-    bg: '#C8D3DB',      // Muted slate
-    textColor: '#1A1A1A',
-    labelColor: '#4A5B66',
+    body: "Deliverables matter less than results. We don't ship things. We move needles.",
+  },
+];
+
+const DIFFERENTIATORS = [
+  {
+    icon: '⬡',
+    title: 'No Account Managers',
+    desc: 'The people who pitch are the people who deliver.',
+  },
+  {
+    icon: '◈',
+    title: 'Flat Retainer Model',
+    desc: 'No hourly billing. Predictable cost, unlimited thinking.',
+  },
+  {
+    icon: '⬢',
+    title: 'Embedded Working',
+    desc: 'We operate like an internal team — in your Slack, on your calls.',
+  },
+  {
+    icon: '✦',
+    title: 'Honest Scope',
+    desc: "If we can't do something well, we'll tell you before you find out.",
   },
 ];
 
 const TEAM = [
-  { name: 'Damien Holt',    role: 'Founder / Strategy',      bio: '12 years scaling digital products for VC-backed startups and Fortune 500 brands.' },
-  { name: 'Priya Mathur',   role: 'Head of Development',     bio: 'Ex-Shopify engineer. Builds systems that handle 10× the traffic you think you\'ll ever get.' },
-  { name: 'Jordan Reef',    role: 'Creative Director',        bio: 'Former agency CD. Cuts creative briefs to the bone and shoots with surgical precision.' },
-  { name: 'Nadia Kovács',   role: 'Head of Performance',     bio: '8 years in paid media. Has managed $40M+ in ad spend with consistent ROAS above 3x.' },
-];
-
-const DIFFERENTIATORS = [
-  { label: 'NO ACCOUNT MANAGERS', desc: 'The people who pitch are the people who deliver.', bg: '#ECEBE4' },
-  { label: 'FLAT RETAINER MODEL', desc: 'No hourly billing. Predictable cost, unlimited thinking.', bg: '#E4EAE2' },
-  { label: 'EMBEDDED WORKING',    desc: 'We operate like an internal team — in your Slack, on your calls.', bg: '#EAE2DC' },
-  { label: 'HONEST SCOPE',        desc: 'If we can\'t do something well, we\'ll tell you before you find out.', bg: '#E2E6EA' },
+  {
+    name: 'Damien Holt',
+    role: 'Founder / Strategy',
+    bio: '12 years scaling digital products for VC-backed startups and Fortune 500 brands.',
+    img: '/about/team_damien.png',
+  },
+  {
+    name: 'Priya Mathur',
+    role: 'Head of Development',
+    bio: "Ex-Shopify engineer. Builds systems that handle 10× the traffic you think you'll ever get.",
+    img: '/about/team_priya.png',
+  },
+  {
+    name: 'Jordan Reef',
+    role: 'Creative Director',
+    bio: 'Former agency CD. Cuts creative briefs to the bone and shoots with surgical precision.',
+    img: '/about/team_marcus.png',
+  },
+  {
+    name: 'Nadia Kovács',
+    role: 'Head of Performance',
+    bio: '8 years in paid media. Has managed $40M+ in ad spend with consistent ROAS above 3x.',
+    img: '/about/team_elena.png',
+  },
 ];
 
 export default function AboutPage() {
-  const heroRef      = useRef(null);
-  const valRef       = useRef(null);
-  const teamRef      = useRef(null);
-  const teamStageRef = useRef(null);
-  const teamCardsRef = useRef([]);
-  const teamDotsRef  = useRef([]);
-  const diffRef      = useRef(null);
-  const ctaRef       = useRef(null);
+  const heroRef  = useRef(null);
+  const storyRef = useRef(null);
+  const princRef = useRef(null);
+  const valRef   = useRef(null);
+  const teamRef  = useRef(null);
+  const ctaRef   = useRef(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const ctx = gsap.context(() => {
-      gsap.fromTo(heroRef.current?.querySelectorAll('.anim') ?? [],
-        { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
+      /* Hero entrance */
+      gsap.fromTo(
+        heroRef.current?.querySelectorAll('.ha') ?? [],
+        { y: 32, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.13, ease: 'power3.out', delay: 0.1 }
+      );
 
-      // VALUES — alternating left/right scroll-triggered slide animation
-      valRef.current?.querySelectorAll('.val-card').forEach((card, i) => {
-        const fromX = i % 2 === 0 ? -60 : 60;
-        gsap.fromTo(card,
-          { x: fromX, opacity: 0, scale: 0.97 },
-          {
-            x: 0, opacity: 1, scale: 1,
-            duration: 0.9,
-            ease: 'power3.out',
-            scrollTrigger: { trigger: card, start: 'top 85%', once: true },
-          }
-        );
-      });
+      /* Story section */
+      gsap.fromTo(
+        storyRef.current?.querySelectorAll('.sa') ?? [],
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: { trigger: storyRef.current, start: 'top 80%', once: true } }
+      );
 
-      // ── Team cards: centre-locked stage, cards swap on scroll ──
-      const stage = teamStageRef.current;
-      const cards = teamCardsRef.current.filter(Boolean);
-      if (stage && cards.length) {
-        const CARD_W  = cards[0].offsetWidth || 380;
-        const SPACING = CARD_W + 60; // centre-to-centre distance
-        const PX_PER_CARD = 600;
-        const totalScroll = PX_PER_CARD * (cards.length - 1);
+      /* Principles cards */
+      gsap.fromTo(
+        princRef.current?.querySelectorAll('.pc') ?? [],
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: { trigger: princRef.current, start: 'top 80%', once: true } }
+      );
 
-        // Place every card initially
-        cards.forEach((card, i) => {
-          gsap.set(card, {
-            x:       i * SPACING,
-            scale:   i === 0 ? 1    : 0.78,
-            opacity: i === 0 ? 1    : i === 1 ? 0.5 : 0,
-            zIndex:  i === 0 ? 10   : 5,
-          });
-        });
+      /* Values cards */
+      gsap.fromTo(
+        valRef.current?.querySelectorAll('.vc') ?? [],
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: valRef.current, start: 'top 80%', once: true } }
+      );
 
-        // Update cards and indicator dots in real-time
-        const update = (progress) => {
-          const activeProgress = progress * (cards.length - 1);
+      /* Team cards */
+      gsap.fromTo(
+        teamRef.current?.querySelectorAll('.tc') ?? [],
+        { y: 28, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: teamRef.current, start: 'top 80%', once: true } }
+      );
 
-          cards.forEach((card, i) => {
-            const offset = i - activeProgress;
-            const dist   = Math.abs(offset);
-
-            const t     = Math.max(0, 1 - dist);
-            const scale = 0.78 + 0.22 * t;
-            const opacity = dist > 1.6 ? 0 : Math.max(0, 1 - dist * 0.65);
-
-            gsap.set(card, {
-              x:       offset * SPACING,
-              scale,
-              opacity,
-              zIndex:  Math.round(10 - dist * 3),
-            });
-          });
-
-          // Dynamic dots sizing & coloring
-          teamDotsRef.current.forEach((dot, dotIdx) => {
-            if (!dot) return;
-            const dist = Math.abs(dotIdx - activeProgress);
-            const activeWeight = Math.max(0, 1 - dist);
-            const w = 6 + 18 * activeWeight;
-            const op = 0.15 + 0.7 * activeWeight;
-            gsap.set(dot, {
-              width: `${w}px`,
-              background: `rgba(10, 10, 10, ${op})`
-            });
-          });
-        };
-
-        ScrollTrigger.create({
-          trigger: teamRef.current,
-          start: 'top top',
-          end: `+=${totalScroll}`,
-          scrub: 1.2,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => update(self.progress),
-        });
-      }
-
-      gsap.fromTo(diffRef.current?.querySelectorAll('.diff-item') ?? [],
-        { x: -20, opacity: 0 }, { x: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out',
-          scrollTrigger: { trigger: diffRef.current, start: 'top 80%' } });
-
+      /* CTA */
       gsap.fromTo(ctaRef.current,
-        { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out',
-          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } });
+        { y: 24, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out',
+          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%', once: true } }
+      );
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: '#F5F2EB', position: 'relative', overflow: 'hidden' }}>
-      
-      {/* HERO */}
-      <section ref={heroRef} style={{ padding: '160px 24px 100px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
-        <div className="anim"><SectionLabel index="ABT" label="ABOUT" /></div>
-        <h1 className="anim" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(52px, 8vw, 100px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 0.95, margin: '24px 0 0', color: '#0A0A0A' }}>
-          We Are Thrust<br />
-          <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>&amp; Logic</span>.
-        </h1>
-        <div className="anim" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '60px', marginTop: '60px' }}>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', lineHeight: 1.7, color: '#444444', margin: 0 }}>
+    <div style={{ background: BG_PAGE, color: TEXT_DARK, fontFamily: FB, overflowX: 'hidden' }}>
+
+      {/* ── Global styles ── */}
+      <style>{`
+        .abt-btn-primary {
+          display: inline-block; text-decoration: none;
+          background: linear-gradient(135deg, ${ACCENT_INDIGO} 0%, ${ACCENT_CORAL} 100%);
+          color: #FFFFFF;
+          font-family: ${FB}; font-size: 14px; font-weight: 600;
+          padding: 14px 30px; border-radius: 6px;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .abt-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(80,70,229,0.3); }
+        .abt-btn-outline {
+          display: inline-block; text-decoration: none;
+          border: 1.5px solid rgba(255,255,255,0.2); color: #FFFFFF;
+          font-family: ${FB}; font-size: 14px; font-weight: 600;
+          padding: 14px 30px; border-radius: 6px; background: transparent;
+          transition: border-color 0.2s, background 0.2s;
+        }
+        .abt-btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
+        .princ-card { transition: transform 0.25s, box-shadow 0.25s; }
+        .princ-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(28,22,19,0.05); }
+        .val-card { transition: transform 0.25s, box-shadow 0.25s; }
+        .val-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.04); }
+        .team-card { transition: transform 0.25s, box-shadow 0.25s; }
+        .team-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.05); }
+      `}</style>
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 01. HERO — split layout                            */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={heroRef}
+        style={{
+          padding: '140px clamp(24px,6vw,80px) 100px',
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '60px',
+          alignItems: 'center',
+          borderBottom: `1px solid ${BORDER}`,
+          boxSizing: 'border-box',
+          background: BG_PAGE,
+        }}
+      >
+        {/* Left: text */}
+        <div>
+          <div className="ha" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: ACCENT_CORAL, display: 'inline-block' }} />
+            <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.18em', color: ACCENT_CORAL, textTransform: 'uppercase', fontWeight: 700 }}>ABOUT THE AGENCY</span>
+          </div>
+
+          <h1 className="ha" style={{ fontFamily: FD, fontSize: 'clamp(42px,5.5vw,76px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.0, margin: '0 0 28px', color: TEXT_DARK }}>
+            Precision in Motion.<br />
+            <span style={{
+              background: `linear-gradient(90deg, ${ACCENT_INDIGO} 0%, ${ACCENT_CORAL} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>Full-Service</span> Digital<br />
+            Excellence.
+          </h1>
+
+          <p className="ha" style={{ fontFamily: FB, fontSize: '16px', lineHeight: 1.75, color: TEXT_MID, maxWidth: '460px', margin: 0 }}>
+            We translate complex technological challenges into elegant digital solutions through rigorous logic and creative momentum.
+          </p>
+        </div>
+
+        {/* Right: hero video (autoplay, muted, loop) */}
+        <div className="ha" style={{ position: 'relative', borderRadius: '4px', overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 12px 32px rgba(28,22,19,0.06)' }}>
+          <video
+            src="/Thrust_and_logic_animating_colors_202607250556.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+            aria-label="Animated hero background"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 02. STORY — original text left, image right        */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={storyRef}
+        style={{
+          padding: '100px clamp(24px,6vw,80px)',
+          display: 'grid',
+          gridTemplateColumns: '1.2fr 1fr',
+          gap: '80px',
+          alignItems: 'center',
+          borderBottom: `1px solid ${BORDER}`,
+          boxSizing: 'border-box',
+          background: BG_PAGE,
+        }}
+      >
+        {/* Left: text */}
+        <div>
+          <h2 className="sa" style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 24px', color: TEXT_DARK }}>
+            Born from a Need for<br />Technical Clarity
+          </h2>
+          <p className="sa" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: TEXT_MID, margin: '0 0 20px' }}>
             We started Thrust &amp; Logic because we were frustrated. Frustrated with agencies that staffed accounts with juniors, padded timelines, and measured success in decks delivered rather than problems solved.
           </p>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', lineHeight: 1.7, color: '#444444', margin: 0 }}>
+          <p className="sa" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: TEXT_MID, margin: '0 0 28px' }}>
             So we built the agency we wanted to hire. Senior-only. Flat. Transparent. Embedded in your world rather than billing by the hour from a distance. Six years later, the model works — for us and the brands we work with.
           </p>
-        </div>
-      </section>
-
-      {/* VALUES: Static list of cards */}
-      <section ref={valRef} style={{ padding: '100px 24px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
-        <SectionLabel index="001" label="VALUES" />
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 48px', lineHeight: 0.95, color: '#0A0A0A' }}>
-          What We<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Stand For.</span>
-        </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {VALUES.map(({ index, title, body, bg, textColor, labelColor }, i) => (
-            <div
-              key={index}
-              className="val-card"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '80px 1.2fr 2fr',
-                gap: '40px',
-                padding: '44px 40px',
-                background: bg,
-                border: '1px solid rgba(0, 0, 0, 0.06)',
-                boxSizing: 'border-box',
-                alignItems: 'start',
-                position: 'relative',
-                overflow: 'hidden',
-                /* GSAP handles transform — no CSS transition on transform */
-              }}
+          <div className="sa">
+            <Link
+              to="/consult"
+              style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.14em', color: ACCENT_CORAL, textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', borderBottom: `1.5px solid ${ACCENT_CORAL}`, paddingBottom: '2px' }}
             >
-              {/* Retro accent stripe on left edge */}
-              <div style={{
-                position: 'absolute', top: 0, left: 0, bottom: 0, width: '3px',
-                background: labelColor, opacity: 0.7,
-              }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '0.1em', color: labelColor, paddingTop: '4px', fontWeight: 700 }}>{index}</span>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: 700, color: textColor, lineHeight: 1.2, letterSpacing: '-0.01em' }}>{title}</div>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.65, color: textColor, opacity: 0.8, margin: 0 }}>{body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* TEAM: Centre-locked card stage */}
-      <section
-        ref={teamRef}
-        style={{ background: '#F5F2EB', overflow: 'hidden' }}
-      >
-        {/* Section header */}
-        <div style={{ padding: '100px 24px 0', boxSizing: 'border-box' }}>
-          <SectionLabel index="002" label="TEAM" />
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 40px', lineHeight: 0.95, color: '#0A0A0A' }}>
-            The People<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Behind It.</span>
-          </h2>
-          
-          {/* Scroll indicator row */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginBottom: '0',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
-              letterSpacing: '0.14em',
-              color: '#AAAAAA',
-            }}
-          >
-            <span style={{ width: '28px', height: '1px', background: '#AAAAAA', display: 'inline-block' }} />
-            SCROLL TO MEET
+              — ESTABLISHED 2019
+            </Link>
           </div>
         </div>
 
-        {/* —— Card Stage: fixed height, cards sit here absolutely centered —— */}
-        <div
-          ref={teamStageRef}
-          style={{
-            position: 'relative',
-            height: '480px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          {TEAM.map(({ name, role, bio }, i) => {
-            const CARD_W = 380;
+        {/* Right: architectural image */}
+        <div className="sa" style={{ borderRadius: '4px', overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 12px 32px rgba(28,22,19,0.06)' }}>
+          <img
+            src="/about/office.png"
+            alt="Technical clarity"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(0.25) brightness(0.95)' }}
+          />
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 03. PRINCIPLES — 4 columns using periwinkle cards   */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={princRef}
+        style={{
+          padding: '100px clamp(24px,6vw,80px)',
+          background: BG_LIGHT,
+          borderBottom: `1px solid ${BORDER}`,
+          boxSizing: 'border-box',
+          textAlign: 'center',
+        }}
+      >
+        <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 12px', color: TEXT_DARK }}>
+          Governed by Principles
+        </h2>
+        <p style={{ fontFamily: FB, fontSize: '15px', color: TEXT_MUTED, margin: '0 0 56px', lineHeight: 1.7 }}>
+          The pillars that sustain our momentum.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', textAlign: 'left' }}>
+          {DIFFERENTIATORS.map(({ icon, title, desc }, i) => {
+            const cardBg = BG_PASTELS[i % BG_PASTELS.length];
+            const iconColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
             return (
               <div
-                key={name}
-                ref={(el) => (teamCardsRef.current[i] = el)}
+                key={title}
+                className="pc princ-card"
                 style={{
-                  position: 'absolute',
-                  width: `${CARD_W}px`,
-                  height: '380px',
-                  /* centre the card on the stage origin */
-                  left: `calc(50% - ${CARD_W / 2}px)`,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: '#FFFFFF',
-                  border: '1px solid rgba(0, 0, 0, 0.08)',
-                  padding: '48px 40px',
-                  boxSizing: 'border-box',
+                  background: cardBg,
+                  borderRadius: '8px',
+                  padding: '40px 32px',
                   display: 'flex',
                   flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transformOrigin: 'center center',
-                  willChange: 'transform, opacity',
+                  gap: '16px',
+                  border: '1px solid rgba(0,0,0,0.03)',
                 }}
               >
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.15em', color: 'var(--accent)', marginBottom: '16px', textTransform: 'uppercase', fontWeight: 600 }}>{role}</div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 600, color: '#0A0A0A', marginBottom: '16px' }}>{name}</div>
+                <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: iconColor }}>
+                  {icon}
                 </div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.6, color: '#555555', margin: 0 }}>{bio}</p>
+                <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: TEXT_DARK, margin: 0, letterSpacing: '-0.01em' }}>{title}</h3>
+                <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.75, color: TEXT_MID, margin: 0 }}>{desc}</p>
               </div>
             );
           })}
         </div>
-
-        {/* Progress dots */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '8px',
-            paddingBottom: '80px',
-          }}
-        >
-          {TEAM.map((_, i) => (
-            <span
-              key={i}
-              ref={(el) => (teamDotsRef.current[i] = el)}
-              style={{
-                width: i === 0 ? '24px' : '6px',
-                height: '6px',
-                borderRadius: '3px',
-                background: i === 0 ? '#0A0A0A' : 'rgba(0,0,0,0.15)',
-                display: 'inline-block',
-                transition: 'all 0.3s',
-              }}
-            />
-          ))}
-        </div>
       </section>
 
-      {/* DIFFERENTIATORS */}
-      <section ref={diffRef} style={{ padding: '100px 60px', borderBottom: '1px solid rgba(0, 0, 0, 0.08)' }}>
-        <SectionLabel index="003" label="WHY US" />
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 64px)', fontWeight: 700, letterSpacing: '-0.03em', margin: '20px 0 48px', lineHeight: 0.95, color: '#0A0A0A' }}>
-          The Honest<br /><span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>Difference.</span>
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 04. VALUES — styled grid of the original 4 values   */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={valRef}
+        style={{
+          padding: '100px clamp(24px,6vw,80px)',
+          background: BG_PAGE,
+          borderBottom: `1px solid ${BORDER}`,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div className="vc" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: ACCENT_INDIGO, display: 'inline-block' }} />
+          <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.18em', color: ACCENT_INDIGO, textTransform: 'uppercase', fontWeight: 700 }}>VALUES</span>
+        </div>
+        <h2 className="vc" style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 52px', color: TEXT_DARK }}>
+          What We<br /><span style={{ fontStyle: 'italic', fontFamily: FD }}>Stand For.</span>
         </h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
-          {DIFFERENTIATORS.map(({ label, desc, bg }) => (
-            <div
-              key={label}
-              className="diff-item"
-              style={{
-                background: bg,
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                padding: '40px 32px',
-                minHeight: '220px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxSizing: 'border-box',
-                /* No hover animation — static card as requested */
-              }}
-            >
-              <div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--accent)', marginBottom: '16px', fontWeight: 700 }}>{label}</div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.65, color: '#333333', margin: 0 }}>{desc}</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          {VALUES.map(({ index, title, body }, i) => {
+            const dotColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
+            return (
+              <div
+                key={index}
+                className="vc val-card"
+                style={{
+                  background: '#FFFFFF',
+                  border: `1px solid ${BORDER}`,
+                  borderRadius: '8px',
+                  padding: '36px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                  borderLeft: `4px solid ${dotColor}`,
+                }}
+              >
+                <span style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.1em', color: dotColor, fontWeight: 700 }}>{index}</span>
+                <h3 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, color: TEXT_DARK, margin: 0 }}>{title}</h3>
+                <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.7, color: TEXT_MID, margin: 0 }}>{body}</p>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
-      {/* CTA */}
-      <section ref={ctaRef} style={{ padding: '100px 60px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px', background: '#0A0A0A', color: '#F5F2EB' }}>
-        <div>
-          <SectionLabel index="004" label="WORK WITH US" />
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(36px, 5vw, 60px)', fontWeight: 600, letterSpacing: '-0.02em', textTransform: 'none', margin: '16px 0 0', lineHeight: 1.1, color: '#FFFFFF' }}>
-            Sounds like<br />a <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)' }}>fit?</span>
-          </h2>
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 05. TEAM — original 4 team members                 */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={teamRef}
+        style={{
+          padding: '100px clamp(24px,6vw,80px)',
+          background: BG_LIGHT,
+          borderBottom: `1px solid ${BORDER}`,
+          boxSizing: 'border-box',
+        }}
+      >
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '52px', flexWrap: 'wrap', gap: '16px' }}>
+          <div>
+            <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 10px', color: TEXT_DARK }}>
+              The Collective Intelligence
+            </h2>
+            <p style={{ fontFamily: FB, fontSize: '15px', color: TEXT_MUTED, margin: 0 }}>
+              Led by industry specialists with a passion for precision.
+            </p>
+          </div>
+          <Link
+            to="/team"
+            style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.12em', color: ACCENT_INDIGO, textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}
+          >
+            View All Team →
+          </Link>
         </div>
-        <Link to="/consult" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#0A0A0A', background: '#FFFFFF', padding: '16px 36px', textDecoration: 'none', fontWeight: 500, transition: 'opacity 0.2s' }}
-          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.88'; }}
-          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}>
-          LET'S TALK &rarr;
-        </Link>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '28px' }}>
+          {TEAM.slice(0, 2).map(({ name, role, bio, img }, i) => {
+            const accentColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
+            return (
+              <div key={name} className="tc team-card" style={{ background: '#FFFFFF', padding: '24px', borderRadius: '8px', border: `1px solid ${BORDER}` }}>
+                {/* Photo */}
+                <div style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: '4px', marginBottom: '20px', background: '#E5E7EB', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
+                  <img
+                    src={img}
+                    alt={name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block', filter: 'grayscale(0.1)' }}
+                  />
+                </div>
+                <div style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, color: TEXT_DARK, marginBottom: '4px', letterSpacing: '-0.01em' }}>{name}</div>
+                <div style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.14em', color: accentColor, textTransform: 'uppercase', fontWeight: 700, marginBottom: '14px' }}>{role}</div>
+                <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.6, color: TEXT_MID, margin: 0 }}>{bio}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* 06. CTA — deep violet navy band                    */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <section
+        ref={ctaRef}
+        style={{
+          background: BG_DARK,
+          padding: '80px clamp(24px,6vw,80px)',
+          textAlign: 'center',
+          boxSizing: 'border-box',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Soft glowing ambient circle */}
+        <div style={{ position: 'absolute', top: '-50%', left: '-20%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(80,70,229,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-50%', right: '-20%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,89,56,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2, margin: '0 0 16px', color: '#FFFFFF' }}>
+            Ready to apply some logic to your next project?
+          </h2>
+          <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.75, color: 'rgba(255,255,255,0.6)', maxWidth: '480px', margin: '0 auto 36px' }}>
+            Let's discuss how our precision-engineered digital strategies can propel your brand forward.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            <Link to="/consult" className="abt-btn-primary">START A PROJECT</Link>
+          </div>
+        </div>
       </section>
 
     </div>
   );
 }
-

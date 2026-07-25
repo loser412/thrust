@@ -13,7 +13,7 @@ const T = {
   panel:   '#080C14',
   card:    '#0D1321',
   border:  '#1A2535',
-  accent:  '#4A6B2F',
+  accent:  '#00D4FF',
   cyan:    '#22D3EE',
   purple:  '#A855F7',
   rose:    '#FB7185',
@@ -665,9 +665,9 @@ export default function DevelopmentPage() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(320px,1fr))', gap: '24px' }}>
+          <div className="development-case-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '16px', justifyItems: 'center' }}>
             {CASE_STUDIES.map(p => (
-              <div key={p.id} className="wk-card">
+              <div key={p.id} className="wk-card" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                 <PremiumCaseCard project={p} />
               </div>
             ))}

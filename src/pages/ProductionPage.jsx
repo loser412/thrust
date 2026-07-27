@@ -37,8 +37,10 @@ const T = {
   red:        '#E11D48',       // Streaming status dot
 };
 
-const FD = 'var(--font-display)';
-const FB = 'var(--font-body)';
+// A condensed editorial face gives the production page a title-card / film-poster feel.
+// Manrope keeps body copy clean and highly legible beside the technical UI details.
+const FD = "'Barlow Condensed', 'Arial Narrow', sans-serif";
+const FB = "'Manrope', 'Helvetica Neue', sans-serif";
 const FM = 'var(--font-mono)';
 
 export default function ProductionPage() {
@@ -110,6 +112,20 @@ export default function ProductionPage() {
 
       {/* Global CSS injections matching stylesheet design */}
       <style>{`
+        .production-page h1, .production-page h2, .production-page h3, .production-page h4 {
+          font-stretch: condensed;
+          text-transform: uppercase;
+        }
+        .production-page h1 {
+          letter-spacing: -0.045em !important;
+          text-wrap: balance;
+        }
+        .production-page h2 {
+          letter-spacing: -0.025em !important;
+        }
+        .production-page p {
+          letter-spacing: -0.012em;
+        }
         .prod-grid-overlay {
           background-image:
             linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
@@ -137,7 +153,7 @@ export default function ProductionPage() {
         .pulse-red { animation: prodPulse 1.8s ease-in-out infinite; }
       `}</style>
 
-      <div className="prod-grid-overlay" ref={mainRef}>
+      <div className="prod-grid-overlay production-page" ref={mainRef}>
         
         {/* ══════════════════════════════════════════════════════ */}
         {/* 01. HERO                                              */}

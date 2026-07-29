@@ -174,7 +174,7 @@ function ScrollToTop() {
 
 function AppContent() {
   const { pathname } = useLocation();
-  const isColorHoverEnabled = !['/about', '/consult'].includes(pathname);
+  const isColorHoverEnabled = !['/', '/about', '/consult'].includes(pathname);
 
   useColorHover(isColorHoverEnabled);
 

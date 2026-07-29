@@ -25,6 +25,49 @@ const SPECS = [
   { value: '16-Bit',   label: 'COLOR DEPTH' },
 ];
 
+const PRODUCTION_ARSENAL = [
+  {
+    title: 'Pre-Production',
+    description: 'Every production starts with a deliberate plan: the idea, the narrative, the people, and the path to set.',
+    services: ['Creative Concept Development', 'Script Writing', 'Storyboarding', 'Mood Boards', 'Shot Planning', 'Location Scouting', 'Casting', 'Production Scheduling'],
+  },
+  {
+    title: 'Video Production',
+    description: 'From commercial campaigns to documentary stories, captured for the screen and the scroll.',
+    services: ['Commercials', 'Brand Films', 'Corporate Videos', 'Product Videos', 'Social Media Content', 'Promotional Videos', 'Documentary Production', 'Event Coverage', 'Interviews & Testimonials', 'Music Videos', 'Short Films', 'Educational Videos'],
+  },
+  {
+    title: 'Photography & Drone',
+    description: 'Still and aerial imagery that gives brands, places, products, and people a sharper point of view.',
+    services: ['Product Photography', 'Lifestyle Photography', 'Fashion Photography', 'Food Photography', 'Corporate Photography', 'Event Photography', 'Portrait Photography', 'E-commerce Photography', 'Real Estate Drone Shoots', 'Construction Progress Videos', 'Tourism & Landscape Filming'],
+  },
+  {
+    title: 'Post-Production',
+    description: 'Precision finishing for every format, from the first assembly through final delivery.',
+    services: ['Video Editing', 'Color Grading', 'Motion Graphics', '2D & 3D Animation', 'Sound Design', 'Audio Mixing', 'Voice-over Recording', 'Subtitles & Captions'],
+  },
+  {
+    title: 'Studio Production',
+    description: 'A controlled environment for polished recordings, broadcasts, conversations, and stills.',
+    services: ['Green Screen Production', 'Podcast Recording', 'Multi-Camera Production', 'Live Streaming', 'Studio Photography'],
+  },
+  {
+    title: 'Digital Content',
+    description: 'Always-on creative shaped around the places your audience actually spends time.',
+    services: ['Reels & Shorts', 'YouTube Content', 'Instagram Content', 'Ad Creatives', 'Explainer Videos', 'Testimonial Videos'],
+  },
+  {
+    title: 'Branding & Marketing',
+    description: 'Campaign-led visual systems made to launch, position, and move a brand forward.',
+    services: ['Brand Identity Videos', 'Product Launch Campaigns', 'Social Media Campaigns', 'Digital Advertisements', 'Creative Direction'],
+  },
+  {
+    title: 'Specialized & Crew',
+    description: 'The specialist craft, equipment, and on-set leadership that make ambitious work possible.',
+    services: ['360° Video Production', 'Time-Lapse Photography', 'Hyperlapse Videos', 'Lighting Setup', 'Audio Recording', 'Production Management', 'Art Direction', 'Set Design'],
+  },
+];
+
 /* ─── DESIGN TOKENS (LIGHT SYSTEM TO MATCH SCREENSHOT) ──── */
 const T = {
   bg:         '#F7F8FA',       // Light background
@@ -151,6 +194,14 @@ export default function ProductionPage() {
         .btn-outline-prod:hover { background: ${T.textDark}; color: ${T.bg}; }
         @keyframes prodPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         .pulse-red { animation: prodPulse 1.8s ease-in-out infinite; }
+        .campaign-delivery-card {
+          width: calc(200% + 20px);
+          margin-left: calc(-100% - 20px);
+        }
+        .campaign-delivery-content { margin: 0 auto; text-align: center; }
+        @media (max-width: 860px) {
+          .campaign-delivery-card { width: 100%; margin-left: 0; }
+        }
       `}</style>
 
       <div className="prod-grid-overlay production-page" ref={mainRef}>
@@ -259,7 +310,7 @@ export default function ProductionPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
             
-            {/* Left Big Card - Cinematic Capture */}
+            {/* Left Big Card - Pre-Production */}
             <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '48px 40px', minHeight: '440px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <div style={{ marginBottom: '24px' }}>
@@ -267,13 +318,13 @@ export default function ProductionPage() {
                     <path d="M23 7l-7 5 7 5V7zM1 5h15v14H1z" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: FD, fontSize: '28px', fontWeight: 700, margin: '0 0 16px', color: T.textDark }}>Cinematic Capture</h3>
+                <h3 style={{ fontFamily: FD, fontSize: '28px', fontWeight: 700, margin: '0 0 16px', color: T.textDark }}>{PRODUCTION_ARSENAL[0].title}</h3>
                 <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
-                  Global-tier optics and sensors designed for immersion. We deploy RED and ARRI ecosystems with surgical precision and automated data management.
+                  {PRODUCTION_ARSENAL[0].description}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '24px' }}>
-                {['RED V-RAPTOR', 'ARRI ALEXA 35', 'COOKE LENSES'].map(st => (
+                {PRODUCTION_ARSENAL[0].services.map(st => (
                   <span key={st} style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: T.textDark, border: `1px solid ${T.border}`, padding: '6px 12px' }}>{st}</span>
                 ))}
               </div>
@@ -284,7 +335,7 @@ export default function ProductionPage() {
               
               {/* Stacked Row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                {/* Stacked Card 1 - High-Bitrate Editing */}
+                {/* Stacked Card 1 - Video Production */}
                 <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '36px 30px' }}>
                   <div style={{ marginBottom: '20px' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5">
@@ -292,38 +343,47 @@ export default function ProductionPage() {
                       <path d="M7 2v20M17 2v20M2 12h20" />
                     </svg>
                   </div>
-                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>High-Bitrate Editing</h4>
+                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>{PRODUCTION_ARSENAL[1].title}</h4>
                   <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0 }}>
-                    Performant NLE environments optimized for multi-stream 8K RAW workflows.
+                    {PRODUCTION_ARSENAL[1].description}
                   </p>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px' }}>
+                    {PRODUCTION_ARSENAL[1].services.map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px' }}>{service}</span>)}
+                  </div>
                 </div>
 
-                {/* Stacked Card 2 - Motion Graphics & VFX */}
+                {/* Stacked Card 2 - Photography & Drone */}
                 <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '36px 30px' }}>
                   <div style={{ marginBottom: '20px' }}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5">
                       <path d="M12 2L2 22h20Z" />
                     </svg>
                   </div>
-                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>Motion Graphics & VFX</h4>
+                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>{PRODUCTION_ARSENAL[2].title}</h4>
                   <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0 }}>
-                    Procedural assets and visual effects integrated into the core narrative engine.
+                    {PRODUCTION_ARSENAL[2].description}
                   </p>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px' }}>
+                    {PRODUCTION_ARSENAL[2].services.map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px' }}>{service}</span>)}
+                  </div>
                 </div>
               </div>
 
-              {/* Bottom Wide Card - Color Science Pipelines (with video integration) */}
-              <div style={{ background: '#EAEAEA', border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden', padding: '40px', minHeight: '160px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              {/* Bottom Wide Card - Post, Studio & Campaign Delivery */}
+              <div className="campaign-delivery-card" style={{ background: '#EAEAEA', border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden', padding: '40px', minHeight: '160px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {/* Background video loop for 2D Fitness */}
                 <video ref={fitnessVidRef} autoPlay muted loop playsInline preload="metadata"
                   style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, zIndex: 0 }}>
                   <source src="/2d%20fitness/2D%20VIDEO.mp4" type="video/mp4" />
                 </video>
-                <div style={{ position: 'relative', zIndex: 2 }}>
-                  <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, margin: '0 0 8px', color: T.textDark }}>Color Science Pipelines</h3>
+                <div className="campaign-delivery-content" style={{ position: 'relative', zIndex: 2 }}>
+                  <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, margin: '0 0 8px', color: T.textDark }}>Post, Studio & Campaign Delivery</h3>
                   <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0, maxWidth: '440px' }}>
-                    ACES-managed workflows that eliminate color drift and guarantee 100% gamut accuracy before mastering.
+                    From finishing and studio execution to digital campaigns and specialist capture, every final asset is made ready for its audience.
                   </p>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px', maxWidth: '520px' }}>
+                    {PRODUCTION_ARSENAL.slice(3).flatMap(category => category.services).map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px', background: 'rgba(255,255,255,0.64)' }}>{service}</span>)}
+                  </div>
                 </div>
                 <div style={{ position: 'relative', zIndex: 2, width: '44px', height: '44px', borderRadius: '50%', border: `1px solid ${T.textDark}`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill={T.textDark}>

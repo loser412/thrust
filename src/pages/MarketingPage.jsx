@@ -34,15 +34,53 @@ const WHAT_WE_DID = [
 ];
 
 const CAPS = [
-  { n:'01', t:'Social Media'     },
-  { n:'02', t:'SEO'              },
-  { n:'03', t:'Content Systems'  },
-  { n:'04', t:'Web Architecture' },
-  { n:'05', t:'Brand Identity'   },
-  { n:'06', t:'Paid Media'       },
+  { n:'01', t:'Social Media',     d:'Always-on creative, community management, and channel direction that earns attention.' },
+  { n:'02', t:'SEO',              d:'Search strategy and content built to turn intent into sustained organic demand.' },
+  { n:'03', t:'Content Systems',  d:'A repeatable creative engine for campaigns, launch moments, and daily publishing.' },
+  { n:'04', t:'Web Architecture', d:'Conversion-led landing pages and journeys that make every visit work harder.' },
+  { n:'05', t:'Brand Identity',   d:'A distinct visual and verbal system that gives every growth channel a clear point of view.' },
+  { n:'06', t:'Paid Media',       d:'Testing, targeting, and optimisation designed to compound efficient acquisition.' },
 ];
 
 const SS = ['smm%20ss.PNG','smm%20ss%202.PNG'];
+
+function GrowthCapabilities({ sectionPad }) {
+  return (
+    <section style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT, borderBottom: `1px solid ${BORDER_L}` }}>
+      <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
+        <span style={{ width: '22px', height: '2px', background: RUST }} />
+        <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>Growth Capabilities</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, .9fr) minmax(0, 2.1fr)', gap: 'clamp(36px, 7vw, 100px)', alignItems: 'end', marginBottom: '46px' }}>
+        <div>
+          <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(38px,5.2vw,68px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 18px', color: DARK_TXT }}>
+            Growth<br />capabilities.
+          </h2>
+          <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: MUTED_L, margin: 0, maxWidth: '340px' }}>
+            The services that connect brand, distribution, and conversion into one momentum engine.
+          </p>
+        </div>
+        <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: DARK_TXT, margin: 0, maxWidth: '560px' }}>
+          Choose one capability or connect them all. Every engagement is shaped around the work that will create the clearest next move for your business.
+        </p>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
+        {CAPS.map(({ n, t, d }, index) => (
+          <article key={n} className="mkt-reveal" style={{ minHeight: '210px', background: index === 5 ? BG_DARK : '#FFFFFF', color: index === 5 ? WHITE : DARK_TXT, border: `1px solid ${index === 5 ? BORDER_D : BORDER_L}`, padding: '28px 26px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+              <span style={{ fontFamily: FM, fontSize: '9px', color: index === 5 ? ACCENT : RUST, letterSpacing: '0.12em', fontWeight: 700 }}>{n}</span>
+              <span style={{ width: '22px', height: '1px', background: index === 5 ? ACCENT : RUST }} />
+            </div>
+            <div>
+              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(23px,2.2vw,31px)', letterSpacing: '-0.01em', lineHeight: 1, color: 'inherit', margin: '0 0 13px' }}>{t}</h3>
+              <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: index === 5 ? MUTED_D : MUTED_L, margin: 0 }}>{d}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function MarketingPage() {
   const heroRef     = useRef(null);
@@ -270,8 +308,11 @@ export default function MarketingPage() {
         </div>
       </section>
 
+      {/* 02. GROWTH CAPABILITIES */}
+      <GrowthCapabilities sectionPad={sectionPad} />
+
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* 02. THE FLIGHT PLAN — cream bg                        */}
+      {/* 03. THE FLIGHT PLAN — cream bg                        */}
       {/* ═══════════════════════════════════════════════════════ */}
       <section id="flight-plan" style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
         <div className="mkt-reveal" style={label(RUST)}>
@@ -469,7 +510,7 @@ export default function MarketingPage() {
       {/* ═══════════════════════════════════════════════════════ */}
       {/* 06. GROWTH CAPABILITIES — cream bg                    */}
       {/* ═══════════════════════════════════════════════════════ */}
-      <section style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
+      <section hidden style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '80px', alignItems: 'start' }}>
           {/* Left */}
           <div style={{ position: 'sticky', top: '90px' }}>

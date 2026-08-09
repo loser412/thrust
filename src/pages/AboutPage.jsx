@@ -84,14 +84,14 @@ const DIFFERENTIATORS = [
 
 const TEAM = [
   {
-    name: 'Damien Holt',
-    role: 'Founder / Strategy',
+    name: 'Dev Haldiyan',
+    role: 'Founder',
     bio: '12 years scaling digital products for VC-backed startups and Fortune 500 brands.',
     img: '/about/team_damien.png',
   },
   {
-    name: 'Priya Mathur',
-    role: 'Head of Development',
+    name: 'Vikas Dhull',
+    role: 'Co-Founder',
     bio: "Ex-Shopify engineer. Builds systems that handle 10× the traffic you think you'll ever get.",
     img: '/about/team_priya.png',
   },

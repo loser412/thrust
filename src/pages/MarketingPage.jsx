@@ -26,20 +26,20 @@ const FM = 'var(--font-mono)';      // monospace
 
 /* ─── DATA ─── */
 const WHAT_WE_DID = [
-  'Social Media Account Direction',
-  'Content Rhythm & Scheduling',
-  'High-Fidelity Visual Design',
-  'Unified Brand Identity Systems',
-  'Organic Reach Optimisation',
+  'Setting Up & Managing Social Channels',
+  'Planning Post Schedules & Rhythms',
+  'Creating Beautiful Graphics & Visuals',
+  'Designing Logos & Brand Guidelines',
+  'Improving Organic Visitor Count',
 ];
 
 const CAPS = [
-  { n:'01', t:'Social Media',     d:'Always-on creative, community management, and channel direction that earns attention.' },
-  { n:'02', t:'SEO',              d:'Search strategy and content built to turn intent into sustained organic demand.' },
-  { n:'03', t:'Content Systems',  d:'A repeatable creative engine for campaigns, launch moments, and daily publishing.' },
-  { n:'04', t:'Web Architecture', d:'Conversion-led landing pages and journeys that make every visit work harder.' },
-  { n:'05', t:'Brand Identity',   d:'A distinct visual and verbal system that gives every growth channel a clear point of view.' },
-  { n:'06', t:'Paid Media',       d:'Testing, targeting, and optimisation designed to compound efficient acquisition.' },
+  { n:'01', t:'Social Media Growth',     d:'We create engaging posts, write captions, and manage your profiles to help your business get noticed and grow on social media.' },
+  { n:'02', t:'Google Search (SEO)',     d:'We improve your website so it shows up at the top of Google when potential customers search for what you offer.' },
+  { n:'03', t:'Content Creation',        d:'We write useful blog posts, take professional photos, and build marketing materials that explain your business clearly.' },
+  { n:'04', t:'Website Design & Building', d:'We build easy-to-use websites and landing pages that load instantly and make it simple for visitors to contact you or buy.' },
+  { n:'05', t:'Logos & Brand Identity',  d:'We design your logo, pick your colors, and define your style so your company looks trustworthy and professional.' },
+  { n:'06', t:'Paid Ads',                d:'We set up and run ads on Facebook, Instagram, and Google to show your business directly to people ready to buy now.' },
 ];
 
 const SS = ['smm%20ss.PNG','smm%20ss%202.PNG'];
@@ -49,19 +49,19 @@ function GrowthCapabilities({ sectionPad }) {
     <section style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT, borderBottom: `1px solid ${BORDER_L}` }}>
       <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px' }}>
         <span style={{ width: '22px', height: '2px', background: RUST }} />
-        <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>Growth Capabilities</span>
+        <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>Our Services</span>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, .9fr) minmax(0, 2.1fr)', gap: 'clamp(36px, 7vw, 100px)', alignItems: 'end', marginBottom: '46px' }}>
         <div>
           <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(38px,5.2vw,68px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 18px', color: DARK_TXT }}>
-            Growth<br />capabilities.
+            How we help<br />you grow.
           </h2>
           <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: MUTED_L, margin: 0, maxWidth: '340px' }}>
-            The services that connect brand, distribution, and conversion into one momentum engine.
+            A simple set of marketing services built to help your business reach more customers and make more sales.
           </p>
         </div>
         <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: DARK_TXT, margin: 0, maxWidth: '560px' }}>
-          Choose one capability or connect them all. Every engagement is shaped around the work that will create the clearest next move for your business.
+          You can choose a single service to start, or connect them all together. We customize our work to fit your business size, budget, and goals.
         </p>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px' }}>
@@ -72,7 +72,7 @@ function GrowthCapabilities({ sectionPad }) {
               <span style={{ width: '22px', height: '1px', background: index === 5 ? ACCENT : RUST }} />
             </div>
             <div>
-              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(23px,2.2vw,31px)', letterSpacing: '-0.01em', lineHeight: 1, color: 'inherit', margin: '0 0 13px' }}>{t}</h3>
+              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(23px,2.2vw,31px)', letterSpacing: '-0.01em', lineHeight: 1.1, color: 'inherit', margin: '0 0 13px' }}>{t}</h3>
               <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: index === 5 ? MUTED_D : MUTED_L, margin: 0 }}>{d}</p>
             </div>
           </article>
@@ -246,7 +246,7 @@ export default function MarketingPage() {
           <div className="ha" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <span style={{ width: '16px', height: '2px', background: AMBER }} />
             <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.22em', color: AMBER, textTransform: 'uppercase', fontWeight: 700 }}>
-              CONVERSION ARCHITECTURE
+              GROWTH MARKETING
             </span>
             <span style={{ width: '16px', height: '2px', background: AMBER }} />
           </div>
@@ -261,8 +261,8 @@ export default function MarketingPage() {
             margin: 0,
             color: WHITE,
           }}>
-            Systems built to<br />
-            hold at <span style={{ color: ACCENT, fontStyle: 'italic', textShadow: `0 0 30px ${ACCENT}15` }}>altitude.</span>
+            Marketing built to<br />
+            help you <span style={{ color: ACCENT, fontStyle: 'italic', textShadow: `0 0 30px ${ACCENT}15` }}>succeed.</span>
           </h1>
 
           {/* Body Text */}
@@ -274,16 +274,16 @@ export default function MarketingPage() {
             maxWidth: '560px',
             margin: 0,
           }}>
-            We design, scale, and optimize customer acquisition channels. Our conversion pipelines are built with vintage precision to ensure predictability, traffic velocity, and enterprise growth.
+            We help you find more customers and scale your business. We build clean, reliable marketing campaigns that attract the right people and turn them into loyal buyers.
           </p>
 
           {/* CTAs */}
           <div className="ha" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link to="/consult" className="mkt-btn-fill">
-              SCALE ACQUISITION →
+              GROW YOUR SALES →
             </Link>
             <a href="#flight-plan" className="mkt-btn-ghost">
-              VIEW FLIGHT PLAN
+              OUR STRATEGY
             </a>
           </div>
 
@@ -320,16 +320,16 @@ export default function MarketingPage() {
           <span style={labelText(RUST)}>The Strategy</span>
         </div>
         <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(38px,5.5vw,72px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 52px', color: DARK_TXT }}>
-          The flight plan.
+          Our strategy roadmap.
         </h2>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
           {/* Card 1 — light */}
           <div className="mkt-reveal" style={{ background: '#FFFFFF', border: `1px solid ${BORDER_L}`, padding: '44px 40px' }}>
             <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '20px' }}>STEP 01</div>
-            <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: DARK_TXT, lineHeight: 1 }}>Discover & Audit</h3>
+            <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: DARK_TXT, lineHeight: 1 }}>Research & Audit</h3>
             <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_L, margin: 0 }}>
-              We dissect your audience, current metrics, and market category. A deep analysis reveals exactly where capital is wasted and where growth is being left on the table.
+              We look closely at your target market, competitors, and current numbers. We find exactly where you are losing money and pinpoint the easiest ways to grow.
             </p>
           </div>
 
@@ -344,9 +344,9 @@ export default function MarketingPage() {
                   <span style={{ fontFamily: FM, fontSize: '8px', color: ACCENT }}>LIVE</span>
                 </div>
               </div>
-              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: WHITE, lineHeight: 1 }}>Growth Plan</h3>
+              <h3 style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(24px,2.8vw,34px)', margin: '0 0 16px', color: WHITE, lineHeight: 1 }}>Growth Roadmap</h3>
               <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_D, margin: 0 }}>
-                A clear, measurable revenue roadmap details the channels, media allocations, and performance targets. You'll know exactly what happens next.
+                We create a clear, step-by-step launch plan. You will know exactly which platforms to use, how much budget to allocate, and what results to expect.
               </p>
             </div>
           </div>
@@ -365,7 +365,7 @@ export default function MarketingPage() {
             </span>
           </div>
           <blockquote className="mkt-reveal" style={{ fontFamily: FD, fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(30px,4.2vw,58px)', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 36px', color: WHITE }}>
-            "The results outperformed anything we had launched previously."
+            "The results were much better than anything we had tried before."
           </blockquote>
           <p className="mkt-reveal" style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.14em', color: MUTED_D, textTransform: 'uppercase' }}>
             Gurnam Saini — Founder, Ayurveda Organics
@@ -384,17 +384,17 @@ export default function MarketingPage() {
             <div>
               <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                 <span style={{ width: '22px', height: '2px', background: RUST }} />
-                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>CASE STUDY #001</span>
+                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>REAL-WORLD EXAMPLE</span>
               </div>
               <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(28px,3.5vw,48px)', lineHeight: 1, letterSpacing: '-0.02em', margin: 0, color: DARK_TXT }}>
-                Ayurveda Organics —<br />audience evolution.
+                Ayurveda Organics —<br />growing their audience.
               </h2>
             </div>
             <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_L, margin: 0 }}>
-              A holistic brand positioning and creative execution program that aligned organic product authenticity with modern social media distribution to drive consistent audience engagement and deeper platform reach.
+              We helped Ayurveda Organics refresh their brand style and share creative, helpful content on social media. This helped them build a loyal following and organically reach more daily customers.
             </p>
             <div className="mkt-reveal">
-              <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '12px' }}>WHAT WE DID</div>
+              <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '12px' }}>HOW WE HELPED</div>
               {WHAT_WE_DID.map((w) => (
                 <div key={w} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 0', borderBottom: `1px solid ${BORDER_L}` }}>
                   <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: RUST, flexShrink: 0 }} />
@@ -410,9 +410,9 @@ export default function MarketingPage() {
             <div style={{ background: BG_DARK, padding: '28px', border: `1px solid ${BORDER_D}` }}>
               {/* Header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-                <span style={{ fontFamily: FM, fontSize: '9px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700 }}>AUDIENCE GROWTH</span>
+                <span style={{ fontFamily: FM, fontSize: '9px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700 }}>NEW FOLLOWERS</span>
                 <div style={{ display: 'flex', gap: '14px' }}>
-                  {[{c:ACCENT,l:'Organic'},{c:`${AMBER}`,l:'Followers'}].map(({c,l}) => (
+                  {[{c:ACCENT,l:'Unpaid Visit'},{c:`${AMBER}`,l:'Followers'}].map(({c,l}) => (
                     <span key={l} style={{ display: 'flex', alignItems: 'center', gap: '5px', fontFamily: FM, fontSize: '8px', color: c }}>
                       <span style={{ width: '14px', height: '2px', background: c, display: 'inline-block' }} />{l}
                     </span>
@@ -443,7 +443,7 @@ export default function MarketingPage() {
 
               {/* Metrics */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginTop: '18px', paddingTop: '16px', borderTop: `1px solid ${BORDER_D}` }}>
-                {[{l:'REACH / MO',v:'144.3k'},{l:'SAVES AVG',v:'4.5k'},{l:'IMPRESSIONS',v:'134.1k'}].map(({l,v}) => (
+                {[{l:'MONTHLY REACH',v:'144.3k'},{l:'SAVES AVERAGE',v:'4.5k'},{l:'IMPRESSIONS',v:'134.1k'}].map(({l,v}) => (
                   <div key={l}>
                     <div style={{ fontFamily: FM, fontSize: '8px', color: MUTED_D, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{l}</div>
                     <div style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: WHITE, letterSpacing: '-0.01em' }}>{v}</div>
@@ -473,24 +473,24 @@ export default function MarketingPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
             <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span style={{ width: '22px', height: '2px', background: ACCENT }} />
-              <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Performance Metrics</span>
+              <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Real Results</span>
             </div>
             <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(34px,4.5vw,64px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: 0, color: WHITE }}>
-              Data-driven<br />visibility.<br />
-              <em style={{ fontStyle: 'italic', color: ACCENT }}>Zero accident.</em>
+              Clear marketing<br />numbers.<br />
+              <em style={{ fontStyle: 'italic', color: ACCENT }}>Zero guesswork.</em>
             </h2>
             <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: MUTED_D, maxWidth: '360px', margin: 0 }}>
-              We map conversion bottlenecks, find high-efficiency clusters in your data, and run efficiency audits. We trust data — always.
+              We track where your website visitors get confused or leave. By fixing these bottlenecks with clear facts, we make sure you get the absolute most out of your budget.
             </p>
           </div>
 
           {/* Right — circular metric cards */}
           <div className="mkt-reveal" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             {[
-              { v: '3.4×',  l: 'AVG RETURN\nON AD SPEND',     big: true  },
-              { v: '13M+',  l: 'ORGANIC\nIMPRESSIONS / MO',   big: false },
-              { v: '+142%', l: 'AVERAGE CTR\nIMPROVEMENT',    big: true  },
-              { v: '7.2%',  l: 'AVERAGE\nCONVERSION RATE',   big: false },
+              { v: '3.4×',  l: 'AVERAGE RETURN\nON AD SPEND',     big: true  },
+              { v: '13M+',  l: 'MONTHLY SOCIAL\nIMPRESSIONS',      big: false },
+              { v: '+142%', l: 'AVERAGE CLICK-THROUGH\nIMPROVEMENT', big: true  },
+              { v: '7.2%',  l: 'AVERAGE WEBSITE\nCONVERSION RATE', big: false },
             ].map(({v,l,big}) => (
               <div key={v} style={{
                 border: `1px solid ${BORDER_D}`,
@@ -519,10 +519,10 @@ export default function MarketingPage() {
               <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>Capabilities</span>
             </div>
             <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(34px,4.5vw,60px)', lineHeight: 0.92, letterSpacing: '-0.02em', margin: '0 0 20px', color: DARK_TXT }}>
-              Growth<br />capabilities.
+              Growth Capabilities
             </h2>
             <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: MUTED_L, margin: 0 }}>
-              We build custom-system solutions aligned to your business profile. Pre-advantage strategies — just momentum engines that flow.
+              The growth tools that help scale your brand organically or with ads.
             </p>
           </div>
 
@@ -544,19 +544,19 @@ export default function MarketingPage() {
       <section className="mkt-bg-grid" style={{ background: BG_DARK, ...sectionPad, paddingBottom: '140px', borderTop: `1px solid ${BORDER_D}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '28px' }} className="mkt-reveal">
           <span style={{ width: '22px', height: '2px', background: ACCENT }} />
-          <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Ready to Scale</span>
+          <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', fontWeight: 700 }}>Start Growing</span>
         </div>
 
         <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(52px,8vw,112px)', lineHeight: 0.87, letterSpacing: '-0.03em', margin: '0 0 32px', color: WHITE, maxWidth: '800px' }}>
-          We build momentum<br />that <em style={{ fontStyle: 'italic', color: ACCENT }}>lasts.</em>
+          We help build growth<br />that <em style={{ fontStyle: 'italic', color: ACCENT }}>lasts.</em>
         </h2>
 
         <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: MUTED_D, maxWidth: '440px', margin: '0 0 40px' }}>
-          High-performance marketing engineered for strategic vision, media distribution, and the only way to get it to work at scale.
+          We design clear, professional marketing strategies that work. Let's make your brand standout and drive more sales.
         </p>
 
         <Link to="/consult" className="mkt-btn-fill mkt-reveal" style={{ fontSize: '11px', padding: '18px 36px' }}>
-          ARCHITECT YOUR GROWTH →
+          TALK TO A GROWTH EXPERT →
         </Link>
       </section>
 

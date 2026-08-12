@@ -29,34 +29,34 @@ const T = {
 /* ─── Services ───────────────────────────────────────────── */
 const SERVICES = [
   {
-    id: '01', title: 'SaaS Products', tag: 'FULL-STACK', color: T.accent,
-    desc: 'End-to-end SaaS platforms — onboarding flows, subscription billing, multi-tenant databases, and analytics dashboards.',
+    id: '01', title: 'Software Platforms', tag: 'WEBSITE & SOFTWARE', color: T.accent,
+    desc: 'We build custom software systems with customer logins, secure database storage, subscription billing, and visual data reports.',
     stack: ['Next.js', 'PostgreSQL', 'Stripe', 'Auth.js'],
-    stat: { label: 'Avg. time-to-launch', value: '8 wks' },
+    stat: { label: 'Time to launch', value: '8 wks' },
   },
   {
-    id: '02', title: 'AI & LLM Pipelines', tag: 'INTELLIGENCE', color: T.cyan,
-    desc: 'Custom RAG architectures, fine-tuned LLM integrations, vector search, and production-grade AI agents that do real work.',
+    id: '02', title: 'Smart AI Tools', tag: 'INTELLIGENCE', color: T.cyan,
+    desc: 'We integrate smart AI tools into your business. This includes helpful chatbots that read your files, and tools that automate tasks.',
     stack: ['OpenAI', 'LangChain', 'Pinecone', 'Python'],
-    stat: { label: 'Latency target', value: '< 800ms' },
+    stat: { label: 'Response speed', value: '< 800ms' },
   },
   {
-    id: '03', title: 'Custom Web & Mobile', tag: 'PRODUCT', color: T.purple,
-    desc: 'High-performance React / Next.js web apps and React Native products built with pixel-perfect fidelity and sub-second load times.',
+    id: '03', title: 'Custom Mobile Apps', tag: 'PRODUCT', color: T.purple,
+    desc: 'We build beautiful websites and phone apps (for iPhone and Android) that load instantly and look great on any screen.',
     stack: ['React', 'React Native', 'TypeScript', 'Expo'],
-    stat: { label: 'Lighthouse score', value: '100/100' },
+    stat: { label: 'App speed score', value: '100%' },
   },
   {
-    id: '04', title: 'UI / UX Engineering', tag: 'INTERFACE', color: T.rose,
-    desc: 'Design systems, component libraries, and polished micro-interaction layers that make products feel alive and instinctively usable.',
+    id: '04', title: 'App Design & Layout', tag: 'INTERFACE', color: T.rose,
+    desc: 'We design easy-to-use screens and smooth animations so your customers can navigate your app without needing help.',
     stack: ['Figma', 'GSAP', 'Framer Motion', 'Radix UI'],
-    stat: { label: 'Components shipped', value: '200+' },
+    stat: { label: 'Visual elements', value: '200+' },
   },
   {
-    id: '05', title: 'AI Automation', tag: 'AUTOMATION', color: T.amber,
-    desc: 'Intelligent workflow automation — CRM sync, document parsing, AI-scheduled jobs, and API orchestration eliminating manual work.',
+    id: '05', title: 'Time-Saving Automations', tag: 'AUTOMATION', color: T.amber,
+    desc: 'We connect your tools together so they share data automatically. We automate document filing, client updates, and data entry.',
     stack: ['n8n', 'Make', 'Zapier', 'Python'],
-    stat: { label: 'Hours saved / month', value: '300+' },
+    stat: { label: 'Hours saved / mo', value: '300+' },
   },
 ];
 
@@ -70,21 +70,21 @@ const TICKER = [
 /* ─── Typewriter code ────────────────────────────────────── */
 const HERO_CODE =
 `> thrust.init({
-    services: ["saas", "ai-llm", "web", "mobile", "automation"],
+    services: ["software", "ai-tools", "apps", "design", "automation"],
     engineers: "senior-only",
     techDebt: false,
-    delivery: "production-grade",
+    delivery: "production-ready",
   });
 
-✓  Stack configured. Ready to ship.`;
+✓ Ready to build.`;
 
 /* ─── Process ────────────────────────────────────────────── */
 const PROCESS = [
-  { num: '01', title: 'Discovery',    desc: 'Map product goals, user flows, and technical constraints in a focused 2-day sprint.' },
-  { num: '02', title: 'Architecture', desc: 'System design, schema planning, and API contracts — all documented before a line is written.' },
-  { num: '03', title: 'Build',        desc: 'Two-week sprints with demo checkpoints so you always know exactly where the product stands.' },
-  { num: '04', title: 'Launch',       desc: 'CI/CD pipelines, edge deployments, and zero-downtime rollouts to production.' },
-  { num: '05', title: 'Scale',        desc: 'Performance monitoring, feature iteration, and infrastructure scaling as users grow.' },
+  { num: '01', title: 'Planning',    desc: 'We talk about your goals, map out how your app will work, and plan the tech steps together.' },
+  { num: '02', title: 'Blueprint',   desc: 'We map out the database and system structure so we have a clear plan before we write any code.' },
+  { num: '03', title: 'Building',    desc: 'We build in two-week cycles and show you live updates regularly so you see your app coming to life.' },
+  { num: '04', title: 'Launch',      desc: 'We publish your application live to the public safely, making sure it runs securely and without downtime.' },
+  { num: '05', title: 'Support',     desc: 'We monitor your app, add new features as you grow, and keep the server fast as more users join.' },
 ];
 
 /* ════════════════════════════════════════════════════════════
@@ -353,7 +353,7 @@ export default function DevelopmentPage() {
                 fontFamily: 'var(--font-body)', fontSize: '17px', lineHeight: 1.8,
                 color: 'rgba(226,232,240,0.78)', maxWidth: '480px', marginBottom: '44px',
               }}>
-                Senior engineers building SaaS platforms, AI pipelines, custom web & mobile apps, and intelligent automation — with zero tolerance for technical debt.
+                Our senior engineers build clean websites, mobile apps, custom software, and time-saving automations. We make sure your code is fast, secure, and easy to maintain.
               </p>
 
               <div className="h-in" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
@@ -500,7 +500,7 @@ export default function DevelopmentPage() {
               fontFamily: 'var(--font-body)', fontSize: '16px', lineHeight: 1.8,
               color: T.body, maxWidth: '480px', alignSelf: 'end',
             }}>
-              Five high-value engineering disciplines, each delivering production-ready systems with a direct line to measurable business outcomes.
+              Five clear software services, each designed to build clean, fast applications that help your business succeed.
             </p>
           </div>
 
@@ -656,12 +656,12 @@ export default function DevelopmentPage() {
                 fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
                 lineHeight: 0.88, color: T.white, margin: 0,
               }}>
-                SHIPPED &amp;<br /><span style={{ color: T.accent }}>LIVE.</span>
+                WHAT WE'VE<br /><span style={{ color: T.accent }}>BUILT.</span>
               </h2>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.green, display: 'inline-block', boxShadow: `0 0 8px ${T.green}` }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>DEPLOYMENT_STATUS: ACTIVE</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>ALL PROJECTS: LIVE &amp; RUNNING</span>
             </div>
           </div>
 
@@ -733,7 +733,7 @@ export default function DevelopmentPage() {
               onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
               onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.transform = 'translateY(0)'; }}
             >
-              INITIATE BUILD →
+              START YOUR PROJECT →
             </Link>
           </div>
         </section>

@@ -6,65 +6,66 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── DATA ───────────────────────────────────────────────── */
+/* ─── DATA ───────────────────────────────────────────────── */
 const OFFERINGS = [
-  { index: '01', title: 'Video Production',    desc: 'Brand films, product demos, testimonials, and social content. Scripted, shot, and edited in-house — no outsourcing.', tags: ['Brand Film', 'Product Demo', 'Testimonial', 'Social'] },
-  { index: '02', title: 'Motion & Animation',  desc: '2D motion graphics, kinetic typography, and animated explainers that carry your message without a word.', tags: ['Motion Graphics', 'After Effects', 'Lottie', 'Explainer'] },
-  { index: '03', title: 'Creative Direction',  desc: 'Visual language, shot lists, storyboards, and art direction. We set the tone so every frame feels intentional.', tags: ['Art Direction', 'Storyboard', 'Mood Board', 'Casting'] },
-  { index: '04', title: 'Post-Production',      desc: 'Colour grading, audio mix, VFX, and delivery-ready exports across all platforms and aspect ratios.', tags: ['Colour Grade', 'Audio Mix', 'VFX', 'DaVinci Resolve'] },
+  { index: '01', title: 'Video Filming',        desc: 'We make commercials, product videos, client success stories, and social clips. Everything is scripted, shot, and edited by our team.', tags: ['Brand Film', 'Product Demo', 'Customer Story', 'Social Content'] },
+  { index: '02', title: 'Animation & Motion',  desc: 'We create custom 2D animations, moving text, and explainer videos that explain your products in a fun, simple way.', tags: ['Animations', 'Explainers', 'Moving Text'] },
+  { index: '03', title: 'Story Planning',      desc: 'We write scripts, design storyboards, and plan shoots so your final video looks clean, intentional, and professional.', tags: ['Concept Design', 'Scripts', 'Visual Layout'] },
+  { index: '04', title: 'Video Editing',       desc: 'We clean up sound, balance colors, add royalty-free music, and size files perfectly for YouTube, Instagram, or television.', tags: ['Editing', 'Color Fixing', 'Music & Sound'] },
 ];
 
 const PROCESS = [
-  { step: '01', heading: 'PRE-PRODUCTION',   body: 'Script analysis, storytelling, and technical blocking based on mathematical frame logic.' },
-  { step: '02', heading: 'CAPTURE',          body: 'Principal photography with calibrated optics and synchronized lighting arrays.' },
-  { step: '03', heading: 'POST-PRODUCTION',   body: 'High-precision color grading, visual effects, and sound design architecture.' },
-  { step: '04', heading: 'DELIVERY',          body: 'Mastering for global distribution with automated quality control protocols.' },
+  { step: '01', heading: 'STORY PLANNING',   body: 'We write the script, design the visual layout, and plan the shoot details with you.' },
+  { step: '02', heading: 'FILMING & CAPTURE', body: 'We film using professional cinema cameras, studio lighting, and crystal-clear audio.' },
+  { step: '03', heading: 'EDITING & SOUND',   body: 'We piece the clips together, correct colors, and add background music or voiceovers.' },
+  { step: '04', heading: 'FINAL DELIVERY',    body: 'We export your files in high resolution, ready to load on your website or social media.' },
 ];
 
 const SPECS = [
-  { value: '2.4 Gbps', label: 'RAW BITRATE' },
-  { value: '16-Bit',   label: 'COLOR DEPTH' },
+  { value: 'Ultra HD',   label: 'VIDEO RESOLUTION' },
+  { value: 'Studio Pro', label: 'AUDIO EQUIPMENT' },
 ];
 
 const PRODUCTION_ARSENAL = [
   {
     title: 'Pre-Production',
-    description: 'Every production starts with a deliberate plan: the idea, the narrative, the people, and the path to set.',
-    services: ['Creative Concept Development', 'Script Writing', 'Storyboarding', 'Mood Boards', 'Shot Planning', 'Location Scouting', 'Casting', 'Production Scheduling'],
+    description: 'Every project starts with a clear plan: the core message, the script, finding actors, and location scouting.',
+    services: ['Concept Development', 'Script Writing', 'Visual Storyboarding', 'Location Scouting', 'Casting Actors', 'Production Schedules'],
   },
   {
-    title: 'Video Production',
-    description: 'From commercial campaigns to documentary stories, captured for the screen and the scroll.',
-    services: ['Commercials', 'Brand Films', 'Corporate Videos', 'Product Videos', 'Social Media Content', 'Promotional Videos', 'Documentary Production', 'Event Coverage', 'Interviews & Testimonials', 'Music Videos', 'Short Films', 'Educational Videos'],
+    title: 'Video Filming',
+    description: 'Commercials, brand showcases, and social media videos captured beautifully for websites and social feeds.',
+    services: ['Tv Commercials', 'Brand Stories', 'Company Profiles', 'Product Demos', 'Social Media Clips', 'Interviews & Testimonials', 'Event Highlight Videos', 'Instructional Videos'],
   },
   {
     title: 'Photography & Drone',
-    description: 'Still and aerial imagery that gives brands, places, products, and people a sharper point of view.',
-    services: ['Product Photography', 'Lifestyle Photography', 'Fashion Photography', 'Food Photography', 'Corporate Photography', 'Event Photography', 'Portrait Photography', 'E-commerce Photography', 'Real Estate Drone Shoots', 'Construction Progress Videos', 'Tourism & Landscape Filming'],
+    description: 'Beautiful photos and high-angle drone videos that give your products and locations a stunning look.',
+    services: ['Product Photos', 'Lifestyle Photography', 'Office Headshots', 'Event Coverage', 'Aerial Drone Video & Photos', 'Real Estate Shoots'],
   },
   {
-    title: 'Post-Production',
-    description: 'Precision finishing for every format, from the first assembly through final delivery.',
-    services: ['Video Editing', 'Color Grading', 'Motion Graphics', '2D & 3D Animation', 'Sound Design', 'Audio Mixing', 'Voice-over Recording', 'Subtitles & Captions'],
+    title: 'Video Editing',
+    description: 'Polishing your videos with transitions, colors, voiceovers, music, and subtitles.',
+    services: ['Footage Editing', 'Color Correction', '2D Animations', 'Sound Effects', 'Voice-over Recording', 'Subtitles & Captions'],
   },
   {
-    title: 'Studio Production',
-    description: 'A controlled environment for polished recordings, broadcasts, conversations, and stills.',
-    services: ['Green Screen Production', 'Podcast Recording', 'Multi-Camera Production', 'Live Streaming', 'Studio Photography'],
+    title: 'Studio Shoots',
+    description: 'A controlled indoor studio for recording podcast episodes, interviews, or product photos.',
+    services: ['Green Screen Filming', 'Podcast Audio Recording', 'Multi-Camera setups', 'Live Stream setups', 'Studio Photography'],
   },
   {
-    title: 'Digital Content',
-    description: 'Always-on creative shaped around the places your audience actually spends time.',
-    services: ['Reels & Shorts', 'YouTube Content', 'Instagram Content', 'Ad Creatives', 'Explainer Videos', 'Testimonial Videos'],
+    title: 'Social & Ads',
+    description: 'Short, engaging videos built to capture attention on platforms where your clients spend time.',
+    services: ['Instagram Reels', 'YouTube Shorts', 'TikTok Content', 'Video Ad Creatives', 'Simple Explainer Videos'],
   },
   {
-    title: 'Branding & Marketing',
-    description: 'Campaign-led visual systems made to launch, position, and move a brand forward.',
-    services: ['Brand Identity Videos', 'Product Launch Campaigns', 'Social Media Campaigns', 'Digital Advertisements', 'Creative Direction'],
+    title: 'Branding Videos',
+    description: 'Core campaign videos built to introduce your brand and launch new products successfully.',
+    services: ['Product Launch Videos', 'Brand Identity Films', 'Campaign Content', 'Creative Direction'],
   },
   {
-    title: 'Specialized & Crew',
-    description: 'The specialist craft, equipment, and on-set leadership that make ambitious work possible.',
-    services: ['360° Video Production', 'Time-Lapse Photography', 'Hyperlapse Videos', 'Lighting Setup', 'Audio Recording', 'Production Management', 'Art Direction', 'Set Design'],
+    title: 'Specialized Crew',
+    description: 'The specialized on-set tools and crew members who handle lighting, audio recording, and editing.',
+    services: ['On-Set Lighting', 'Field Audio Recording', 'Director of Photography', 'Production Management', 'Art & Set Styling'],
   },
 ];
 
@@ -268,7 +269,7 @@ export default function ProductionPage() {
                 maxWidth: '480px',
                 margin: 0,
               }}>
-                High-fidelity visual storytelling meets clinical engineering precision. We architect, capture, and refine high-stakes media content with zero-compromise post-production.
+                We make beautiful, high-quality videos and photos for your brand. From writing the script to filming and editing, we handle everything under one roof to make your business look its absolute best.
               </p>
 
               {/* KPI Badges */}
@@ -414,7 +415,7 @@ export default function ProductionPage() {
               </h2>
             </div>
             <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
-              A clinical four-stage process designed to ensure absolute fidelity from script to screen.
+              A simple four-step process so you always know what's happening — from the first idea to the finished video.
             </p>
           </div>
 
@@ -440,7 +441,7 @@ export default function ProductionPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
             <div>
               <h2 style={{ fontFamily: FD, fontSize: '32px', fontWeight: 700, margin: 0, color: T.textDark }}>PRODUCTION STANDARDS</h2>
-              <p style={{ fontFamily: FB, fontSize: '13px', color: T.textMuted, marginTop: '4px' }}>Real-time studio and render performance data.</p>
+              <p style={{ fontFamily: FB, fontSize: '13px', color: T.textMuted, marginTop: '4px' }}>The quality standards we hold every shoot and edit to.</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: `1px solid ${T.border}`, padding: '8px 16px', fontFamily: FM, fontSize: '9px', color: T.textDark }}>
               <span className="pulse-red" style={{ width: '6px', height: '6px', borderRadius: '50%', background: T.red }} />
@@ -635,13 +636,13 @@ export default function ProductionPage() {
             gap: '28px',
           }}>
             <h2 style={{ fontFamily: FD, fontSize: 'clamp(32px,5.5vw,56px)', fontWeight: 700, margin: 0, color: T.textDark }}>
-              Built for Experts.
+              Your Brand Deserves the Best.
             </h2>
             <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: T.textMuted, maxWidth: '520px', margin: 0 }}>
-              Our production environment is a restricted airspace. We only capture content that passes our rigorous 400-point technical checklist. Zero compromise on fidelity, narrative, and visual stability.
+              We hold our video and photo shoots to the highest standards. We carefully plan and review every shot, color grade, and sound mix so you receive beautiful, professional results that make your business stand out.
             </p>
             <Link to="/consult" className="btn-outline-prod" style={{ display: 'inline-block' }}>
-              VIEW STUDIO SPECS
+              TALK TO A PRODUCER
             </Link>
           </div>
         </section>

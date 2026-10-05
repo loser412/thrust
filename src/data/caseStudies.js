@@ -20,7 +20,7 @@ export const CASE_STUDIES = [
     ],
     testimonial: {
       quote: 'The new site instantly improved lead quality and made our agents more efficient.',
-      author: 'CEO, Property Masters',
+      author: 'Rajesh Sehgal, Director, Property Masters',
     },
     milestones: [
       { date: '2023-09', label: 'Discovery' },
@@ -69,4 +69,3 @@ export const CASE_STUDIES = [
 ];
 
 export default CASE_STUDIES;
-

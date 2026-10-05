@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CASE_STUDIES } from '../data/caseStudies';
 import './HomePage.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -66,11 +67,25 @@ const MATRIX = [
 ];
 
 /* ─── PROOF TESTIMONIAL ─── */
-const PROOF_TESTIMONIAL = {
-  quote: '"The results were much better than anything we had tried before. The team felt like our own in-house team — they just got it."',
-  name: 'Gurnam Saini',
-  role: 'Founder, Ayurveda Organics',
-};
+const PROOF_TESTIMONIALS = [
+  {
+    quote: 'The results were much better than anything we had tried before. The team felt like our own in-house team — they just got it.',
+    author: 'Gurnam Saini — Founder, Ayurveda Organics',
+  },
+  ...CASE_STUDIES
+    .filter(({ id }) => id === 'property-masters')
+    .map(({ testimonial }) => ({
+      ...testimonial,
+      author: 'Rajesh Sehgal — Director, Property Masters',
+    })),
+];
+
+const PROOF_CLIENT_LOGOS = [
+  { name: 'Ayurveda Organics', src: '/icons/ayurveda%20organics.png' },
+  { name: 'Property Masters', src: '/icons/property%20masters.png' },
+  { name: 'Easy Life Home Care', src: '/icons/ELHC.png' },
+  { name: 'HopUp', src: '/icons/image.png' },
+];
 
 /* ─── VISUAL COMPONENT ─── */
 function CraftVisual({ type }) {
@@ -297,44 +312,41 @@ export default function HomePage() {
       <section className="proof-section section-shell" ref={proofRef}>
         <p className="overline proof-item"><i /> PROOF OF WORK</p>
 
-        <div className="proof-logos proof-item">
-          {['Ayurveda Organics', 'PropertyMasters', 'Precious', 'Fitness Client'].map((brand) => (
-            <span key={brand} className="proof-logo-pill">{brand}</span>
-          ))}
-        </div>
-
-        <div className="proof-grid">
-          {/* UI Screenshot */}
-          <div className="proof-item proof-media-card">
-            <div className="proof-media-label">DEVELOPMENT · UI PLATFORM</div>
-            <div className="proof-media-img">
-              <img
-                src="/ChatGPT%20Image%20Jul%2029,%202026,%2012_35_01%20PM.png"
-                alt="Custom SaaS UI Platform"
-              />
-            </div>
-          </div>
-
-          {/* Video Frame */}
-          <div className="proof-item proof-media-card">
-            <div className="proof-media-label">PRODUCTION · BRAND FILM</div>
-            <div className="proof-media-img proof-media-dark">
-              <img
-                src="/ChatGPT%20Image%20Jul%2029,%202026,%2012_33_34%20PM.png"
-                alt="Cinematic brand film frame"
-              />
-            </div>
+        <div className="proof-logo-marquee proof-item" aria-label="Client logos">
+          <div className="proof-logo-track">
+            {[0, 1].map((group) => (
+              <div
+                className="proof-logo-group"
+                key={group}
+                aria-hidden={group === 1}
+                role={group === 0 ? 'list' : undefined}
+                aria-label={group === 0 ? 'Client logos' : undefined}
+              >
+                {PROOF_CLIENT_LOGOS.map((brand) => (
+                  <div
+                    key={brand.name}
+                    className="proof-logo-card"
+                    role={group === 0 ? 'listitem' : undefined}
+                  >
+                    <img src={brand.src} alt={group === 0 ? `${brand.name} logo` : ''} />
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Testimonial */}
         <div className="proof-testimonial proof-item">
-          <blockquote className="proof-quote">
-            {PROOF_TESTIMONIAL.quote}
-          </blockquote>
-          <cite className="proof-cite">
-            {PROOF_TESTIMONIAL.name} — {PROOF_TESTIMONIAL.role}
-          </cite>
+          <p className="proof-testimonial-label">WHAT OUR CLIENTS SAY</p>
+          {PROOF_TESTIMONIALS.map((testimonial) => (
+            <div className="proof-review" key={testimonial.author}>
+              <blockquote className="proof-quote">
+                “{testimonial.quote}”
+              </blockquote>
+              <cite className="proof-cite">{testimonial.author}</cite>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -2,76 +2,154 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { COMPANY } from '../lib/company';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── DATA ───────────────────────────────────────────────── */
-/* ─── DATA ───────────────────────────────────────────────── */
-const OFFERINGS = [
-  { index: '01', title: 'Video Filming',        desc: 'We make commercials, product videos, client success stories, and social clips. Everything is scripted, shot, and edited by our team.', tags: ['Brand Film', 'Product Demo', 'Customer Story', 'Social Content'] },
-  { index: '02', title: 'Animation & Motion',  desc: 'We create custom 2D animations, moving text, and explainer videos that explain your products in a fun, simple way.', tags: ['Animations', 'Explainers', 'Moving Text'] },
-  { index: '03', title: 'Story Planning',      desc: 'We write scripts, design storyboards, and plan shoots so your final video looks clean, intentional, and professional.', tags: ['Concept Design', 'Scripts', 'Visual Layout'] },
-  { index: '04', title: 'Video Editing',       desc: 'We clean up sound, balance colors, add royalty-free music, and size files perfectly for YouTube, Instagram, or television.', tags: ['Editing', 'Color Fixing', 'Music & Sound'] },
+const SELECTED_PROJECTS = [
+  {
+    type: 'video',
+    title: 'Creative Studio Reel',
+    category: 'Commercial / Studio Reel',
+    role: 'Directing & Cinematography',
+    brief: 'Cinematic brand overview highlighting modern architectural spaces and lighting.',
+    src: '/crousel/30 Oct 2025.mp4',
+  },
+  {
+    type: 'video',
+    title: '2D Fitness Campaign',
+    category: 'Commercial / Product Demo',
+    role: 'Direction & Core Motion',
+    brief: 'Commercial product launch visualising fitness routines and active tracking.',
+    src: '/2d fitness/2D VIDEO.mp4',
+  },
+  {
+    type: 'video',
+    title: 'Precious Anniversary Film',
+    category: 'Brand Documentary',
+    role: 'Story, Direction & Capture',
+    brief: 'Narrative documentary capturing historical milestones and brand legacy.',
+    src: '/precious/Anniversary Main.mp4',
+  },
+  {
+    type: 'video',
+    title: 'Camera Test Motion Reel',
+    category: 'Technical Test & Grade',
+    role: 'RAW Grade & Camera Test',
+    brief: 'Color grading calibration test footage focusing on lighting density and dynamic range.',
+    src: '/crousel/IMG_9527.MOV',
+  },
+  {
+    type: 'image',
+    title: 'Production Still 01',
+    category: 'Commercial Photography',
+    role: 'On-Set Capture',
+    brief: 'High-fidelity portrait capture highlighting practical set lighting.',
+    src: '/crousel/IMG_1812.JPG',
+  },
+  {
+    type: 'image',
+    title: 'Production Still 02',
+    category: 'Set Photography',
+    role: 'Set Architecture',
+    brief: 'On-location setup still documenting camera placement and rigging.',
+    src: '/crousel/IMG_1813.JPG',
+  },
 ];
 
+/* 6 Post-Production & Campaign Content Categories (Page 3 of PDF) */
+const SERVICE_CATEGORIES = [
+  {
+    title: 'Editing & Finishing',
+    tag: 'POST-PRODUCTION',
+    desc: 'Cutting, assembling, and timing footage for emotional clarity and high viewer retention.',
+    items: ['Video editing', 'Colour correction', 'Sound design', 'Subtitles & captions'],
+  },
+  {
+    title: 'Motion & Visual Effects',
+    tag: 'ANIMATION',
+    desc: 'Dynamic text, 2D motion graphics, and visual enhancements that bring brand concepts to life.',
+    items: ['2D animation', 'Green-screen compositing', 'Titles & graphics', 'Logo reveals'],
+  },
+  {
+    title: 'Audio Production',
+    tag: 'SOUND',
+    desc: 'Studio-grade voiceovers, broadcast-level audio cleaning, and custom soundscapes.',
+    items: ['Voice-over recording', 'Podcast audio editing', 'Sound effects', 'Audio mastering'],
+  },
+  {
+    title: 'Studio & Photography',
+    tag: 'STUDIO',
+    desc: 'Controlled-environment captures, high-resolution product photography, and multi-cam recording.',
+    items: ['Product photography', 'Studio shoots', 'Multi-camera recording', 'Commercial stills'],
+  },
+  {
+    title: 'Social & Campaign Content',
+    tag: 'DISTRIBUTION',
+    desc: 'Fast-paced, hook-driven vertical and square content tailored to stop the scroll.',
+    items: ['Instagram Reels', 'YouTube Shorts', 'TikTok videos', 'Video ad creatives'],
+  },
+  {
+    title: 'Brand & Business Films',
+    tag: 'NARRATIVE',
+    desc: 'Flagship commercial films engineered to establish authority and explain complex products.',
+    items: ['Brand films', 'Product launch videos', 'Explainer videos', 'Campaign films'],
+  },
+];
+
+/* Production Standards (Page 2 of PDF) */
+const PRODUCTION_STANDARDS = [
+  {
+    num: '01',
+    label: 'VISUAL QUALITY',
+    heading: 'Thoughtful framing. Consistent colour.',
+    detail: 'We plan every composition with intention—calibrated lighting, deliberate camera movement, and balanced colour grading tailored to your brand identity.',
+    deliverable: 'Cinema-grade lighting & colour science',
+  },
+  {
+    num: '02',
+    label: 'SOUND & FINISHING',
+    heading: 'Clean audio. Polished edits.',
+    detail: 'Pacing that holds audience attention, paired with pristine voice recording, custom sound design, and licensing-cleared music tracks.',
+    deliverable: 'Pristine dialogue & broadcast mix',
+  },
+  {
+    num: '03',
+    label: 'DELIVERY',
+    heading: 'Files prepared for your platforms.',
+    detail: 'Clean exports in all required ratios and bitrates: 16:9 widescreen, 9:16 vertical reels, 1:1 feeds, and archival 4K master files.',
+    deliverable: '16:9 • 9:16 • 1:1 • 4K UHD masters',
+  },
+];
+
+/* Production Workflow (Page 2 of PDF) */
 const PROCESS = [
-  { step: '01', heading: 'STORY PLANNING',   body: 'We write the script, design the visual layout, and plan the shoot details with you.' },
-  { step: '02', heading: 'FILMING & CAPTURE', body: 'We film using professional cinema cameras, studio lighting, and crystal-clear audio.' },
-  { step: '03', heading: 'EDITING & SOUND',   body: 'We piece the clips together, correct colors, and add background music or voiceovers.' },
-  { step: '04', heading: 'FINAL DELIVERY',    body: 'We export your files in high resolution, ready to load on your website or social media.' },
-];
-
-const SPECS = [
-  { value: 'Ultra HD',   label: 'VIDEO RESOLUTION' },
-  { value: 'Studio Pro', label: 'AUDIO EQUIPMENT' },
-];
-
-const PRODUCTION_ARSENAL = [
   {
-    title: 'Pre-Production',
-    description: 'Every project starts with a clear plan: the core message, the script, finding actors, and location scouting.',
-    services: ['Concept Development', 'Script Writing', 'Visual Storyboarding', 'Location Scouting', 'Casting Actors', 'Production Schedules'],
+    step: '01',
+    heading: 'PLAN',
+    body: 'We understand your goals, audience and deliverables, then shape the concept, schedule and shoot plan.',
   },
   {
-    title: 'Video Filming',
-    description: 'Commercials, brand showcases, and social media videos captured beautifully for websites and social feeds.',
-    services: ['Tv Commercials', 'Brand Stories', 'Company Profiles', 'Product Demos', 'Social Media Clips', 'Interviews & Testimonials', 'Event Highlight Videos', 'Instructional Videos'],
+    step: '02',
+    heading: 'SHOOT',
+    body: 'We coordinate the shoot, capture the footage or photographs, and guide the production on set.',
   },
   {
-    title: 'Photography & Drone',
-    description: 'Beautiful photos and high-angle drone videos that give your products and locations a stunning look.',
-    services: ['Product Photos', 'Lifestyle Photography', 'Office Headshots', 'Event Coverage', 'Aerial Drone Video & Photos', 'Real Estate Shoots'],
+    step: '03',
+    heading: 'EDIT',
+    body: 'We shape the story, refine the visuals, balance colour and complete the sound.',
   },
   {
-    title: 'Video Editing',
-    description: 'Polishing your videos with transitions, colors, voiceovers, music, and subtitles.',
-    services: ['Footage Editing', 'Color Correction', '2D Animations', 'Sound Effects', 'Voice-over Recording', 'Subtitles & Captions'],
-  },
-  {
-    title: 'Studio Shoots',
-    description: 'A controlled indoor studio for recording podcast episodes, interviews, or product photos.',
-    services: ['Green Screen Filming', 'Podcast Audio Recording', 'Multi-Camera setups', 'Live Stream setups', 'Studio Photography'],
-  },
-  {
-    title: 'Social & Ads',
-    description: 'Short, engaging videos built to capture attention on platforms where your clients spend time.',
-    services: ['Instagram Reels', 'YouTube Shorts', 'TikTok Content', 'Video Ad Creatives', 'Simple Explainer Videos'],
-  },
-  {
-    title: 'Branding Videos',
-    description: 'Core campaign videos built to introduce your brand and launch new products successfully.',
-    services: ['Product Launch Videos', 'Brand Identity Films', 'Campaign Content', 'Creative Direction'],
-  },
-  {
-    title: 'Specialized Crew',
-    description: 'The specialized on-set tools and crew members who handle lighting, audio recording, and editing.',
-    services: ['On-Set Lighting', 'Field Audio Recording', 'Director of Photography', 'Production Management', 'Art & Set Styling'],
+    step: '04',
+    heading: 'DELIVER',
+    body: 'We provide the approved files in the formats and sizes agreed for your website and social channels.',
   },
 ];
 
-/* ─── DESIGN TOKENS (LIGHT SYSTEM TO MATCH SCREENSHOT) ──── */
+/* ─── DESIGN TOKENS ──── */
 const T = {
-  bg:         '#F7F8FA',       // Light background
+  bg:         '#F7F8FA',       // Light clean background
   cardBg:     '#FFFFFF',       // Stark white cards
   cardBgAlt:  '#0C120C',       // Dark card highlight
   border:     '#E5E7EB',       // Subtle borders
@@ -81,8 +159,6 @@ const T = {
   red:        '#E11D48',       // Streaming status dot
 };
 
-// A condensed editorial face gives the production page a title-card / film-poster feel.
-// Manrope keeps body copy clean and highly legible beside the technical UI details.
 const FD = "'Barlow Condensed', 'Arial Narrow', sans-serif";
 const FB = "'Manrope', 'Helvetica Neue', sans-serif";
 const FM = 'var(--font-mono)';
@@ -91,28 +167,12 @@ export default function ProductionPage() {
   const heroRef        = useRef(null);
   const heroBgRef      = useRef(null);
   const mainRef        = useRef(null);
-  const videoRef       = useRef(null);
-  const fitnessVidRef  = useRef(null);
   const anniversaryVidRef = useRef(null);
 
-  const [logIndex, setLogIndex] = useState(0);
   const [activeWorkVideo, setActiveWorkVideo] = useState(null);
-  const logLines = [
-    'CAM_A_LOC: ONSTAGE...',
-    '> TRANSMITTING sensor...',
-    '> Reading dynamic range...',
-    '> Overlord 8K RAW stream',
-    '> Locking cam_config_v4.1',
-    '> [ARRIRAW] Frame sync lock.'
-  ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Telemetry log simulator
-    const logInterval = setInterval(() => {
-      setLogIndex(prev => (prev < logLines.length ? prev + 1 : 1));
-    }, 2800);
 
     const ctx = gsap.context(() => {
       // Hero element reveals
@@ -145,16 +205,13 @@ export default function ProductionPage() {
       );
     });
 
-    return () => {
-      clearInterval(logInterval);
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <div style={{ background: T.bg, color: T.textDark, fontFamily: FB, minHeight: '100vh', overflowX: 'hidden' }}>
 
-      {/* Global CSS injections matching stylesheet design */}
+      {/* Global CSS injections */}
       <style>{`
         .production-page h1, .production-page h2, .production-page h3, .production-page h4 {
           font-stretch: condensed;
@@ -177,42 +234,68 @@ export default function ProductionPage() {
           background-size: 60px 60px;
         }
         .btn-black-prod {
-          background: ${T.textDark}; color: ${T.bg};
+          background: ${T.textDark}; color: #FFFFFF;
           font-family: ${FM}; font-size: 11px; font-weight: 700;
-          letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-          padding: 16px 32px; display: inline-block;
+          letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+          padding: 16px 32px; display: inline-flex; align-items: center; gap: 8px;
           transition: transform 0.2s, opacity 0.2s; border: none; cursor: pointer;
         }
-        .btn-black-prod:hover { transform: translateY(-1px); opacity: 0.9; }
+        .btn-black-prod:hover { transform: translateY(-2px); opacity: 0.92; }
         .btn-outline-prod {
           background: transparent; color: ${T.textDark};
           border: 1px solid ${T.textDark};
           font-family: ${FM}; font-size: 11px; font-weight: 700;
-          letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
-          padding: 16px 32px; display: inline-block;
-          transition: background 0.2s, color 0.2s;
+          letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+          padding: 16px 32px; display: inline-flex; align-items: center; gap: 8px;
+          transition: background 0.2s, color 0.2s, transform 0.2s;
         }
-        .btn-outline-prod:hover { background: ${T.textDark}; color: ${T.bg}; }
+        .btn-outline-prod:hover { background: ${T.textDark}; color: #FFFFFF; transform: translateY(-2px); }
+        .btn-whatsapp-prod {
+          background: #25D366; color: #FFFFFF;
+          font-family: ${FM}; font-size: 11px; font-weight: 700;
+          letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+          padding: 16px 32px; display: inline-flex; align-items: center; gap: 8px;
+          transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer;
+        }
+        .btn-whatsapp-prod:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.35); }
         @keyframes prodPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         .pulse-red { animation: prodPulse 1.8s ease-in-out infinite; }
-        .campaign-delivery-card {
-          width: calc(200% + 20px);
-          margin-left: calc(-100% - 20px);
+        .prod-work-card {
+          background: ${T.cardBg};
+          border: 1px solid ${T.border};
+          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
         }
-        .campaign-delivery-content { margin: 0 auto; text-align: center; }
+        .prod-work-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 36px rgba(0,0,0,0.08);
+          border-color: ${T.accent};
+        }
+        .prod-svc-card {
+          background: ${T.cardBg};
+          border: 1px solid ${T.border};
+          padding: 36px 32px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+        .prod-svc-card:hover {
+          transform: translateY(-3px);
+          border-color: ${T.accent};
+        }
         @media (max-width: 860px) {
-          .campaign-delivery-card { width: 100%; margin-left: 0; }
+          .prod-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
         }
       `}</style>
 
       <div className="prod-grid-overlay production-page" ref={mainRef}>
         
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 01. HERO                                              */}
+        {/* 01. MAIN BANNER / HERO                                */}
         {/* ══════════════════════════════════════════════════════ */}
         <section ref={heroRef} style={{
-          minHeight: '90vh',
-          padding: '140px clamp(24px,6vw,80px) 80px',
+          minHeight: '85vh',
+          padding: '140px clamp(24px,6vw,80px) 90px',
           display: 'flex',
           alignItems: 'center',
           borderBottom: `1px solid ${T.border}`,
@@ -220,300 +303,171 @@ export default function ProductionPage() {
           overflow: 'hidden',
           color: '#fff',
         }}>
+          {/* Background image with cinematic gradient */}
           <div
             ref={heroBgRef}
             style={{
               position: 'absolute',
               inset: 0,
               zIndex: 0,
-              backgroundImage: `linear-gradient(110deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.38) 55%, rgba(0,0,0,0.64) 100%), url('/image3.jpeg')`,
+              backgroundImage: `linear-gradient(110deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.48) 55%, rgba(0,0,0,0.72) 100%), url('/image3.jpeg')`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
               willChange: 'transform',
             }}
           />
-          <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: '60px', width: '100%', alignItems: 'center' }}>
+
+          <div className="prod-hero-grid" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '60px', width: '100%', alignItems: 'center' }}>
             
             {/* Left Content */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
               
-              {/* Status Badge */}
-              <div className="h-anim" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {/* Eyebrow Tag: Unified Thrust & Logic Positioning */}
+              <div className="h-anim" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span className="pulse-red" style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.red }} />
-                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#fff', fontWeight: 700 }}>
-                  STREAMING STATUS: LIVE
+                <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#fff', fontWeight: 700 }}>
+                  THRUST &amp; LOGIC • PRODUCTION MEDIA
                 </span>
               </div>
 
-              {/* Title */}
+              {/* Heading from PDF: "MAKE YOUR BRAND SEEN." */}
               <h1 className="h-anim" style={{
                 fontFamily: FD,
-                fontSize: 'clamp(48px, 6vw, 92px)',
+                fontSize: 'clamp(52px, 7vw, 102px)',
                 fontWeight: 700,
-                lineHeight: 0.92,
-                letterSpacing: '-0.03em',
+                lineHeight: 0.9,
+                letterSpacing: '-0.035em',
                 margin: 0,
                 color: '#fff',
               }}>
-                Cinematic<br />
-                Production at Scale.
+                MAKE YOUR<br />BRAND SEEN.
               </h1>
 
-              {/* Body */}
+              {/* Supporting copy from PDF */}
               <p className="h-anim" style={{
                 fontFamily: FB,
-                fontSize: '15px',
+                fontSize: '16px',
                 lineHeight: 1.8,
-                color: 'rgba(255,255,255,0.84)',
-                maxWidth: '480px',
+                color: 'rgba(255,255,255,0.88)',
+                maxWidth: '540px',
                 margin: 0,
               }}>
-                We make beautiful, high-quality videos and photos for your brand. From writing the script to filming and editing, we handle everything under one roof to make your business look its absolute best.
+                From brand films and product shoots to social media videos and campaign content,
+                we plan, produce and edit visuals that help your business communicate with clarity.
               </p>
 
-              {/* KPI Badges */}
-              <div className="h-anim" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                {SPECS.map(({ value, label }) => (
-                  <div key={label} style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)', padding: '16px 24px', flex: '1 1 180px', backdropFilter: 'blur(8px)' }}>
-                    <span style={{ fontFamily: FM, fontSize: '8px', color: 'rgba(255,255,255,0.72)', letterSpacing: '0.1em', display: 'block', marginBottom: '4px' }}>{label}</span>
-                    <span style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: '#fff' }}>{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="h-anim" style={{
-              minHeight: '320px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-            }} />
-
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════ */}
-        {/* 02. ARSENAL (SERVICES)                                */}
-        {/* ══════════════════════════════════════════════════════ */}
-        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-            <span style={{ width: '22px', height: '2px', background: T.accent }} />
-            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
-              ARSENAL
-            </span>
-          </div>
-
-          <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,64px)', fontWeight: 700, letterSpacing: '-0.02em', margin: '0 0 52px', color: T.textDark }}>
-            Production Arsenal
-          </h2>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
-            
-            {/* Left Big Card - Pre-Production */}
-            <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '48px 40px', minHeight: '440px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ marginBottom: '24px' }}>
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5">
-                    <path d="M23 7l-7 5 7 5V7zM1 5h15v14H1z" />
-                  </svg>
-                </div>
-                <h3 style={{ fontFamily: FD, fontSize: '28px', fontWeight: 700, margin: '0 0 16px', color: T.textDark }}>{PRODUCTION_ARSENAL[0].title}</h3>
-                <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
-                  {PRODUCTION_ARSENAL[0].description}
-                </p>
-              </div>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '24px' }}>
-                {PRODUCTION_ARSENAL[0].services.map(st => (
-                  <span key={st} style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: T.textDark, border: `1px solid ${T.border}`, padding: '6px 12px' }}>{st}</span>
-                ))}
-              </div>
-            </div>
-
-            {/* Right Column (Stacked Cards + Bottom Wide Card) */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              
-              {/* Stacked Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                {/* Stacked Card 1 - Video Production */}
-                <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '36px 30px' }}>
-                  <div style={{ marginBottom: '20px' }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5">
-                      <rect x="2" y="2" width="20" height="20" rx="2.5" />
-                      <path d="M7 2v20M17 2v20M2 12h20" />
-                    </svg>
-                  </div>
-                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>{PRODUCTION_ARSENAL[1].title}</h4>
-                  <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0 }}>
-                    {PRODUCTION_ARSENAL[1].description}
-                  </p>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px' }}>
-                    {PRODUCTION_ARSENAL[1].services.map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px' }}>{service}</span>)}
-                  </div>
-                </div>
-
-                {/* Stacked Card 2 - Photography & Drone */}
-                <div style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '36px 30px' }}>
-                  <div style={{ marginBottom: '20px' }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={T.accent} strokeWidth="1.5">
-                      <path d="M12 2L2 22h20Z" />
-                    </svg>
-                  </div>
-                  <h4 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>{PRODUCTION_ARSENAL[2].title}</h4>
-                  <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0 }}>
-                    {PRODUCTION_ARSENAL[2].description}
-                  </p>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px' }}>
-                    {PRODUCTION_ARSENAL[2].services.map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px' }}>{service}</span>)}
-                  </div>
-                </div>
+              {/* Action Buttons: Discuss Project & View Work */}
+              <div className="h-anim" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginTop: '6px' }}>
+                <Link to="/consult" className="btn-black-prod" style={{ background: '#FFFFFF', color: T.textDark }}>
+                  DISCUSS YOUR PROJECT <span>↗</span>
+                </Link>
+                <a href="#portfolio" className="btn-outline-prod" style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.5)' }}>
+                  VIEW OUR WORK ↓
+                </a>
               </div>
 
-              {/* Bottom Wide Card - Post, Studio & Campaign Delivery */}
-              <div className="campaign-delivery-card" style={{ background: '#EAEAEA', border: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden', padding: '40px', minHeight: '160px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                {/* Background video loop for 2D Fitness */}
-                <video ref={fitnessVidRef} autoPlay muted loop playsInline preload="metadata"
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.15, zIndex: 0 }}>
-                  <source src="/2d%20fitness/2D%20VIDEO.mp4" type="video/mp4" />
-                </video>
-                <div className="campaign-delivery-content" style={{ position: 'relative', zIndex: 2 }}>
-                  <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, margin: '0 0 8px', color: T.textDark }}>Post, Studio & Campaign Delivery</h3>
-                  <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: 0, maxWidth: '440px' }}>
-                    From finishing and studio execution to digital campaigns and specialist capture, every final asset is made ready for its audience.
-                  </p>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '18px', maxWidth: '520px' }}>
-                    {PRODUCTION_ARSENAL.slice(3).flatMap(category => category.services).map(service => <span key={service} style={{ fontFamily: FM, fontSize: '8px', letterSpacing: '0.06em', color: T.textDark, border: `1px solid ${T.border}`, padding: '5px 7px', background: 'rgba(255,255,255,0.64)' }}>{service}</span>)}
-                  </div>
-                </div>
-                <div style={{ position: 'relative', zIndex: 2, width: '44px', height: '44px', borderRadius: '50%', border: `1px solid ${T.textDark}`, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'white' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill={T.textDark}>
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════ */}
-        {/* 03. METHODOLOGY & WORKFLOW                            */}
-        {/* ══════════════════════════════════════════════════════ */}
-        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderTop: `1px solid ${T.border}` }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'end', marginBottom: '64px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-                <span style={{ width: '22px', height: '2px', background: T.accent }} />
-                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
-                  METHODOLOGY
+              {/* India-focused location badge */}
+              <div className="h-anim" style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: 0.85, marginTop: '8px' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4A90E2' }} />
+                <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
+                  Based in Chandigarh, India • Available for projects across India
                 </span>
               </div>
-              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,64px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
-                Production Workflow
-              </h2>
             </div>
-            <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
-              A simple four-step process so you always know what's happening — from the first idea to the finished video.
-            </p>
-          </div>
 
-          {/* Flow Cards */}
-          <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '30px', left: 0, right: 0, height: '1px', background: T.border, zIndex: 0 }} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', position: 'relative', zIndex: 1 }}>
-              {PROCESS.map(({ step, heading, body }) => (
-                <div key={step} style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <div style={{ fontFamily: FM, fontSize: '11px', color: T.accent, fontWeight: 700 }}>{step}</div>
-                  <h3 style={{ fontFamily: FD, fontSize: '18px', fontWeight: 700, color: T.textDark, margin: 0 }}>{heading}</h3>
-                  <p style={{ fontFamily: FB, fontSize: '12px', lineHeight: 1.7, color: T.textMuted, margin: 0 }}>{body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════ */}
-        {/* 04. STANDARDS (CHARTS)                                */}
-        {/* ══════════════════════════════════════════════════════ */}
-        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderTop: `1px solid ${T.border}` }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px' }}>
-            <div>
-              <h2 style={{ fontFamily: FD, fontSize: '32px', fontWeight: 700, margin: 0, color: T.textDark }}>PRODUCTION STANDARDS</h2>
-              <p style={{ fontFamily: FB, fontSize: '13px', color: T.textMuted, marginTop: '4px' }}>The quality standards we hold every shoot and edit to.</p>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'white', border: `1px solid ${T.border}`, padding: '8px 16px', fontFamily: FM, fontSize: '9px', color: T.textDark }}>
-              <span className="pulse-red" style={{ width: '6px', height: '6px', borderRadius: '50%', background: T.red }} />
-              UPDATING LIVE
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px' }}>
-            {[
-              { l: 'AVG FRAME RATE', v: '120 FPS', chart: [50, 70, 85, 60, 95] },
-              { l: 'RENDER EFFICIENCY', v: '0.8s RT', chart: [35, 45, 30, 65, 80] },
-              { l: 'COLOR ACCURACY', v: '99.9% CR', chart: [85, 90, 88, 92, 99.9] },
-            ].map(({ l, v, chart }) => (
-              <div key={l} style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '28px 24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '24px' }}>
-                  <span style={{ fontFamily: FM, fontSize: '9px', color: T.textMuted, letterSpacing: '0.05em' }}>{l}</span>
-                  <span style={{ fontFamily: FM, fontSize: '10px', color: T.accent, fontWeight: 700 }}>{v}</span>
-                </div>
-                {/* CSS Bar Chart */}
-                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '60px', paddingBottom: '4px', borderBottom: `1px solid ${T.border}` }}>
-                  {chart.map((val, i) => (
-                    <div key={i} style={{
-                      flex: 1,
-                      height: `${val}%`,
-                      background: T.accent,
-                      opacity: 0.3 + (i * 0.15),
-                      borderRadius: '1px',
-                    }} />
-                  ))}
+            {/* Right: Featured Reel Preview Card */}
+            <div className="h-anim" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              background: 'rgba(12,18,12,0.65)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              backdropFilter: 'blur(12px)',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              position: 'relative',
+            }}
+              onClick={() => setActiveWorkVideo('/Thrust_and_logic_animating_colors_202607250556.mp4')}
+            >
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                >
+                  <source src="/Thrust_and_logic_animating_colors_202607250556.mp4" type="video/mp4" />
+                </video>
+                <div style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div style={{
+                    width: '56px', height: '56px', borderRadius: '50%',
+                    background: '#FFFFFF', color: T.textDark,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                  }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill={T.textDark}>
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
                 </div>
               </div>
-            ))}
+              <div style={{ padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.12em', color: '#97b7f7', textTransform: 'uppercase', display: 'block', marginBottom: '3px' }}>
+                    FEATURED SHOWREEL
+                  </span>
+                  <span style={{ fontFamily: FD, fontSize: '18px', fontWeight: 700, color: '#fff' }}>
+                    THRUST &amp; LOGIC REEL
+                  </span>
+                </div>
+                <span style={{ fontFamily: FM, fontSize: '9px', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)', padding: '5px 10px' }}>
+                  WATCH REEL ↗
+                </span>
+              </div>
+            </div>
+
           </div>
         </section>
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 05. PROOF OF WORK (VIDEO GALLERY)                    */}
+        {/* 02. SELECTED WORK (PROOF BEFORE PROCESS)              */}
         {/* ══════════════════════════════════════════════════════ */}
-        {false && (
-        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderTop: `1px solid ${T.border}` }}>
+        <section id="portfolio" className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
             <span style={{ width: '22px', height: '2px', background: T.accent }} />
             <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
-              PORTFOLIO
+              PORTFOLIO &amp; PROOF
             </span>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '56px', flexWrap: 'wrap', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '30px', alignItems: 'end', marginBottom: '56px', flexWrap: 'wrap' }}>
             <div>
-              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,64px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
-                Proof of Work
+              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
+                Selected Projects
               </h2>
-              <p style={{ fontFamily: FB, fontSize: '13px', color: T.textMuted, marginTop: '4px' }}>Explore seven raw production loops, brand reels, and motion sequences.</p>
+              <p style={{ fontFamily: FB, fontSize: '15px', color: T.textMuted, marginTop: '6px', maxWidth: '580px' }}>
+                Real commercial campaigns, product videos, and brand reels produced for our clients.
+              </p>
             </div>
-            <div style={{ fontFamily: FM, fontSize: '9px', color: T.textMuted }}>CLICK TO PLAY FULLSCREEN</div>
+            <div style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.1em', color: T.textMuted, textTransform: 'uppercase' }}>
+              HOVER TO PREVIEW • CLICK TO PLAY
+            </div>
           </div>
 
-          {/* Grid Layout of the 6 original production files (4 videos + 2 images) */}
+          {/* 6 Projects Grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-            {[
-              { type: 'video', title: 'Creative Studio Reel', scope: 'Directing / Sound Design', src: '/crousel/30 Oct 2025.mp4', desc: 'Cinematic brand overview highlighting modern architectural spaces and lighting.' },
-              { type: 'video', title: '2D Fitness Campaign', scope: 'Direction / Core Motion', src: '/2d fitness/2D VIDEO.mp4', desc: 'Commercial product launch visualising fitness routines and active tracking.' },
-              { type: 'video', title: 'Precious Anniversary Film', scope: 'Story / Cinematic Capture', src: '/precious/Anniversary Main.mp4', desc: 'Narrative documentary capturing historical milestones and brand legacy.' },
-              { type: 'video', title: 'Camera Test Motion Reel', scope: 'RAW Grade / Camera Test', src: '/crousel/IMG_9527.MOV', desc: 'Color grading calibration test footage focusing on lighting density.' },
-              { type: 'image', title: 'Production Still 01', scope: 'On-Set Capture', src: '/crousel/IMG_1812.JPG', desc: 'High-fidelity portrait capture highlighting practical set lighting.' },
-              { type: 'image', title: 'Production Still 02', scope: 'Set Architecture', src: '/crousel/IMG_1813.JPG', desc: 'On-location setup still documenting camera placement and rigging.' },
-            ].map(({ type, title, scope, src, desc }) => {
+            {SELECTED_PROJECTS.map((item) => {
               const [hovered, setHovered] = useState(false);
               const cardVidRef = useRef(null);
 
               useEffect(() => {
-                if (type !== 'video') return;
+                if (item.type !== 'video') return;
                 const vid = cardVidRef.current;
                 if (!vid) return;
                 if (hovered) {
@@ -522,65 +476,49 @@ export default function ProductionPage() {
                   vid.pause();
                   vid.currentTime = 0;
                 }
-              }, [hovered, type]);
+              }, [hovered, item.type]);
 
               return (
                 <div
-                  key={title}
+                  key={item.title}
+                  className="prod-work-card"
                   onClick={() => {
-                    if (type === 'video') {
-                      setActiveWorkVideo(src);
-                    }
+                    if (item.type === 'video') setActiveWorkVideo(item.src);
                   }}
                   onMouseEnter={() => setHovered(true)}
                   onMouseLeave={() => setHovered(false)}
                   style={{
-                    background: T.cardBg,
-                    border: `1px solid ${T.border}`,
-                    padding: '24px',
-                    cursor: type === 'video' ? 'pointer' : 'default',
+                    padding: '22px',
+                    cursor: item.type === 'video' ? 'pointer' : 'default',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
-                    minHeight: '340px',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    setHovered(true);
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.06)';
-                  }}
-                  onMouseLeave={(e) => {
-                    setHovered(false);
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    minHeight: '360px',
                   }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {/* Media wrapper slot */}
+                    {/* Media Slot */}
                     <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#F0EFF1' }}>
-                      {type === 'video' ? (
+                      {item.type === 'video' ? (
                         <>
                           <video
                             ref={cardVidRef}
-                            src={src}
+                            src={item.src}
                             muted
                             loop
                             playsInline
                             preload="metadata"
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
-                          {/* Play indicator overlay */}
                           <div style={{
                             position: 'absolute', inset: 0, display: 'flex', justifyContent: 'center',
-                            alignItems: 'center', background: hovered ? 'rgba(0,0,0,0.1)' : 'transparent',
+                            alignItems: 'center', background: hovered ? 'rgba(0,0,0,0.15)' : 'transparent',
                             transition: 'background 0.3s',
                           }}>
                             <div style={{
-                              width: '40px', height: '40px', borderRadius: '50%', background: 'white',
+                              width: '42px', height: '42px', borderRadius: '50%', background: '#FFFFFF',
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              opacity: hovered ? 1 : 0.8, transition: 'opacity 0.2s',
-                              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                              boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
                             }}>
                               <svg width="12" height="12" viewBox="0 0 24 24" fill={T.textDark}>
                                 <path d="M8 5v14l11-7z" />
@@ -590,17 +528,28 @@ export default function ProductionPage() {
                         </>
                       ) : (
                         <img
-                          src={src}
-                          alt={title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.08)' }}
+                          src={item.src}
+                          alt={item.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                       )}
                     </div>
 
                     <div>
-                      <span style={{ fontFamily: FM, fontSize: '8px', color: T.accent, letterSpacing: '0.1em', display: 'block', marginBottom: '6px' }}>{scope}</span>
-                      <h3 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, color: T.textDark, margin: '0 0 8px', lineHeight: 1.15 }}>{title}</h3>
-                      <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.6, color: T.textMuted, margin: 0 }}>{desc}</p>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <span style={{ fontFamily: FM, fontSize: '9px', color: T.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
+                          {item.category}
+                        </span>
+                        <span style={{ fontFamily: FM, fontSize: '9px', color: T.textMuted }}>
+                          {item.role}
+                        </span>
+                      </div>
+                      <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: T.textDark, margin: '0 0 8px', lineHeight: 1.15 }}>
+                        {item.title}
+                      </h3>
+                      <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.6, color: T.textMuted, margin: 0 }}>
+                        {item.brief}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -608,16 +557,175 @@ export default function ProductionPage() {
             })}
           </div>
         </section>
-        )}
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 06. CTA WITH ANNIVERSARY VIDEO INTEGRATION            */}
+        {/* 03. POST-PRODUCTION & CAMPAIGN CONTENT (SERVICES)     */}
         {/* ══════════════════════════════════════════════════════ */}
-        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 140px', borderTop: `1px solid ${T.border}`, position: 'relative', overflow: 'hidden' }}>
-          {/* Subtle loop of our main Anniversary video behind the CTA */}
-          <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: 'black' }}>
+        <section id="services" className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+            <span style={{ width: '22px', height: '2px', background: T.accent }} />
+            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
+              DELIVERABLES
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '60px' }}>
+            <div>
+              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
+                Post-Production &amp;<br />Campaign Content
+              </h2>
+            </div>
+            <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
+              From the first edit to final platform-ready assets, we turn your footage into clear,
+              engaging content for your brand.
+            </p>
+          </div>
+
+          {/* 6 Grouped Service Categories (Page 3 of PDF) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+            {SERVICE_CATEGORIES.map((cat, i) => (
+              <div key={cat.title} className="prod-svc-card">
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <span style={{ fontFamily: FM, fontSize: '9px', color: T.accent, letterSpacing: '0.14em', fontWeight: 700 }}>
+                      0{i + 1} — {cat.tag}
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily: FD, fontSize: '26px', fontWeight: 700, margin: '0 0 12px', color: T.textDark }}>
+                    {cat.title}
+                  </h3>
+                  <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: T.textMuted, margin: '0 0 20px' }}>
+                    {cat.desc}
+                  </p>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
+                  {cat.items.map((svc) => (
+                    <span
+                      key={svc}
+                      style={{
+                        fontFamily: FM,
+                        fontSize: '9px',
+                        letterSpacing: '0.06em',
+                        color: T.textDark,
+                        background: '#F0F2F5',
+                        border: `1px solid ${T.border}`,
+                        padding: '6px 10px',
+                      }}
+                    >
+                      {svc}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════ */}
+        {/* 04. PRODUCTION STANDARDS (Page 2 of PDF)              */}
+        {/* ══════════════════════════════════════════════════════ */}
+        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+            <span style={{ width: '22px', height: '2px', background: T.accent }} />
+            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
+              STANDARDS
+            </span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '56px' }}>
+            <div>
+              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
+                Quality in Every Frame.
+              </h2>
+            </div>
+            <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
+              We plan every shoot with care and refine every edit with attention to detail—from
+              framing and lighting to colour, sound and final delivery.
+            </p>
+          </div>
+
+          {/* 3 Meaningful Cards replacing fake FPS metrics */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+            {PRODUCTION_STANDARDS.map((std) => (
+              <div
+                key={std.num}
+                style={{
+                  background: T.cardBg,
+                  border: `1px solid ${T.border}`,
+                  padding: '36px 30px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '260px',
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <span style={{ fontFamily: FM, fontSize: '10px', color: T.accent, letterSpacing: '0.15em', fontWeight: 700 }}>
+                      CARD {std.num}
+                    </span>
+                    <span style={{ fontFamily: FM, fontSize: '9px', color: T.textMuted, letterSpacing: '0.1em' }}>
+                      {std.label}
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily: FD, fontSize: '24px', fontWeight: 700, margin: '0 0 14px', color: T.textDark, lineHeight: 1.15 }}>
+                    {std.heading}
+                  </h3>
+                  <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.75, color: T.textMuted, margin: 0 }}>
+                    {std.detail}
+                  </p>
+                </div>
+                <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
+                  <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.1em', color: T.accent, fontWeight: 700, textTransform: 'uppercase' }}>
+                    ✓ {std.deliverable}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════ */}
+        {/* 05. PRODUCTION WORKFLOW (Page 2 of PDF)               */}
+        {/* ══════════════════════════════════════════════════════ */}
+        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'end', marginBottom: '64px' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+                <span style={{ width: '22px', height: '2px', background: T.accent }} />
+                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
+                  METHODOLOGY
+                </span>
+              </div>
+              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
+                From First Idea<br />to Final Cut.
+              </h2>
+            </div>
+            <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: T.textMuted, margin: 0 }}>
+              A clear, collaborative process keeps your project organised at every stage.
+            </p>
+          </div>
+
+          {/* 4 Flow Cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+            {PROCESS.map(({ step, heading, body }) => (
+              <div key={step} style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div style={{ fontFamily: FM, fontSize: '11px', color: T.accent, fontWeight: 700 }}>{step}</div>
+                <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: T.textDark, margin: 0 }}>{heading}</h3>
+                <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.75, color: T.textMuted, margin: 0 }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════ */}
+        {/* 06. CALL TO ACTION WITH WHATSAPP ENQUIRY               */}
+        {/* ══════════════════════════════════════════════════════ */}
+        <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 140px', position: 'relative', overflow: 'hidden' }}>
+          {/* Subtle loop of Anniversary video behind the CTA */}
+          <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: '#0C120C' }}>
             <video ref={anniversaryVidRef} autoPlay muted loop playsInline preload="metadata"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.12 }}>
+              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.14 }}>
               <source src="/precious/Anniversary Main.mp4" type="video/mp4" />
             </video>
           </div>
@@ -625,29 +733,111 @@ export default function ProductionPage() {
           <div style={{
             position: 'relative',
             zIndex: 1,
-            background: 'rgba(255,255,255,0.92)',
+            background: 'rgba(255,255,255,0.95)',
             border: `1px solid ${T.border}`,
-            padding: '80px 40px',
+            padding: '70px 40px',
             textAlign: 'center',
             display: 'flex',
-            backdropFilter: 'blur(10px)',
+            backdropFilter: 'blur(12px)',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '28px',
+            gap: '24px',
           }}>
-            <h2 style={{ fontFamily: FD, fontSize: 'clamp(32px,5.5vw,56px)', fontWeight: 700, margin: 0, color: T.textDark }}>
-              Your Brand Deserves the Best.
+            <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: T.accent, fontWeight: 700 }}>
+              START A PROJECT
+            </span>
+
+            <h2 style={{ fontFamily: FD, fontSize: 'clamp(38px,6vw,68px)', fontWeight: 700, margin: 0, color: T.textDark }}>
+              Discuss Your Project.
             </h2>
-            <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: T.textMuted, maxWidth: '520px', margin: 0 }}>
-              We hold our video and photo shoots to the highest standards. We carefully plan and review every shot, color grade, and sound mix so you receive beautiful, professional results that make your business stand out.
+
+            <p style={{ fontFamily: FB, fontSize: '16px', lineHeight: 1.8, color: T.textMuted, maxWidth: '580px', margin: 0 }}>
+              Tell us what you're planning to shoot, produce, or edit. We'll provide a straightforward
+              estimate, timeline, and creative approach—straight from the team doing the work.
             </p>
-            <Link to="/consult" className="btn-outline-prod" style={{ display: 'inline-block' }}>
-              TALK TO A PRODUCER
-            </Link>
+
+            {/* India-focused note */}
+            <div style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.08em', color: T.textDark, textTransform: 'uppercase', background: '#F0F2F5', padding: '8px 18px', border: `1px solid ${T.border}` }}>
+              Based in Chandigarh, India • Available for projects across India
+            </div>
+
+            {/* CTAs: Enquiry Form + WhatsApp Option (Page 5 of PDF) */}
+            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '8px' }}>
+              <Link to="/consult" className="btn-black-prod">
+                DISCUSS YOUR PROJECT <span>↗</span>
+              </Link>
+              <a
+                href="https://wa.me/917082568222?text=Hi%20Thrust%20%26%20Logic,%20I'd%20like%20to%20discuss%20a%20production%20project"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-whatsapp-prod"
+              >
+                CHAT ON WHATSAPP <span>↗</span>
+              </a>
+            </div>
           </div>
         </section>
 
       </div>
+
+      {/* ══════════════════════════════════════════════════════ */}
+      {/* VIDEO LIGHTBOX MODAL                                   */}
+      {/* ══════════════════════════════════════════════════════ */}
+      {activeWorkVideo && (
+        <div
+          onClick={() => setActiveWorkVideo(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            background: 'rgba(0,0,0,0.92)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '1000px',
+              aspectRatio: '16/9',
+              background: '#000',
+              border: '1px solid rgba(255,255,255,0.2)',
+              boxShadow: '0 24px 60px rgba(0,0,0,0.8)',
+            }}
+          >
+            <video
+              src={activeWorkVideo}
+              controls
+              autoPlay
+              playsInline
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+            <button
+              onClick={() => setActiveWorkVideo(null)}
+              style={{
+                position: 'absolute',
+                top: '-44px',
+                right: '0',
+                background: 'transparent',
+                border: 'none',
+                color: '#FFFFFF',
+                fontFamily: FM,
+                fontSize: '13px',
+                cursor: 'pointer',
+                letterSpacing: '0.1em',
+              }}
+            >
+              ✕ CLOSE
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

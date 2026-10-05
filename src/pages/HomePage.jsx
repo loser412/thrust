@@ -1,61 +1,361 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './HomePage.css';
 
-const engines = [
-  { number: '01', name: 'Development & Systems', description: 'Digital products, platforms, and infrastructure designed to move at the speed of your ambition.', link: '/development', cta: 'Explore Engineering', visual: 'system' },
-  { number: '02', name: 'Cinematic Production', description: 'Brand films and social-first stories built to hold attention long after the first frame.', link: '/production', cta: 'Explore Production', visual: 'production' },
-  { number: '03', name: 'Performance Marketing', description: 'Creative, media, and conversion intelligence tuned to create compounding demand.', link: '/marketing', cta: 'Explore Marketing', visual: 'growth' },
+gsap.registerPlugin(ScrollTrigger);
+
+/* ─── CRAFT CARDS ─── */
+const CRAFT = [
+  {
+    num: '01',
+    tag: 'DEVELOPMENT & SYSTEMS',
+    desc: 'Digital products, platforms, and infrastructure designed to move at the speed of your ambition. Clean, hand-written architecture engineered for raw speed, deep security, and zero technical debt.',
+    link: '/development',
+    cta: 'EXPLORE DEVELOPMENT',
+    visual: 'code',
+  },
+  {
+    num: '02',
+    tag: 'CINEMATIC PRODUCTION',
+    desc: 'We shoot real glass and direct real stories. High-bitrate, intentional cinema engineered to make your brand look like the category leader overnight.',
+    link: '/production',
+    cta: 'EXPLORE PRODUCTION',
+    visual: 'film',
+  },
+  {
+    num: '03',
+    tag: 'PERFORMANCE MARKETING',
+    desc: 'Great work dies in the dark without distribution. We build brutal, data-backed funnels that turn raw attention into compounding revenue.',
+    link: '/marketing',
+    cta: 'EXPLORE MARKETING',
+    visual: 'graph',
+  },
 ];
 
-const work = [
-  { discipline: 'Development', title: 'Custom SaaS Platform', detail: 'A unified operating system for a national service business.', image: '/ChatGPT%20Image%20Jul%2029,%202026,%2012_35_01%20PM.png', link: '/development', alt: 'Development services visual' },
-  { discipline: 'Production', title: 'Brand Film / Commercial Reel', detail: 'A cinematic launch campaign made to stop the scroll.', image: '/ChatGPT%20Image%20Jul%2029,%202026,%2012_33_34%20PM.png', link: '/production', alt: 'Production services visual' },
-  { discipline: 'Marketing', title: 'Customer Acquisition Engine', detail: 'A full-funnel growth system for a fast-moving e-commerce brand.', image: '/ChatGPT%20Image%20Jul%2029,%202026,%2012_33_59%20PM.png', link: '/marketing', alt: 'Marketing services visual' },
+/* ─── CAPABILITY MATRIX ─── */
+const MATRIX = [
+  {
+    col: 'CODE & ARCHITECTURE',
+    items: [
+      'Custom SaaS & Web Applications',
+      'AI Pipelines & Workflow Automation',
+      'Mobile App Development',
+      'High-Performance UI/UX Engineering',
+    ],
+  },
+  {
+    col: 'MEDIA & PRODUCTION',
+    items: [
+      '3D Product & Tech Explainers',
+      'High-Bitrate Commercial Cinematography',
+      'Brand Identity & Motion Graphics',
+      'End-to-End Pre & Post-Production',
+    ],
+  },
+  {
+    col: 'GROWTH & PERFORMANCE',
+    items: [
+      'Multi-Channel Performance Marketing',
+      'Full-Funnel SEO & Search Architecture',
+      'Organic Growth Strategy',
+      'B2B & D2C Revenue Scale Strategy',
+    ],
+  },
 ];
 
-function Arrow() { return <span aria-hidden="true">↗</span>; }
+/* ─── PROOF TESTIMONIAL ─── */
+const PROOF_TESTIMONIAL = {
+  quote: '"The results were much better than anything we had tried before. The team felt like our own in-house team — they just got it."',
+  name: 'Gurnam Saini',
+  role: 'Founder, Ayurveda Organics',
+};
 
-function EngineVisual({ type }) {
-  if (type === 'system') return <div className="engine-visual code-visual" aria-hidden="true"><div className="code-top"><i /><i /><i /><b>system.config</b></div><div className="code-lines"><span>const velocity = <b>scale</b>;</span><span>build(<em>ambition</em>);</span><span className="short">deploy / production</span></div><div className="component-orbit"><i /><i /><i /></div></div>;
-  if (type === 'production') return <div className="engine-visual film-visual" aria-hidden="true"><video autoPlay muted loop playsInline preload="metadata"><source src="/Thrust_and_logic_animating_colors_202607250556.mp4" type="video/mp4" /></video><div className="film-shade" /><div className="play-mark">▶</div><small>PLAY REEL · 00:10</small></div>;
-  return <div className="engine-visual graph-visual" aria-hidden="true"><div className="metric"><span>AVERAGE ROI</span><strong>+142%</strong><small>vs. prior period <b>↑ 38.4%</b></small></div><svg viewBox="0 0 330 130" preserveAspectRatio="none"><path d="M0 116 C31 112 43 104 64 107 S96 89 120 92 S151 80 171 83 S199 43 224 54 S256 45 277 24 S308 32 330 4" /><path className="area" d="M0 116 C31 112 43 104 64 107 S96 89 120 92 S151 80 171 83 S199 43 224 54 S256 45 277 24 S308 32 330 4 V130 H0Z" /></svg><div className="graph-labels"><span>MON</span><span>WED</span><span>FRI</span><span>SUN</span></div></div>;
+/* ─── VISUAL COMPONENT ─── */
+function CraftVisual({ type }) {
+  if (type === 'code') return (
+    <div className="craft-visual code-visual" aria-hidden="true">
+      <div className="code-top"><i /><i /><i /><b>system.config</b></div>
+      <div className="code-lines">
+        <span>const velocity = <b>scale</b>;</span>
+        <span>build(<em>ambition</em>);</span>
+        <span className="short">deploy / production</span>
+      </div>
+      <div className="component-orbit"><i /><i /><i /></div>
+    </div>
+  );
+  if (type === 'film') return (
+    <div className="craft-visual film-visual" aria-hidden="true">
+      <video autoPlay muted loop playsInline preload="metadata">
+        <source src="/Thrust_and_logic_animating_colors_202607250556.mp4" type="video/mp4" />
+      </video>
+      <div className="film-shade" />
+      <div className="play-mark">▶</div>
+      <small>PLAY REEL · 00:10</small>
+    </div>
+  );
+  return (
+    <div className="craft-visual graph-visual" aria-hidden="true">
+      <div className="metric">
+        <span>AVERAGE ROI</span>
+        <strong>+142%</strong>
+        <small>vs. prior period <b>↑ 38.4%</b></small>
+      </div>
+      <svg viewBox="0 0 330 130" preserveAspectRatio="none">
+        <path d="M0 116 C31 112 43 104 64 107 S96 89 120 92 S151 80 171 83 S199 43 224 54 S256 45 277 24 S308 32 330 4" />
+        <path className="area" d="M0 116 C31 112 43 104 64 107 S96 89 120 92 S151 80 171 83 S199 43 224 54 S256 45 277 24 S308 32 330 4 V130 H0Z" />
+      </svg>
+      <div className="graph-labels"><span>MON</span><span>WED</span><span>FRI</span><span>SUN</span></div>
+    </div>
+  );
 }
 
 export default function HomePage() {
-  return <main className="refined-home">
-    <section className="refined-hero">
-      <div className="grid-field" aria-hidden="true" />
-      <div className="hero-inner">
-        <div className="hero-copy">
-          <p className="overline"><i /> THRUST &amp; LOGIC <span>·</span> INTEGRATED AGENCY</p>
-          <h1>Software.<br /><em>Stories.</em><br />Scale.</h1>
-          <p className="hero-description">We build high-performance web systems, capture cinematic media, and scale customer acquisition for ambitious brands.</p>
-          <Link to="/consult" className="accent-button">Start a conversation <Arrow /></Link>
+  const heroRef     = useRef(null);
+  const craftRef    = useRef(null);
+  const matrixRef   = useRef(null);
+  const ecoRef      = useRef(null);
+  const proofRef    = useRef(null);
+  const ctaRef      = useRef(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const ctx = gsap.context(() => {
+
+      /* Hero entrance */
+      gsap.fromTo(
+        heroRef.current?.querySelectorAll('.h-in') ?? [],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.1, stagger: 0.14, ease: 'power3.out', delay: 0.1 }
+      );
+
+      /* Craft cards */
+      gsap.fromTo(
+        craftRef.current?.querySelectorAll('.craft-card') ?? [],
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power2.out',
+          scrollTrigger: { trigger: craftRef.current, start: 'top 78%' } }
+      );
+
+      /* Matrix rows */
+      gsap.fromTo(
+        matrixRef.current?.querySelectorAll('.matrix-col') ?? [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: matrixRef.current, start: 'top 80%' } }
+      );
+
+      /* Eco section */
+      gsap.fromTo(
+        ecoRef.current?.querySelectorAll('.eco-item') ?? [],
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: { trigger: ecoRef.current, start: 'top 78%' } }
+      );
+
+      /* Proof section */
+      gsap.fromTo(
+        proofRef.current?.querySelectorAll('.proof-item') ?? [],
+        { y: 50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, stagger: 0.09, ease: 'power2.out',
+          scrollTrigger: { trigger: proofRef.current, start: 'top 80%' } }
+      );
+
+      /* CTA */
+      gsap.fromTo(ctaRef.current,
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power2.out',
+          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } }
+      );
+    });
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <main className="refined-home">
+
+      {/* ══════════ HERO ══════════════════════════════════════════════ */}
+      <section className="refined-hero" ref={heroRef}>
+        <div className="grid-field" aria-hidden="true" />
+        <div className="hero-inner">
+          <div className="hero-copy">
+
+            <p className="overline h-in">
+              <i />
+              THRUST &amp; LOGIC <span>|</span> INTEGRATED AGENCY
+            </p>
+
+            <h1 className="h-in">
+              CODE.<br />
+              CONTENT.<br />
+              <em>GROWTH.</em>
+            </h1>
+
+            <p className="hero-description h-in">
+              Most agencies outsource. We don't. We combine craftsman-level engineering,
+              studio-grade production, and surgical growth strategy under one roof.
+              No middlemen. No guesswork.
+            </p>
+
+            <Link to="/consult" className="accent-button h-in">
+              TALK TO THE BUILDERS <span>↗</span>
+            </Link>
+          </div>
         </div>
 
-      </div>
-      <div className="hero-baseline"><span>CODE · CONTENT · CUSTOMER GROWTH</span><span>SCROLL TO EXPLORE ↓</span></div>
-    </section>
+        <div className="hero-baseline h-in">
+          <span>NO JUNIORS • NO OUTSOURCING • DIRECT EXECUTION</span>
+          <span>SCROLL TO SEE HOW WE THINK ↓</span>
+        </div>
+      </section>
 
-    <section className="triad section-shell" id="services">
-      <div className="section-intro"><p className="overline"><i /> 01 / THREE ENGINES</p><h2>Three disciplines.<br /><em>One direction.</em></h2><p>Each engagement brings together the systems, story, and signal your next stage demands.</p></div>
-      <div className="engine-grid">
-        {engines.map((engine) => <article className="engine-card" key={engine.number}><div className="engine-number">{engine.number}</div><EngineVisual type={engine.visual} /><div className="engine-body"><p>{engine.name}</p><h3>{engine.description}</h3><Link to={engine.link}>{engine.cta} <Arrow /></Link></div></article>)}
-      </div>
-    </section>
+      {/* ══════════ 01 / OUR CRAFT ════════════════════════════════════ */}
+      <section className="craft-section section-shell" ref={craftRef}>
+        <div className="section-intro-new">
+          <p className="overline"><i /> 01 / OUR CRAFT</p>
+          <h2>Three disciplines.<br /><em>Zero hand-offs.</em></h2>
+          <p>
+            We don't hire account managers to pass messages down a chain. You work directly
+            with the people writing the code, directing the cameras, and scaling the ads.
+          </p>
+        </div>
 
-    <section className="featured-work section-shell" id="work">
-      <div className="work-head"><div><p className="overline"><i /> 02 / SELECTED WORK</p><h2>Proof in<br /><em>every medium.</em></h2></div><p>We make the work connect across product, picture, and performance—not just look good in isolation.</p></div>
-      <div className="work-grid">{work.map((item, index) => <Link className={`work-card work-card--${index + 1}`} to={item.link} key={item.title}><div className="work-image"><img src={item.image} alt={item.alt} /></div><div className="work-info"><p>{item.discipline} <Arrow /></p><h3>{item.title}</h3><span>{item.detail}</span></div></Link>)}</div>
-    </section>
+        <div className="craft-grid">
+          {CRAFT.map((c) => (
+            <article className="craft-card" key={c.num}>
+              <div className="craft-num">{c.num}</div>
+              <CraftVisual type={c.visual} />
+              <div className="craft-body">
+                <p className="craft-tag">{c.tag}</p>
+                <p className="craft-desc">{c.desc}</p>
+                <Link to={c.link} className="craft-link">
+                  {c.cta} <span>↗</span>
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
 
-    <section className="ecosystem section-shell">
-      <p className="overline"><i /> 03 / THE UNIFIED ECOSYSTEM</p>
-      <div className="ecosystem-grid"><h2>The gaps between agencies<br />are where momentum <em>goes to die.</em></h2><div className="ecosystem-copy"><p className="pull-quote">“Dev teams don’t understand brand narrative. Marketing agencies don’t understand code. Production crews don’t understand conversion metrics.”</p><p>We built Thrust &amp; Logic so you never have to bridge that gap again. One senior engine handling your code, content, and customer growth.</p><div className="discipline-list"><span>Systems</span><span>Story</span><span>Scale</span></div></div></div>
-    </section>
+      {/* ══════════ 02 / FULL CAPABILITY MATRIX ══════════════════════ */}
+      <section className="matrix-section section-shell" ref={matrixRef}>
+        <div className="section-intro-new">
+          <p className="overline"><i /> 02 / THE DELIVERABLES</p>
+          <h2>Full Capability<br /><em>Matrix.</em></h2>
+          <p>
+            The complete technical, creative, and growth infrastructure we build under one roof.
+          </p>
+        </div>
 
-    <section className="conversion section-shell">
-      <div className="conversion-card"><div className="conversion-glow" aria-hidden="true" /><p className="overline"><i /> 04 / OPEN A CHANNEL</p><h2>Ready to apply logic<br />to your next move?</h2><p>Tell us what you’re building, shooting, or scaling. We’ll give you a clear, grounded strategy with zero sales pressure.</p><Link to="/consult" className="accent-button">Consult now <Arrow /></Link><span className="corner-note">THRUST &amp; LOGIC / 2026</span></div>
-    </section>
-  </main>;
+        <div className="matrix-grid">
+          {MATRIX.map((col) => (
+            <div className="matrix-col" key={col.col}>
+              <div className="matrix-col-head">{col.col}</div>
+              <ul className="matrix-list">
+                {col.items.map((item) => (
+                  <li key={item}>
+                    <span className="matrix-bullet">—</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ══════════ 03 / THE UNIFIED ECOSYSTEM ═══════════════════════ */}
+      <section className="ecosystem section-shell" ref={ecoRef}>
+        <p className="overline eco-item"><i /> 03 / THE UNIFIED ECOSYSTEM</p>
+
+        <div className="ecosystem-grid">
+          <h2 className="eco-item">
+            The traditional agency<br />model is broken.<br />
+            <em>Here is how we fixed it.</em>
+          </h2>
+
+          <div className="ecosystem-copy eco-item">
+            <p className="pull-quote">
+              "Dev shops build tech that nobody buys. Creative agencies shoot films that don't convert. Marketing agencies run ads to broken websites."
+            </p>
+            <p>
+              When you split your brand between three different vendors, you spend more time managing
+              friction than growing your business. We built Thrust &amp; Logic as a single,
+              senior-led engine where software, cinema, and growth strategy sit at the exact same table.
+            </p>
+            <div className="discipline-list eco-item">
+              <span>LOGIC IN CODE</span>
+              <span>AUTHORITY IN MEDIA</span>
+              <span>PRECISION IN GROWTH</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ 03.5 / PROOF OF WORK ════════════════════════════ */}
+      <section className="proof-section section-shell" ref={proofRef}>
+        <p className="overline proof-item"><i /> PROOF OF WORK</p>
+
+        <div className="proof-logos proof-item">
+          {['Ayurveda Organics', 'PropertyMasters', 'Precious', 'Fitness Client'].map((brand) => (
+            <span key={brand} className="proof-logo-pill">{brand}</span>
+          ))}
+        </div>
+
+        <div className="proof-grid">
+          {/* UI Screenshot */}
+          <div className="proof-item proof-media-card">
+            <div className="proof-media-label">DEVELOPMENT · UI PLATFORM</div>
+            <div className="proof-media-img">
+              <img
+                src="/ChatGPT%20Image%20Jul%2029,%202026,%2012_35_01%20PM.png"
+                alt="Custom SaaS UI Platform"
+              />
+            </div>
+          </div>
+
+          {/* Video Frame */}
+          <div className="proof-item proof-media-card">
+            <div className="proof-media-label">PRODUCTION · BRAND FILM</div>
+            <div className="proof-media-img proof-media-dark">
+              <img
+                src="/ChatGPT%20Image%20Jul%2029,%202026,%2012_33_34%20PM.png"
+                alt="Cinematic brand film frame"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonial */}
+        <div className="proof-testimonial proof-item">
+          <blockquote className="proof-quote">
+            {PROOF_TESTIMONIAL.quote}
+          </blockquote>
+          <cite className="proof-cite">
+            {PROOF_TESTIMONIAL.name} — {PROOF_TESTIMONIAL.role}
+          </cite>
+        </div>
+      </section>
+
+      {/* ══════════ 04 / OPEN A CHANNEL ══════════════════════════════ */}
+      <section className="conversion section-shell" ref={ctaRef}>
+        <div className="conversion-card">
+          <div className="conversion-glow" aria-hidden="true" />
+          <p className="overline"><i /> 04 / OPEN A CHANNEL</p>
+          <h2>No sales reps. No pitch decks.<br /><em>Just a direct line.</em></h2>
+          <p>
+            Tell us what you're building, shooting, or scaling. You'll get an honest,
+            grounded breakdown of how we'd tackle it — straight from the people who will
+            actually do the work.
+          </p>
+          <Link to="/consult" className="accent-button">
+            START A DIRECT CONVERSATION <span>↗</span>
+          </Link>
+          <span className="corner-note">THRUST &amp; LOGIC / 2026</span>
+        </div>
+      </section>
+
+    </main>
+  );
 }

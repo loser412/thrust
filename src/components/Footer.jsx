@@ -6,17 +6,16 @@ import { COMPANY } from '../lib/company';
 import './Footer.css';
 
 const SERVICES_LINKS = [
-  { to: '/development', label: 'Development' },
-  { to: '/marketing',   label: 'Creative & Marketing' },
-  { to: '/production',  label: 'Production' },
-  { to: '/',            label: 'Tech Stack' },
-  { to: '/',            label: 'Value Scale' },
+  { to: '/development',          label: 'Digital Development' },
+  { to: '/marketing',            label: 'Creative & Marketing' },
+  { to: '/production',           label: 'Production Media' },
+  { to: '/production#services',  label: 'Post-Production' },
 ];
 
 const COMPANY_LINKS = [
   { to: '/about',       label: 'About Us' },
-  { to: '/consult',     label: 'Consult Now' },
-  { to: '/',            label: 'Case Studies' },
+  { to: '/#work',       label: 'Our Work' },
+  { to: '/marketing',   label: 'Case Studies' },
   { to: '/consult',     label: 'Contact' },
 ];
 
@@ -24,6 +23,7 @@ const SOCIALS = [
   { href: 'https://instagram.com', label: 'Instagram' },
   { href: 'https://linkedin.com',  label: 'LinkedIn' },
   { href: 'https://behance.net',   label: 'Behance' },
+  { href: 'https://youtube.com',   label: 'YouTube' },
 ];
 
 export default function Footer() {
@@ -117,10 +117,10 @@ export default function Footer() {
               fontSize: '14px',
               lineHeight: 1.6,
               color: '#555555',
-              maxWidth: '300px',
+              maxWidth: '320px',
             }}
           >
-            A senior-only digital agency building high-performance web systems and marketing architectures.
+            Thrust &amp; Logic is a creative and digital partner helping brands build, communicate and grow. From digital experiences and marketing to video and photo production, we bring strategy and execution together.
           </p>
           <div
             style={{
@@ -128,15 +128,17 @@ export default function Footer() {
               fontSize: '11px',
               letterSpacing: '0.05em',
               color: '#777777',
-              lineHeight: 1.6,
+              lineHeight: 1.8,
               textTransform: 'uppercase',
             }}
           >
             {COMPANY.registeredOffice}
             <br />
-            <a href={`mailto:${COMPANY.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{COMPANY.email}</a>
+            <a href={`mailto:${COMPANY.email}`} style={{ color: '#0A0A0A', textDecoration: 'underline' }}>{COMPANY.email}</a>
             <br />
-            Ph: {COMPANY.phone}
+            Ph: <a href={COMPANY.phoneHref} style={{ color: '#0A0A0A', textDecoration: 'underline' }}>{COMPANY.phone}</a>
+            <br />
+            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Based in Chandigarh, India • Serving clients across India</span>
           </div>
         </div>
 

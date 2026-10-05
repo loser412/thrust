@@ -42,7 +42,10 @@ const CAPS = [
   { n:'06', t:'Paid Ads',                d:'We set up and run ads on Facebook, Instagram, and Google to show your business directly to people ready to buy now.' },
 ];
 
-const SS = ['smm%20ss.PNG','smm%20ss%202.PNG'];
+const SS = [
+  { src: '/AO,%20facebook,%20ss.PNG', label: 'Facebook — 135.9K Views', platform: 'FB' },
+  { src: '/AO,%20instagram%20,%20ss.PNG', label: 'Instagram — 87.9K Views', platform: 'IG' },
+];
 
 function GrowthCapabilities({ sectionPad }) {
   return (
@@ -443,7 +446,7 @@ export default function MarketingPage() {
 
               {/* Metrics */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '12px', marginTop: '18px', paddingTop: '16px', borderTop: `1px solid ${BORDER_D}` }}>
-                {[{l:'MONTHLY REACH',v:'144.3k'},{l:'SAVES AVERAGE',v:'4.5k'},{l:'IMPRESSIONS',v:'134.1k'}].map(({l,v}) => (
+                {[{l:'FACEBOOK VIEWS',v:'135.9k'},{l:'INSTAGRAM VIEWS',v:'87.9k'},{l:'TOTAL REACH',v:'31.2k'}].map(({l,v}) => (
                   <div key={l}>
                     <div style={{ fontFamily: FM, fontSize: '8px', color: MUTED_D, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}>{l}</div>
                     <div style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: WHITE, letterSpacing: '-0.01em' }}>{v}</div>
@@ -452,11 +455,14 @@ export default function MarketingPage() {
               </div>
             </div>
 
-            {/* Screenshots */}
+            {/* Screenshots — 2×2 grid: Meta Insights + Campaign shots */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              {SS.map((f,i) => (
-                <div key={f} style={{ border: `1px solid ${BORDER_D}`, overflow: 'hidden' }}>
-                  <img src={`/devpage/propertymsters/mm/${f}`} alt={`Campaign ${i+1}`} style={{ width: '100%', height: 'auto', display: 'block' }} />
+              {SS.map((item) => (
+                <div key={item.src} style={{ border: `1px solid ${BORDER_D}`, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <img src={item.src} alt={item.label} style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  <div style={{ padding: '8px 12px', background: 'rgba(45,204,112,0.04)', borderTop: `1px solid ${BORDER_D}` }}>
+                    <span style={{ fontFamily: FM, fontSize: '8px', color: ACCENT, letterSpacing: '0.12em', textTransform: 'uppercase' }}>{item.label}</span>
+                  </div>
                 </div>
               ))}
             </div>

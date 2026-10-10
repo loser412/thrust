@@ -700,7 +700,7 @@ export default function DevelopmentPage() {
           }}
         >
           {/* faint bg image echo */}
-          <div className="development-cta-layout" style={{
+          <div style={{
             position: 'absolute', inset: 0, zIndex: 0,
             backgroundImage: 'url(/pexels-asim-razan-32997.jpg)',
             backgroundSize: 'cover', backgroundPosition: 'center',
@@ -708,7 +708,7 @@ export default function DevelopmentPage() {
           }} />
           <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(${T.bg} 0%, rgba(4,6,10,0.88) 100%)`, zIndex: 1 }} />
 
-          <div style={{
+          <div className="development-cta-layout" style={{
             position: 'relative', zIndex: 2,
             display: 'grid', gridTemplateColumns: '1fr auto', gap: '48px',
             alignItems: 'center', flexWrap: 'wrap',

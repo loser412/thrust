@@ -162,6 +162,20 @@
     gap: 28px !important;
   }
 
+  .development-responsive .development-cta-layout h2 {
+    font-size: clamp(40px, 10.5vw, 64px) !important;
+    line-height: 0.94 !important;
+    overflow-wrap: normal;
+  }
+
+  .development-responsive .development-cta-layout > a {
+    width: fit-content;
+    max-width: 100%;
+    padding: 18px 22px !important;
+    white-space: normal !important;
+    text-align: center;
+  }
+
   .development-responsive .development-case-grid {
     grid-template-columns: minmax(0, 1fr) !important;
   }

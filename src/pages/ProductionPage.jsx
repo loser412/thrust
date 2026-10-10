@@ -378,7 +378,7 @@ export default function ProductionPage() {
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '30px', alignItems: 'end', marginBottom: '56px', flexWrap: 'wrap' }}>
+          <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '30px', alignItems: 'end', marginBottom: '56px', flexWrap: 'wrap' }}>
             <div>
               <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
                 Selected Projects
@@ -393,7 +393,7 @@ export default function ProductionPage() {
           </div>
 
           {/* 6 Projects Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+          <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             {SELECTED_PROJECTS.map((item) => {
               const [hovered, setHovered] = useState(false);
               const cardVidRef = useRef(null);
@@ -501,7 +501,7 @@ export default function ProductionPage() {
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '60px' }}>
+          <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '60px' }}>
             <div>
               <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
                 Post-Production &amp;<br />Campaign Content
@@ -514,7 +514,7 @@ export default function ProductionPage() {
           </div>
 
           {/* 6 Grouped Service Categories (Page 3 of PDF) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
+          <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
             {SERVICE_CATEGORIES.map((cat, i) => (
               <div key={cat.title} className="prod-svc-card">
                 <div>
@@ -564,7 +564,7 @@ export default function ProductionPage() {
             </span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '56px' }}>
+          <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '56px' }}>
             <div>
               <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
                 Quality in Every Frame.
@@ -577,7 +577,7 @@ export default function ProductionPage() {
           </div>
 
           {/* 3 Meaningful Cards replacing fake FPS metrics */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+          <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
             {PRODUCTION_STANDARDS.map((std) => (
               <div
                 key={std.num}
@@ -621,7 +621,7 @@ export default function ProductionPage() {
         {/* 05. PRODUCTION WORKFLOW (Page 2 of PDF)               */}
         {/* ══════════════════════════════════════════════════════ */}
         <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'end', marginBottom: '64px' }}>
+          <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'end', marginBottom: '64px' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
                 <span style={{ width: '22px', height: '2px', background: T.accent }} />
@@ -639,7 +639,7 @@ export default function ProductionPage() {
           </div>
 
           {/* 4 Flow Cards */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+          <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
             {PROCESS.map(({ step, heading, body }) => (
               <div key={step} style={{ background: T.cardBg, border: `1px solid ${T.border}`, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 <div style={{ fontFamily: FM, fontSize: '11px', color: T.accent, fontWeight: 700 }}>{step}</div>

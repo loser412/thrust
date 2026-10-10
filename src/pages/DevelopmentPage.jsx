@@ -231,7 +231,7 @@ export default function DevelopmentPage() {
 
   /* ─────────────────────────────────────────────────────── */
   return (
-    <div style={{
+    <div className="development-responsive" style={{
       background: T.bg,
       color: T.fg,
       overflowX: 'hidden',
@@ -250,10 +250,10 @@ export default function DevelopmentPage() {
         WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 0%,black 30%,transparent 100%)',
       }} />
 
-      <div style={{ position: 'relative', zIndex: 2 }}>
+      <div className="development-content" style={{ position: 'relative', zIndex: 2 }}>
 
         {/* ══════════ CINEMATIC HERO ══════════════════════════ */}
-        <section style={{
+        <section className="development-hero" style={{
           position: 'relative',
           height: '100svh',
           minHeight: '700px',
@@ -314,6 +314,7 @@ export default function DevelopmentPage() {
           {/* ── Hero content */}
           <div
             ref={heroTextRef}
+            className="development-hero-layout"
             style={{
               position: 'relative', zIndex: 5,
               padding: 'clamp(120px,15vw,160px) clamp(24px,6vw,80px) 80px',
@@ -487,7 +488,7 @@ export default function DevelopmentPage() {
           ref={svcRef}
           style={{ padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)', borderBottom: `1px solid ${T.border}` }}
         >
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '72px' }}>
+          <div className="development-section-intro" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'end', marginBottom: '72px' }}>
             <div>
               <div className="svc-hd" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
                 <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
@@ -625,7 +626,7 @@ export default function DevelopmentPage() {
             }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '28px' }}>
+          <div className="development-process-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: '28px' }}>
             {PROCESS.map(step => (
               <div
                 key={step.num}
@@ -699,7 +700,7 @@ export default function DevelopmentPage() {
           }}
         >
           {/* faint bg image echo */}
-          <div style={{
+          <div className="development-cta-layout" style={{
             position: 'absolute', inset: 0, zIndex: 0,
             backgroundImage: 'url(/pexels-asim-razan-32997.jpg)',
             backgroundSize: 'cover', backgroundPosition: 'center',

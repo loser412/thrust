@@ -181,7 +181,7 @@ export default function MarketingPage() {
   });
 
   return (
-    <div style={{ background: BG_DARK, color: WHITE, fontFamily: FB, overflowX: 'hidden' }}>
+    <div className="marketing-responsive" style={{ background: BG_DARK, color: WHITE, fontFamily: FB, overflowX: 'hidden' }}>
 
       {/* ── Injected global styles ─────────────────────────── */}
       <style>{`

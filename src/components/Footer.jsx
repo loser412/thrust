@@ -76,6 +76,7 @@ export default function Footer() {
 
   return (
     <footer
+      className="site-footer"
       ref={footerRef}
       style={{
         background: '#F5F2EB', // Light cream background

@@ -103,8 +103,7 @@ function CraftVisual({ type }) {
         <source src="/Thrust_and_logic_animating_colors_202607250556.mp4" type="video/mp4" />
       </video>
       <div className="film-shade" />
-      <div className="play-mark">▶</div>
-      <small>PLAY REEL · 00:10</small>
+      <small>BRAND REEL · 00:10</small>
     </div>
   );
   return (

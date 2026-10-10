@@ -396,6 +396,7 @@ export default function ProductionPage() {
           <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             {SELECTED_PROJECTS.map((item) => {
               const [hovered, setHovered] = useState(false);
+              const [previewPlaying, setPreviewPlaying] = useState(false);
               const cardVidRef = useRef(null);
 
               useEffect(() => {
@@ -440,6 +441,8 @@ export default function ProductionPage() {
                             loop
                             playsInline
                             preload="metadata"
+                            onPlay={() => setPreviewPlaying(true)}
+                            onPause={() => setPreviewPlaying(false)}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                           <div style={{
@@ -447,15 +450,17 @@ export default function ProductionPage() {
                             alignItems: 'center', background: hovered ? 'rgba(0,0,0,0.15)' : 'transparent',
                             transition: 'background 0.3s',
                           }}>
-                            <div style={{
-                              width: '42px', height: '42px', borderRadius: '50%', background: '#FFFFFF',
-                              display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
-                            }}>
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill={T.textDark}>
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            </div>
+                            {!previewPlaying && (
+                              <div style={{
+                                width: '42px', height: '42px', borderRadius: '50%', background: '#FFFFFF',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
+                              }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill={T.textDark}>
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </div>
+                            )}
                           </div>
                         </>
                       ) : (

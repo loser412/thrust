@@ -29,32 +29,32 @@ const T = {
 /* ─── Services ───────────────────────────────────────────── */
 const SERVICES = [
   {
-    id: '01', title: 'Software Platforms', tag: 'WEBSITE & SOFTWARE', color: T.accent,
-    desc: 'We build custom software systems with customer logins, secure database storage, subscription billing, and visual data reports.',
+    id: '01', title: 'Custom SaaS & Web Platforms', tag: 'WEBSITE & SOFTWARE', color: T.accent,
+    desc: 'We build custom software tailored exactly to your business. Whether it’s a customer portal, an internal management system, or a subscription billing platform, we make it secure, fast, and easy to use.',
     stack: ['Next.js', 'PostgreSQL', 'Stripe', 'Auth.js'],
     stat: { label: 'Time to launch', value: '8 wks' },
   },
   {
     id: '02', title: 'Smart AI Tools', tag: 'INTELLIGENCE', color: T.cyan,
-    desc: 'We integrate smart AI tools into your business. This includes helpful chatbots that read your files, and tools that automate tasks.',
+    desc: 'We integrate smart AI directly into your workflows. From helpful chatbots that read your private documents to tools that automate data entry, we make AI do the heavy lifting for your team.',
     stack: ['OpenAI', 'LangChain', 'Pinecone', 'Python'],
     stat: { label: 'Response speed', value: '< 800ms' },
   },
   {
     id: '03', title: 'Custom Mobile Apps', tag: 'PRODUCT', color: T.purple,
-    desc: 'We build beautiful websites and phone apps (for iPhone and Android) that load instantly and look great on any screen.',
+    desc: 'Beautiful, responsive apps for both iPhone and Android. We build them from a single codebase so they load instantly, run smoothly, and look great on any screen size.',
     stack: ['React', 'React Native', 'TypeScript', 'Expo'],
     stat: { label: 'App speed score', value: '100%' },
   },
   {
-    id: '04', title: 'App Design & Layout', tag: 'INTERFACE', color: T.rose,
-    desc: 'We design easy-to-use screens and smooth animations so your customers can navigate your app without needing help.',
+    id: '04', title: 'Design Systems & UI Engineering', tag: 'INTERFACE', color: T.rose,
+    desc: 'Software is useless if it’s hard to use. We design intuitive screens and smooth animations so your customers can navigate your app perfectly without needing a manual.',
     stack: ['Figma', 'GSAP', 'Framer Motion', 'Radix UI'],
     stat: { label: 'Visual elements', value: '200+' },
   },
   {
     id: '05', title: 'Time-Saving Automations', tag: 'AUTOMATION', color: T.amber,
-    desc: 'We connect your tools together so they share data automatically. We automate document filing, client updates, and data entry.',
+    desc: 'We connect your existing software stack so they share data automatically. We automate document filing, client updates, and data entry so you can focus on running your business.',
     stack: ['n8n', 'Make', 'Zapier', 'Python'],
     stat: { label: 'Hours saved / mo', value: '300+' },
   },
@@ -62,29 +62,36 @@ const SERVICES = [
 
 /* ─── Tech ticker ────────────────────────────────────────── */
 const TICKER = [
-  'NEXT.JS', 'REACT NATIVE', 'POSTGRESQL', 'OPENAI API', 'LANGCHAIN',
-  'PINECONE', 'STRIPE', 'AWS', 'DOCKER', 'TYPESCRIPT', 'GRAPHQL',
-  'SUPABASE', 'REDIS', 'TERRAFORM', 'FIGMA', 'GSAP', 'FRAMER',
+  'AWS', 'DOCKER', 'TYPESCRIPT', 'GRAPHQL', 'SUPABASE', 'REDIS',
+  'TERRAFORM', 'FIGMA', 'GSAP', 'FRAMER', 'NEXT.JS', 'REACT NATIVE',
+  'POSTGRESQL', 'OPENAI API', 'LANGCHAIN', 'PINECONE', 'STRIPE',
 ];
 
 /* ─── Typewriter code ────────────────────────────────────── */
 const HERO_CODE =
 `> thrust.init({
-    services: ["software", "ai-tools", "apps", "design", "automation"],
-    engineers: "senior-only",
-    techDebt: false,
-    delivery: "production-ready",
-  });
+  services: ["software", "ai-tools", "apps", "design", "automation"],
+  architecture: "custom-built",
+  engineers: "senior-only",
+  technicalDebt: 0,
+  performance: "sub-second",
+  delivery: "production-ready",
+});
 
 ✓ Ready to build.`;
 
+const CASE_STUDY_OUTCOMES = {
+  'property-masters': 'Client-provided case-study outcome: reduced agent admin time by 40% in Month 1.',
+  'ayurveda-organics': 'Client-provided case-study outcome: scaled to 10k+ concurrent users during global sales.',
+};
+
 /* ─── Process ────────────────────────────────────────────── */
 const PROCESS = [
-  { num: '01', title: 'Planning',    desc: 'We talk about your goals, map out how your app will work, and plan the tech steps together.' },
-  { num: '02', title: 'Blueprint',   desc: 'We map out the database and system structure so we have a clear plan before we write any code.' },
-  { num: '03', title: 'Building',    desc: 'We build in two-week cycles and show you live updates regularly so you see your app coming to life.' },
-  { num: '04', title: 'Launch',      desc: 'We publish your application live to the public safely, making sure it runs securely and without downtime.' },
-  { num: '05', title: 'Support',     desc: 'We monitor your app, add new features as you grow, and keep the server fast as more users join.' },
+  { num: '01', title: 'Planning',    desc: 'We talk about your business goals, map out exactly what your product will do, and plan the tech steps together in plain language.' },
+  { num: '02', title: 'Blueprint',   desc: 'We map out the screens and system structure so we have a crystal-clear visual plan before we write any code.' },
+  { num: '03', title: 'Building',    desc: 'We build in focused cycles and show you regular live updates, so you can actually see your product coming to life, and test features as they are built, not just at the end.' },
+  { num: '04', title: 'Launch',      desc: 'We rigorously test for bugs and security issues, then launch your application publicly, making sure it runs securely and without downtime.' },
+  { num: '05', title: 'Support',     desc: 'We monitor your app, add new features as you grow, and keep the servers fast as new users join.' },
 ];
 
 /* ════════════════════════════════════════════════════════════
@@ -178,7 +185,7 @@ export default function DevelopmentPage() {
       );
 
       /* ── SERVICE rows – clip-path reveal */
-      svcRef.current?.querySelectorAll('.svc-row').forEach((row, i) => {
+      svcRef.current?.querySelectorAll('.svc-row').forEach(row => {
         gsap.fromTo(row,
           { clipPath: 'inset(0 100% 0 0)', opacity: 0 },
           { clipPath: 'inset(0 0% 0 0)', opacity: 1, duration: 0.9, ease: 'power3.out',
@@ -353,7 +360,7 @@ export default function DevelopmentPage() {
                 fontFamily: 'var(--font-body)', fontSize: '17px', lineHeight: 1.8,
                 color: 'rgba(226,232,240,0.78)', maxWidth: '480px', marginBottom: '44px',
               }}>
-                Our senior engineers build clean websites, mobile apps, custom software, and time-saving automations. We make sure your code is fast, secure, and easy to maintain.
+                We engineer custom SaaS &amp; web platforms, AI pipelines &amp; smart AI tools, cross-platform apps, and automated workflows. Hand-written code built for sub-second speed, deep security, and zero technical debt.
               </p>
 
               <div className="h-in" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
@@ -367,7 +374,7 @@ export default function DevelopmentPage() {
                   onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
                   onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
-                  START A PROJECT →
+                  START A PROJECT ↗
                 </Link>
                 <a href="#work" style={{
                   fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.22em',
@@ -380,7 +387,7 @@ export default function DevelopmentPage() {
                   onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.accent; }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = T.fg; }}
                 >
-                  VIEW WORK ↓
+                  VIEW WORK ↘
                 </a>
               </div>
             </div>
@@ -504,24 +511,26 @@ export default function DevelopmentPage() {
             </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(min(100%,320px),1fr))', gap: '16px' }}>
             {SERVICES.map((s) => (
               <div
                 key={s.id}
                 className="svc-row"
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '80px 1fr auto',
-                  gap: '40px',
-                  alignItems: 'start',
-                  padding: '36px 16px',
-                  borderTop: `1px solid ${T.border}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: '24px',
+                  minHeight: '350px',
+                  padding: '28px',
+                  border: `1px solid ${T.border}`,
+                  background: T.card,
                   cursor: 'default',
-                  transition: 'background 0.3s, padding 0.3s',
+                  transition: 'background 0.3s, border-color 0.3s, transform 0.3s',
                   borderRadius: '2px',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = `${s.color}09`; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+                onMouseEnter={e => { e.currentTarget.style.background = `${s.color}09`; e.currentTarget.style.borderColor = `${s.color}88`; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = T.card; e.currentTarget.style.borderColor = T.border; e.currentTarget.style.transform = 'translateY(0)'; }}
               >
                 <div>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: s.color, fontWeight: 700, display: 'block', marginBottom: '6px' }}>{s.id}</span>
@@ -547,13 +556,12 @@ export default function DevelopmentPage() {
                   </div>
                 </div>
 
-                <div style={{ textAlign: 'right', minWidth: '120px' }}>
+                <div style={{ textAlign: 'left', minWidth: 0, paddingTop: '16px', borderTop: `1px solid ${T.border}` }}>
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: '34px', fontWeight: 700, color: s.color, lineHeight: 1 }}>{s.stat.value}</div>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.1em', color: T.muted, marginTop: '6px', textTransform: 'uppercase' }}>{s.stat.label}</div>
                 </div>
               </div>
             ))}
-            <div style={{ borderTop: `1px solid ${T.border}` }} />
           </div>
         </section>
 
@@ -584,8 +592,8 @@ export default function DevelopmentPage() {
               textTransform: 'uppercase', textAlign: 'center', lineHeight: 1.2,
               margin: 0, maxWidth: '700px', padding: '0 24px',
             }}>
-              "CODE THAT RUNS IN PRODUCTION<br />
-              <span style={{ color: T.accent }}>IS THE ONLY KIND THAT MATTERS."</span>
+              CODE THAT SOLVES REAL PROBLEMS<br />
+              <span style={{ color: T.accent }}>IN PRODUCTION IS THE ONLY KIND THAT MATTERS.</span>
             </p>
             <div style={{ width: '1px', height: '50px', background: `linear-gradient(${T.accent}, transparent)` }} />
           </div>
@@ -661,14 +669,22 @@ export default function DevelopmentPage() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.green, display: 'inline-block', boxShadow: `0 0 8px ${T.green}` }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>ALL PROJECTS: LIVE &amp; RUNNING</span>
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>CLIENT-PROVIDED CASE STUDY OUTCOMES</span>
             </div>
           </div>
 
           <div className="development-case-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '16px', justifyItems: 'center' }}>
-            {CASE_STUDIES.map(p => (
-              <div key={p.id} className="wk-card" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            {CASE_STUDIES.filter(p => CASE_STUDY_OUTCOMES[p.id]).map(p => (
+              <div key={p.id} className="wk-card" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
                 <PremiumCaseCard project={p} />
+                <p style={{
+                  width: '100%', maxWidth: '380px', margin: 0, padding: '14px 16px',
+                  border: `1px solid ${T.border}`, background: T.card,
+                  color: T.body, fontFamily: 'var(--font-body)', fontSize: '12px', lineHeight: 1.7,
+                  textAlign: 'center',
+                }}>
+                  {CASE_STUDY_OUTCOMES[p.id]}
+                </p>
               </div>
             ))}
           </div>
@@ -720,6 +736,9 @@ export default function DevelopmentPage() {
                 <span style={{ color: '#34D399' }}>"your-idea"</span>
                 <span style={{ color: T.fg }}>{' });'}</span>
               </div>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.8, color: T.body, maxWidth: '520px', margin: '18px 0 0' }}>
+                Tell us what app, platform, or tool you want to build. You’ll get an honest, straightforward breakdown of how we would tackle it—directly from the engineers.
+              </p>
             </div>
 
             <Link to="/consult" style={{
@@ -733,7 +752,7 @@ export default function DevelopmentPage() {
               onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
               onMouseLeave={e => { e.currentTarget.style.opacity = '1';    e.currentTarget.style.transform = 'translateY(0)'; }}
             >
-              START YOUR PROJECT →
+              START YOUR PROJECT ↗
             </Link>
           </div>
         </section>
@@ -742,4 +761,3 @@ export default function DevelopmentPage() {
     </div>
   );
 }
-

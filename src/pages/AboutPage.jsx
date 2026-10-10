@@ -5,477 +5,269 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── COLOR PALETTE — VIBRANT, LUXURIOUS MULTI-TONE LIGHT DESIGN ─── */
-const BG_PAGE         = '#FDFCF7';       // soft warm porcelain
-const BG_LIGHT        = '#F4F2EB';       // warm sand grey
-const BG_DARK         = '#130F26';       // deep midnight violet for CTA
-const ACCENT_INDIGO   = '#5046E5';       // royal indigo
-const ACCENT_CORAL    = '#FF5938';       // energetic sunset coral
-const TEXT_DARK       = '#1C1613';       // rich dark espresso
-const TEXT_MID        = '#4B433E';       // warm charcoal
-const TEXT_MUTED      = '#857B74';       // soft earth grey
-const BORDER          = 'rgba(28,22,19,0.06)';
-
-/* Alternating premium pastel colors for cards */
-const BG_PASTELS = [
-  '#E3ECE8', // Soft Sage Green
-  '#F7EBE0', // Soft Peach
-  '#E6E4F0', // Soft Lavender
-  '#E2ECF2', // Soft Sky Blue
-];
-
-const TEXT_PASTELS = [
-  '#2C5243',
-  '#6B4423',
-  '#3C376B',
-  '#27475A',
-];
-
+const COLORS = {
+  page: '#FDFCF7',
+  light: '#F4F2EB',
+  dark: '#130F26',
+  indigo: '#5046E5',
+  coral: '#FF5938',
+  text: '#1C1613',
+  mid: '#4B433E',
+  muted: '#857B74',
+  border: 'rgba(28,22,19,0.08)',
+};
 const FD = 'var(--font-display)';
 const FB = 'var(--font-body)';
 const FM = 'var(--font-mono)';
 
-/* ─── DATA ─── */
-const VALUES = [
+const PRINCIPLES = [
   {
-    index: '/01',
-    title: 'CLARITY OVER COMPLEXITY',
-    body: "We don't add process for process's sake. Simple, direct, and well-reasoned beats elaborate and slow every time.",
-  },
-  {
-    index: '/02',
-    title: 'SENIOR TALENT ONLY',
-    body: 'Every engagement is run by people who have done it before — not managed by them. No juniors learning on your dime.',
-  },
-  {
-    index: '/03',
-    title: 'RADICAL TRANSPARENCY',
-    body: "You know what we're doing, why we're doing it, and how it's tracking — in real time, always.",
-  },
-  {
-    index: '/04',
-    title: 'OUTCOMES OVER OUTPUTS',
-    body: "Deliverables matter less than results. We don't ship things. We move needles.",
-  },
-];
-
-const DIFFERENTIATORS = [
-  {
-    icon: '⬡',
     title: 'No Account Managers',
-    desc: 'The people who pitch are the people who deliver.',
+    body: 'The senior experts who understand your project are the exact same specialists who execute it. Nothing gets lost in translation.',
   },
   {
-    icon: '◈',
-    title: 'Flat Retainer Model',
-    desc: 'No hourly billing. Predictable cost, unlimited thinking.',
-  },
-  {
-    icon: '⬢',
     title: 'Embedded Working',
-    desc: 'We operate like an internal team — in your Slack, on your calls.',
+    body: 'We do not work in silos. We integrate directly into your daily operations, your communication channels, and your team calls like an in-house unit.',
   },
   {
-    icon: '✦',
-    title: 'Honest Scope',
-    desc: "If we can't do something well, we'll tell you before you find out.",
+    title: 'Outcomes Over Outputs',
+    body: 'We do not just ship code or post content to check a box. We engineer digital assets designed specifically to move the needle and drive revenue.',
+  },
+  {
+    title: 'Radical Transparency',
+    body: 'You will never wonder where your money is going. You see exactly what we are doing, why we are doing it, and the data tracking in real time.',
   },
 ];
 
-const TEAM = [
-  {
-    name: 'Dev Haldiyan',
-    role: 'Founder',
-    bio: '12 years scaling digital products for VC-backed startups and Fortune 500 brands.',
-    img: '/about/team_damien.png',
-  },
+const UNITS = [
+  ['Engineering', 'Custom SaaS, Web Platforms, Mobile Apps, and AI Integration Pipelines.'],
+  ['Growth', 'SEO Architecture, Performance Advertising, and Data Analytics.'],
+  ['Production', 'Cinematography, Direction, and Studio-Grade Post-Production.'],
+  ['Design', 'Brand Identity, UI/UX Systems, and Motion Graphics.'],
+];
+
+const FOUNDERS = [
   {
     name: 'Vikas Dhull',
-    role: 'Co-Founder',
-    bio: "Ex-Shopify engineer. Builds systems that handle 10× the traffic you think you'll ever get.",
-    img: '/about/team_priya.png',
+    role: 'Co-Founder & Managing Partner',
+    title: 'Architect of Strategy',
+    bio: 'Vikas leads client relations, financial strategy, and quality control. He is the final check on every deliverable, ensuring that our work aligns with your business goals and user experience. He brings military-grade discipline to agency management.',
   },
   {
-    name: 'Jordan Reef',
-    role: 'Creative Director',
-    bio: 'Former agency CD. Cuts creative briefs to the bone and shoots with surgical precision.',
-    img: '/about/team_marcus.png',
-  },
-  {
-    name: 'Nadia Kovács',
-    role: 'Head of Performance',
-    bio: '8 years in paid media. Has managed $40M+ in ad spend with consistent ROAS above 3x.',
-    img: '/about/team_elena.png',
+    name: 'Dev Haldiyan',
+    role: 'Co-Founder & Partner',
+    title: 'Director of Production',
+    bio: 'Dev leads the production department, overseeing everything from camera work to post-production. He brings specialized technical and visual expertise to our creative campaigns, ensuring every frame of content is studio-grade.',
   },
 ];
 
+const sectionStyle = {
+  padding: 'clamp(64px, 9vw, 112px) clamp(24px, 6vw, 80px)',
+  borderBottom: `1px solid ${COLORS.border}`,
+  boxSizing: 'border-box',
+};
+const headingStyle = {
+  fontFamily: FD,
+  fontSize: 'clamp(32px, 4.5vw, 54px)',
+  lineHeight: 1.05,
+  letterSpacing: '-0.035em',
+  color: COLORS.text,
+  margin: 0,
+};
+const eyebrowStyle = {
+  fontFamily: FM,
+  fontSize: '10px',
+  letterSpacing: '0.18em',
+  color: COLORS.coral,
+  textTransform: 'uppercase',
+  fontWeight: 700,
+};
+
 export default function AboutPage() {
-  const heroRef  = useRef(null);
+  const heroRef = useRef(null);
   const storyRef = useRef(null);
-  const princRef = useRef(null);
-  const valRef   = useRef(null);
-  const teamRef  = useRef(null);
-  const ctaRef   = useRef(null);
+  const philosophyRef = useRef(null);
+  const teamRef = useRef(null);
+  const operationsRef = useRef(null);
+  const principlesRef = useRef(null);
+  const ctaRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     const ctx = gsap.context(() => {
-      /* Hero entrance */
-      gsap.fromTo(
-        heroRef.current?.querySelectorAll('.ha') ?? [],
-        { y: 32, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, stagger: 0.13, ease: 'power3.out', delay: 0.1 }
-      );
-
-      /* Story section */
-      gsap.fromTo(
-        storyRef.current?.querySelectorAll('.sa') ?? [],
+      gsap.fromTo(heroRef.current?.querySelectorAll('.abt-reveal') ?? [],
         { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power2.out',
-          scrollTrigger: { trigger: storyRef.current, start: 'top 80%', once: true } }
-      );
-
-      /* Principles cards */
-      gsap.fromTo(
-        princRef.current?.querySelectorAll('.pc') ?? [],
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power2.out',
-          scrollTrigger: { trigger: princRef.current, start: 'top 80%', once: true } }
-      );
-
-      /* Values cards */
-      gsap.fromTo(
-        valRef.current?.querySelectorAll('.vc') ?? [],
-        { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: valRef.current, start: 'top 80%', once: true } }
-      );
-
-      /* Team cards */
-      gsap.fromTo(
-        teamRef.current?.querySelectorAll('.tc') ?? [],
-        { y: 28, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, stagger: 0.1, ease: 'power2.out',
-          scrollTrigger: { trigger: teamRef.current, start: 'top 80%', once: true } }
-      );
-
-      /* CTA */
-      gsap.fromTo(ctaRef.current,
-        { y: 24, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power2.out',
-          scrollTrigger: { trigger: ctaRef.current, start: 'top 85%', once: true } }
-      );
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.1 });
+      [storyRef, philosophyRef, teamRef, operationsRef, principlesRef, ctaRef].forEach((ref) => {
+        gsap.fromTo(ref.current?.querySelectorAll('.abt-card, .abt-copy') ?? [],
+          { y: 24, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: 'power2.out',
+            scrollTrigger: { trigger: ref.current, start: 'top 82%', once: true },
+          });
+      });
     });
     return () => ctx.revert();
   }, []);
 
   return (
-    <div style={{ background: BG_PAGE, color: TEXT_DARK, fontFamily: FB, overflowX: 'hidden' }}>
-
-      {/* ── Global styles ── */}
+    <main className="about-page" style={{ background: COLORS.page, color: COLORS.text, fontFamily: FB, overflowX: 'hidden' }}>
       <style>{`
-        .abt-btn-primary {
-          display: inline-block; text-decoration: none;
-          background: linear-gradient(135deg, ${ACCENT_INDIGO} 0%, ${ACCENT_CORAL} 100%);
-          color: #FFFFFF;
-          font-family: ${FB}; font-size: 14px; font-weight: 600;
-          padding: 14px 30px; border-radius: 6px;
-          transition: transform 0.2s, box-shadow 0.2s;
+        .about-page * { box-sizing: border-box; }
+        .about-page .abt-card { transition: transform .25s ease, box-shadow .25s ease; }
+        .about-page .abt-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(28,22,19,.08); }
+        .about-page .abt-hero, .about-page .abt-story, .about-page .abt-philosophy-grid,
+        .about-page .abt-founder-grid, .about-page .abt-units, .about-page .abt-principles {
+          display: grid; gap: 24px;
         }
-        .abt-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(80,70,229,0.3); }
-        .abt-btn-outline {
-          display: inline-block; text-decoration: none;
-          border: 1.5px solid rgba(255,255,255,0.2); color: #FFFFFF;
-          font-family: ${FB}; font-size: 14px; font-weight: 600;
-          padding: 14px 30px; border-radius: 6px; background: transparent;
-          transition: border-color 0.2s, background 0.2s;
+        .about-page .abt-hero { grid-template-columns: minmax(0, 1.2fr) minmax(280px, .8fr); align-items: center; gap: clamp(32px, 6vw, 76px); }
+        .about-page .abt-story { grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); align-items: center; gap: clamp(32px, 6vw, 76px); }
+        .about-page .abt-philosophy-grid, .about-page .abt-founder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .about-page .abt-units, .about-page .abt-principles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .about-page .abt-cta-link {
+          display: inline-flex; justify-content: center; align-items: center; padding: 15px 24px;
+          border-radius: 6px; background: linear-gradient(135deg, ${COLORS.indigo}, ${COLORS.coral});
+          color: #fff; font: 700 11px ${FM}; letter-spacing: .15em; text-decoration: none;
         }
-        .abt-btn-outline:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.06); }
-        .princ-card { transition: transform 0.25s, box-shadow 0.25s; }
-        .princ-card:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(28,22,19,0.05); }
-        .val-card { transition: transform 0.25s, box-shadow 0.25s; }
-        .val-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.04); }
-        .team-card { transition: transform 0.25s, box-shadow 0.25s; }
-        .team-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(0,0,0,0.05); }
+        @media (max-width: 800px) {
+          .about-page .abt-hero, .about-page .abt-story { grid-template-columns: 1fr; }
+          .about-page .abt-hero { padding-top: 112px !important; }
+          .about-page .abt-philosophy-grid, .about-page .abt-founder-grid { grid-template-columns: 1fr; }
+          .about-page .abt-units, .about-page .abt-principles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+          .about-page .abt-hero-media { max-width: 580px; }
+        }
+        @media (max-width: 520px) {
+          .about-page .abt-units, .about-page .abt-principles { grid-template-columns: 1fr; }
+          .about-page .abt-brand-mark { font-size: 12px !important; }
+        }
       `}</style>
 
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 01. HERO — split layout                            */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={heroRef}
-        style={{
-          padding: '140px clamp(24px,6vw,80px) 100px',
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
-          gap: '60px',
-          alignItems: 'center',
-          borderBottom: `1px solid ${BORDER}`,
-          boxSizing: 'border-box',
-          background: BG_PAGE,
-        }}
-      >
-        {/* Left: text */}
+      <section ref={heroRef} className="abt-hero" style={{ ...sectionStyle, paddingTop: '140px', paddingBottom: '92px' }}>
         <div>
-          <div className="ha" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '28px' }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: ACCENT_CORAL, display: 'inline-block' }} />
-            <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.18em', color: ACCENT_CORAL, textTransform: 'uppercase', fontWeight: 700 }}>ABOUT THE AGENCY</span>
+          <div className="abt-reveal" style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 24 }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: COLORS.coral }} />
+            <span style={eyebrowStyle}>ABOUT THRUST &amp; LOGIC</span>
           </div>
-
-          <h1 className="ha" style={{ fontFamily: FD, fontSize: 'clamp(42px,5.5vw,76px)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.0, margin: '0 0 28px', color: TEXT_DARK }}>
-            Precision in Motion.<br />
-            <span style={{
-              background: `linear-gradient(90deg, ${ACCENT_INDIGO} 0%, ${ACCENT_CORAL} 100%)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>Full-Service</span> Digital<br />
-            Excellence.
+          <h1 className="abt-reveal" style={{ ...headingStyle, fontSize: 'clamp(42px, 6vw, 76px)', marginBottom: 24 }}>
+            THE CREATORS.<br />THE ENGINEERS.<br />
+            <span style={{ color: COLORS.indigo }}>THE FOUNDERS.</span>
           </h1>
-
-          <p className="ha" style={{ fontFamily: FB, fontSize: '16px', lineHeight: 1.75, color: TEXT_MID, maxWidth: '460px', margin: 0 }}>
-            We translate complex technological challenges into elegant digital solutions through rigorous logic and creative momentum.
+          <p className="abt-reveal" style={{ maxWidth: 650, margin: 0, color: COLORS.mid, fontSize: 16, lineHeight: 1.8 }}>
+            We are Vikas Dhull and Dev Haldiyan. Two friends who met in high school and rebuilt their careers to bridge the gap between cinematic creativity and engineering precision. No middlemen. No fluff. Just the people who build your brand.
           </p>
         </div>
-
-        {/* Right: hero video (autoplay, muted, loop) */}
-        <div className="ha" style={{ position: 'relative', borderRadius: '4px', overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 12px 32px rgba(28,22,19,0.06)' }}>
-          <video
-            src="/Thrust_and_logic_animating_colors_202607250556.mp4"
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label="Animated hero background"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
+        <div className="abt-reveal abt-hero-media" style={{ overflow: 'hidden', borderRadius: 6, aspectRatio: '4 / 3', background: COLORS.light }}>
+          <video src="/Thrust_and_logic_animating_colors_202607250556.mp4" autoPlay muted loop playsInline aria-label="Thrust & Logic animated brand colors" style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }} />
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 02. STORY — original text left, image right        */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={storyRef}
-        style={{
-          padding: '100px clamp(24px,6vw,80px)',
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
-          gap: '80px',
-          alignItems: 'center',
-          borderBottom: `1px solid ${BORDER}`,
-          boxSizing: 'border-box',
-          background: BG_PAGE,
-        }}
-      >
-        {/* Left: text */}
+      <section ref={storyRef} className="abt-story" style={{ ...sectionStyle, background: COLORS.light }}>
         <div>
-          <h2 className="sa" style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 24px', color: TEXT_DARK }}>
-            Born from a Need for<br />Technical Clarity
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: COLORS.indigo, marginBottom: 18 }}>OUR ORIGIN</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, fontSize: 'clamp(32px, 4vw, 48px)', marginBottom: 24 }}>
+            From High School Friends to Global Builders.
           </h2>
-          <p className="sa" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: TEXT_MID, margin: '0 0 20px' }}>
-            We started Thrust &amp; Logic because we were frustrated. Frustrated with agencies that staffed accounts with juniors, padded timelines, and measured success in decks delivered rather than problems solved.
-          </p>
-          <p className="sa" style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.8, color: TEXT_MID, margin: '0 0 28px' }}>
-            So we built the agency we wanted to hire. Senior-only. Flat. Transparent. Embedded in your world rather than billing by the hour from a distance. Six years later, the model works — for us and the brands we work with.
-          </p>
-          <div className="sa">
-            <Link
-              to="/consult"
-              style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.14em', color: ACCENT_CORAL, textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', borderBottom: `1.5px solid ${ACCENT_CORAL}`, paddingBottom: '2px' }}
-            >
-              — ESTABLISHED 2019
-            </Link>
+          <div className="abt-copy" style={{ color: COLORS.mid, fontSize: 15, lineHeight: 1.8 }}>
+            <p>Our story doesn’t start in a boardroom. It starts with two friends who saw a problem in the agency world: creatives didn’t understand code, and developers didn’t understand storytelling.</p>
+            <p><strong>Vikas (Logic):</strong> After leaving competitive civil service exams, Vikas pivoted to business operations. He saw the chaos of fragmented agencies and wanted to build systems that actually worked.</p>
+            <p><strong>Dev (Thrust):</strong> With a background in engineering and fitness, Dev found his true calling in visual media. He moved from technical studies to cinematic production, obsessed with the craft of the “perfect shot”.</p>
+            <p><strong>The Turning Point:</strong> It began with a local studio pilot that didn’t pan out. But it led to an international opportunity through Dev’s fitness network. We delivered high-end digital infrastructure to an Australian partner. The result? Proof that we could compete globally.</p>
+            <p style={{ marginBottom: 0 }}>We launched as D-Creations, learned the hard way, rebranded to Thrust &amp; Logic to reflect our dual philosophy, and built this agency from the ground up—hands-on, client-first, and ready to scale.</p>
           </div>
         </div>
-
-        {/* Right: architectural image */}
-        <div className="sa" style={{ borderRadius: '4px', overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 12px 32px rgba(28,22,19,0.06)' }}>
-          <img
-            src="/about/office.png"
-            alt="Technical clarity"
-            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'grayscale(0.25) brightness(0.95)' }}
-          />
+        <div className="abt-card" style={{ borderRadius: 6, overflow: 'hidden', aspectRatio: '4 / 3', background: '#e9e4dc' }}>
+          <img src="/about/office.png" alt="Studio workspace representing the origins of Thrust & Logic" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 03. PRINCIPLES — 4 columns using periwinkle cards   */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={princRef}
-        style={{
-          padding: '100px clamp(24px,6vw,80px)',
-          background: BG_LIGHT,
-          borderBottom: `1px solid ${BORDER}`,
-          boxSizing: 'border-box',
-          textAlign: 'center',
-        }}
-      >
-        <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 12px', color: TEXT_DARK }}>
-          Governed by Principles
-        </h2>
-        <p style={{ fontFamily: FB, fontSize: '15px', color: TEXT_MUTED, margin: '0 0 56px', lineHeight: 1.7 }}>
-          The pillars that sustain our momentum.
-        </p>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', textAlign: 'left' }}>
-          {DIFFERENTIATORS.map(({ icon, title, desc }, i) => {
-            const cardBg = BG_PASTELS[i % BG_PASTELS.length];
-            const iconColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
-            return (
-              <div
-                key={title}
-                className="pc princ-card"
-                style={{
-                  background: cardBg,
-                  borderRadius: '8px',
-                  padding: '40px 32px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  border: '1px solid rgba(0,0,0,0.03)',
-                }}
-              >
-                <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: iconColor }}>
-                  {icon}
-                </div>
-                <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: TEXT_DARK, margin: 0, letterSpacing: '-0.01em' }}>{title}</h3>
-                <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.75, color: TEXT_MID, margin: 0 }}>{desc}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 04. VALUES — styled grid of the original 4 values   */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={valRef}
-        style={{
-          padding: '100px clamp(24px,6vw,80px)',
-          background: BG_PAGE,
-          borderBottom: `1px solid ${BORDER}`,
-          boxSizing: 'border-box',
-        }}
-      >
-        <div className="vc" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: ACCENT_INDIGO, display: 'inline-block' }} />
-          <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.18em', color: ACCENT_INDIGO, textTransform: 'uppercase', fontWeight: 700 }}>VALUES</span>
-        </div>
-        <h2 className="vc" style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 52px', color: TEXT_DARK }}>
-          What We<br /><span style={{ fontStyle: 'italic', fontFamily: FD }}>Stand For.</span>
-        </h2>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-          {VALUES.map(({ index, title, body }, i) => {
-            const dotColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
-            return (
-              <div
-                key={index}
-                className="vc val-card"
-                style={{
-                  background: '#FFFFFF',
-                  border: `1px solid ${BORDER}`,
-                  borderRadius: '8px',
-                  padding: '36px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  borderLeft: `4px solid ${dotColor}`,
-                }}
-              >
-                <span style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.1em', color: dotColor, fontWeight: 700 }}>{index}</span>
-                <h3 style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, color: TEXT_DARK, margin: 0 }}>{title}</h3>
-                <p style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.7, color: TEXT_MID, margin: 0 }}>{body}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 05. TEAM — original 4 team members                 */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={teamRef}
-        style={{
-          padding: '100px clamp(24px,6vw,80px)',
-          background: BG_LIGHT,
-          borderBottom: `1px solid ${BORDER}`,
-          boxSizing: 'border-box',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '52px', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.15, margin: '0 0 10px', color: TEXT_DARK }}>
-              The Collective Intelligence
-            </h2>
-            <p style={{ fontFamily: FB, fontSize: '15px', color: TEXT_MUTED, margin: 0 }}>
-              Led by industry specialists with a passion for precision.
-            </p>
-          </div>
-          <Link
-            to="/team"
-            style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.12em', color: ACCENT_INDIGO, textTransform: 'uppercase', textDecoration: 'none', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}
-          >
-            View All Team →
-          </Link>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '28px' }}>
-          {TEAM.slice(0, 2).map(({ name, role, bio, img }, i) => {
-            const accentColor = TEXT_PASTELS[i % TEXT_PASTELS.length];
-            return (
-              <div key={name} className="tc team-card" style={{ background: '#FFFFFF', padding: '24px', borderRadius: '8px', border: `1px solid ${BORDER}` }}>
-                {/* Photo */}
-                <div style={{ aspectRatio: '3/4', overflow: 'hidden', borderRadius: '4px', marginBottom: '20px', background: '#E5E7EB', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-                  <img
-                    src={img}
-                    alt={name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block', filter: 'grayscale(0.1)' }}
-                  />
-                </div>
-                <div style={{ fontFamily: FD, fontSize: '20px', fontWeight: 700, color: TEXT_DARK, marginBottom: '4px', letterSpacing: '-0.01em' }}>{name}</div>
-                <div style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.14em', color: accentColor, textTransform: 'uppercase', fontWeight: 700, marginBottom: '14px' }}>{role}</div>
-                <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.6, color: TEXT_MID, margin: 0 }}>{bio}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════ */}
-      {/* 06. CTA — deep violet navy band                    */}
-      {/* ═══════════════════════════════════════════════════ */}
-      <section
-        ref={ctaRef}
-        style={{
-          background: BG_DARK,
-          padding: '80px clamp(24px,6vw,80px)',
-          textAlign: 'center',
-          boxSizing: 'border-box',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Soft glowing ambient circle */}
-        <div style={{ position: 'absolute', top: '-50%', left: '-20%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(80,70,229,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-50%', right: '-20%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,89,56,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <h2 style={{ fontFamily: FD, fontSize: 'clamp(28px,3.5vw,44px)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2, margin: '0 0 16px', color: '#FFFFFF' }}>
-            Ready to apply some logic to your next project?
-          </h2>
-          <p style={{ fontFamily: FB, fontSize: '15px', lineHeight: 1.75, color: 'rgba(255,255,255,0.6)', maxWidth: '480px', margin: '0 auto 36px' }}>
-            Let's discuss how our precision-engineered digital strategies can propel your brand forward.
+      <section ref={philosophyRef} style={{ ...sectionStyle, background: COLORS.page }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: COLORS.indigo, marginBottom: 16 }}>FOUNDER’S PHILOSOPHY</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, marginBottom: 34 }}>Thrust and Logic. Why it matters.</h2>
+          <p className="abt-copy" style={{ margin: '0 0 30px', color: COLORS.mid, fontSize: 15, lineHeight: 1.8 }}>
+            The name isn’t just a brand; it’s our operating system.
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-            <Link to="/consult" className="abt-btn-primary">START A PROJECT</Link>
+          <div className="abt-philosophy-grid">
+            <article className="abt-card" style={{ padding: 'clamp(28px, 5vw, 48px)', background: '#F7EBE0', borderRadius: 8 }}>
+              <div className="abt-brand-mark" style={{ font: `700 14px ${FM}`, letterSpacing: '.2em', color: COLORS.coral }}>THRUST</div>
+              <h3 style={{ ...headingStyle, fontSize: 30, margin: '20px 0 14px' }}>The Creative Force</h3>
+              <p style={{ margin: 0, color: COLORS.mid, fontSize: 15, lineHeight: 1.8 }}>Momentum. Energy. High-impact production. This is the Thrust of our brand—making you look like the undisputed category leader through cinematic storytelling and bold visual identity.</p>
+            </article>
+            <article className="abt-card" style={{ padding: 'clamp(28px, 5vw, 48px)', background: '#E6E4F0', borderRadius: 8 }}>
+              <div className="abt-brand-mark" style={{ font: `700 14px ${FM}`, letterSpacing: '.2em', color: COLORS.indigo }}>LOGIC</div>
+              <h3 style={{ ...headingStyle, fontSize: 30, margin: '20px 0 14px' }}>The Strategic Engine</h3>
+              <p style={{ margin: 0, color: COLORS.mid, fontSize: 15, lineHeight: 1.8 }}>Structure. Discipline. Engineering. This is the Logic—the clean code, the data-backed marketing strategy, and the financial transparency that keeps your business running.</p>
+            </article>
+          </div>
+          <p className="abt-copy" style={{ margin: '28px 0 0', padding: '24px', borderTop: `1px solid ${COLORS.border}`, textAlign: 'center', color: COLORS.text, fontFamily: FD, fontSize: 'clamp(19px, 2.7vw, 28px)', lineHeight: 1.45 }}>
+            <strong style={{ display: 'block', marginBottom: 10, fontFamily: FM, fontSize: 10, letterSpacing: '.18em', color: COLORS.indigo }}>THE SYNERGY</strong>
+            Most agencies are 90% creative and 10% logic. Or 90% logic and 10% creative. We are <strong>100% of both.</strong>
+          </p>
+        </div>
+      </section>
+
+      <section ref={teamRef} style={{ ...sectionStyle, background: COLORS.light }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: COLORS.indigo, marginBottom: 16 }}>MEET THE FOUNDERS</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, marginBottom: 32 }}>The people behind the work.</h2>
+          <div className="abt-founder-grid">
+            {FOUNDERS.map((founder) => (
+              <article key={founder.name} className="abt-card" style={{ padding: 'clamp(26px, 4vw, 38px)', background: '#fff', border: `1px solid ${COLORS.border}`, borderRadius: 8 }}>
+                <div style={{ font: `700 10px ${FM}`, letterSpacing: '.16em', color: COLORS.coral, textTransform: 'uppercase' }}>{founder.title}</div>
+                <h3 style={{ ...headingStyle, fontSize: 29, margin: '16px 0 8px' }}>{founder.name}</h3>
+                <div style={{ font: `700 10px ${FM}`, letterSpacing: '.1em', color: COLORS.indigo, textTransform: 'uppercase' }}>{founder.role}</div>
+                <p style={{ margin: '20px 0 0', color: COLORS.mid, fontSize: 14, lineHeight: 1.8 }}>{founder.bio}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-    </div>
+      <section ref={operationsRef} style={{ ...sectionStyle, background: COLORS.page }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: COLORS.indigo, marginBottom: 16 }}>HOW WE WORK</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, marginBottom: 34 }}>Specialized Units. One Unified Vision.</h2>
+          <div className="abt-units">
+            {UNITS.map(([title, body], i) => (
+              <article key={title} className="abt-card" style={{ minHeight: 190, padding: 25, borderRadius: 8, background: [ '#E3ECE8', '#E2ECF2', '#F7EBE0', '#E6E4F0' ][i] }}>
+                <div style={{ font: `700 10px ${FM}`, letterSpacing: '.14em', color: COLORS.indigo }}>0{i + 1}</div>
+                <h3 style={{ font: `700 20px ${FD}`, color: COLORS.text, margin: '18px 0 10px' }}>{title}</h3>
+                <p style={{ fontSize: 13, color: COLORS.mid, lineHeight: 1.7, margin: 0 }}>{body}</p>
+              </article>
+            ))}
+          </div>
+          <p className="abt-copy" style={{ margin: '26px 0 0', padding: '20px 24px', background: COLORS.dark, borderRadius: 6, color: '#fff', fontSize: 14, lineHeight: 1.7 }}>
+            <strong style={{ color: '#fff' }}>THE CORE LEADERSHIP — Vikas Dhull &amp; Dev Haldiyan:</strong> strategy, client relations, finance, and final quality control.
+          </p>
+        </div>
+      </section>
+
+      <section ref={principlesRef} style={{ ...sectionStyle, background: COLORS.light }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: COLORS.indigo, marginBottom: 16 }}>OUR PRINCIPLES</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, marginBottom: 34 }}>Governed by Principles.</h2>
+          <div className="abt-principles">
+            {PRINCIPLES.map(({ title, body }, i) => (
+              <article key={title} className="abt-card" style={{ padding: 26, minHeight: 205, border: `1px solid ${COLORS.border}`, borderRadius: 8, background: '#fff' }}>
+                <span style={{ font: `700 10px ${FM}`, color: COLORS.coral, letterSpacing: '.12em' }}>0{i + 1}</span>
+                <h3 style={{ font: `700 19px ${FD}`, color: COLORS.text, lineHeight: 1.2, margin: '18px 0 12px' }}>{title}</h3>
+                <p style={{ margin: 0, color: COLORS.mid, fontSize: 13, lineHeight: 1.75 }}>{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section ref={ctaRef} style={{ padding: 'clamp(72px, 10vw, 112px) 24px', textAlign: 'center', background: COLORS.dark, color: '#fff', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', zIndex: 1, maxWidth: 760, margin: '0 auto' }}>
+          <div className="abt-copy" style={{ ...eyebrowStyle, color: '#FF927C', marginBottom: 20 }}>WORK WITH THE FOUNDERS</div>
+          <h2 className="abt-copy" style={{ ...headingStyle, color: '#fff', fontSize: 'clamp(34px, 5vw, 58px)', marginBottom: 20 }}>You’ll work directly with us. Not a sales rep.</h2>
+          <p className="abt-copy" style={{ maxWidth: 620, margin: '0 auto 30px', color: 'rgba(255,255,255,.72)', fontSize: 15, lineHeight: 1.8 }}>
+            Every project at Thrust &amp; Logic is led by the founders and executed by specialized senior talent. Tell us what you’re building, shooting, or scaling—and get an honest breakdown of how we’d tackle it.
+          </p>
+          <Link to="/consult" className="abt-cta-link">TALK TO THE FOUNDERS ↗</Link>
+        </div>
+      </section>
+    </main>
   );
 }

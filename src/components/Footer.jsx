@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { COMPANY } from '../lib/company';
@@ -120,7 +120,7 @@ export default function Footer() {
               maxWidth: '320px',
             }}
           >
-            Thrust &amp; Logic is a creative and digital partner helping brands build, communicate and grow. From digital experiences and marketing to video and photo production, we bring strategy and execution together.
+            An independent, senior-led agency crafting high-performance web systems, cinematic stories, and growth engines. Senior-led. Direct execution. Zero middlemen.
           </p>
           <div
             style={{
@@ -132,13 +132,9 @@ export default function Footer() {
               textTransform: 'uppercase',
             }}
           >
-            {COMPANY.registeredOffice}
-            <br />
             <a href={`mailto:${COMPANY.email}`} style={{ color: '#0A0A0A', textDecoration: 'underline' }}>{COMPANY.email}</a>
             <br />
             Ph: <a href={COMPANY.phoneHref} style={{ color: '#0A0A0A', textDecoration: 'underline' }}>{COMPANY.phone}</a>
-            <br />
-            <span style={{ color: 'var(--accent)', fontWeight: 600 }}>Based in Chandigarh, India • Serving clients across India</span>
           </div>
         </div>
 
@@ -233,4 +229,3 @@ export default function Footer() {
     </footer>
   );
 }
-

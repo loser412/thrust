@@ -72,12 +72,9 @@ const PROOF_TESTIMONIALS = [
     quote: 'The results were much better than anything we had tried before. The team felt like our own in-house team — they just got it.',
     author: 'Gurnam Saini — Founder, Ayurveda Organics',
   },
-  ...CASE_STUDIES
-    .filter(({ id }) => id === 'property-masters')
-    .map(({ testimonial }) => ({
-      ...testimonial,
-      author: 'Rajesh Sehgal — Director, Property Masters',
-    })),
+  {
+    ...CASE_STUDIES.find((caseStudy) => caseStudy.id === 'property-masters').testimonial,
+  },
 ];
 
 const PROOF_CLIENT_LOGOS = [
@@ -136,6 +133,8 @@ export default function HomePage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
     const ctx = gsap.context(() => {
 
       /* Hero entrance */
@@ -145,42 +144,96 @@ export default function HomePage() {
         { y: 0, opacity: 1, duration: 1.1, stagger: 0.14, ease: 'power3.out', delay: 0.1 }
       );
 
+      /* Hold the hero as its layers drift apart during the first scroll. */
+      const desktopMotion = gsap.matchMedia();
+      desktopMotion.add('(min-width: 961px)', () => {
+        const heroScroll = gsap.timeline({
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: '+=100%',
+            scrub: 0.8,
+            pin: true,
+            anticipatePin: 1,
+          },
+        });
+
+        heroScroll
+          .to(heroRef.current?.querySelector('.hero-copy'), {
+            yPercent: -18,
+            scale: 0.94,
+            autoAlpha: 0.4,
+            ease: 'none',
+          }, 0)
+          .to(heroRef.current?.querySelector('.grid-field'), {
+            scale: 1.18,
+            rotation: 5,
+            opacity: 0.8,
+            ease: 'none',
+          }, 0)
+          .to(heroRef.current?.querySelector('.hero-orbit'), {
+            scale: 1.25,
+            rotation: 28,
+            autoAlpha: 0,
+            ease: 'none',
+          }, 0)
+          .to(heroRef.current?.querySelector('.hero-baseline'), {
+            y: 16,
+            autoAlpha: 0,
+            ease: 'none',
+          }, 0);
+      });
+
       /* Craft cards */
       gsap.fromTo(
         craftRef.current?.querySelectorAll('.craft-card') ?? [],
-        { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power2.out',
+        { y: 72, scale: 0.97, opacity: 0 },
+        { y: 0, scale: 1, opacity: 1, duration: 1, stagger: 0.16, ease: 'power3.out',
+          scrollTrigger: { trigger: craftRef.current, start: 'top 78%' } }
+      );
+
+      gsap.fromTo(
+        craftRef.current?.querySelectorAll('.section-intro-new > *') ?? [],
+        { y: 34, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out',
           scrollTrigger: { trigger: craftRef.current, start: 'top 78%' } }
       );
 
       /* Matrix rows */
       gsap.fromTo(
         matrixRef.current?.querySelectorAll('.matrix-col') ?? [],
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power2.out',
+        { y: 56, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.14, ease: 'power3.out',
+          scrollTrigger: { trigger: matrixRef.current, start: 'top 80%' } }
+      );
+
+      gsap.fromTo(
+        matrixRef.current?.querySelectorAll('.section-intro-new > *') ?? [],
+        { y: 34, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: 'power3.out',
           scrollTrigger: { trigger: matrixRef.current, start: 'top 80%' } }
       );
 
       /* Eco section */
       gsap.fromTo(
         ecoRef.current?.querySelectorAll('.eco-item') ?? [],
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, stagger: 0.1, ease: 'power2.out',
+        { y: 44, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power3.out',
           scrollTrigger: { trigger: ecoRef.current, start: 'top 78%' } }
       );
 
       /* Proof section */
       gsap.fromTo(
         proofRef.current?.querySelectorAll('.proof-item') ?? [],
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, stagger: 0.09, ease: 'power2.out',
+        { y: 54, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.9, stagger: 0.13, ease: 'power3.out',
           scrollTrigger: { trigger: proofRef.current, start: 'top 80%' } }
       );
 
       /* CTA */
       gsap.fromTo(ctaRef.current,
         { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power2.out',
+        { y: 0, opacity: 1, duration: 1.1, ease: 'power3.out',
           scrollTrigger: { trigger: ctaRef.current, start: 'top 85%' } }
       );
     });
@@ -192,7 +245,9 @@ export default function HomePage() {
 
       {/* ══════════ HERO ══════════════════════════════════════════════ */}
       <section className="refined-hero" ref={heroRef}>
+        <div className="hero-ambient" aria-hidden="true" />
         <div className="grid-field" aria-hidden="true" />
+        <div className="hero-orbit" aria-hidden="true" />
         <div className="hero-inner">
           <div className="hero-copy">
 
@@ -202,7 +257,7 @@ export default function HomePage() {
             </p>
 
             <h1 className="h-in">
-              CODE.<br />
+              <span className="code-word">CODE.</span><br />
               CONTENT.<br />
               <em>GROWTH.</em>
             </h1>

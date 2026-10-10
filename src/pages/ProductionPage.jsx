@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { COMPANY } from '../lib/company';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -283,9 +282,6 @@ export default function ProductionPage() {
           transform: translateY(-3px);
           border-color: ${T.accent};
         }
-        @media (max-width: 860px) {
-          .prod-hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-        }
       `}</style>
 
       <div className="prod-grid-overlay production-page" ref={mainRef}>
@@ -318,7 +314,7 @@ export default function ProductionPage() {
             }}
           />
 
-          <div className="prod-hero-grid" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '60px', width: '100%', alignItems: 'center' }}>
+          <div className="prod-hero-grid" style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr', width: '100%', alignItems: 'center' }}>
             
             {/* Left Content */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '26px' }}>
@@ -367,71 +363,7 @@ export default function ProductionPage() {
                 </a>
               </div>
 
-              {/* India-focused location badge */}
-              <div className="h-anim" style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: 0.85, marginTop: '8px' }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4A90E2' }} />
-                <span style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.75)' }}>
-                  Based in Chandigarh, India • Available for projects across India
-                </span>
-              </div>
             </div>
-
-            {/* Right: Featured Reel Preview Card */}
-            <div className="h-anim" style={{
-              display: 'flex',
-              flexDirection: 'column',
-              background: 'rgba(12,18,12,0.65)',
-              border: '1px solid rgba(255,255,255,0.18)',
-              backdropFilter: 'blur(12px)',
-              overflow: 'hidden',
-              cursor: 'pointer',
-              position: 'relative',
-            }}
-              onClick={() => setActiveWorkVideo('/Thrust_and_logic_animating_colors_202607250556.mp4')}
-            >
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden' }}>
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                >
-                  <source src="/Thrust_and_logic_animating_colors_202607250556.mp4" type="video/mp4" />
-                </video>
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <div style={{
-                    width: '56px', height: '56px', borderRadius: '50%',
-                    background: '#FFFFFF', color: T.textDark,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-                  }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill={T.textDark}>
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div style={{ padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.12em', color: '#97b7f7', textTransform: 'uppercase', display: 'block', marginBottom: '3px' }}>
-                    FEATURED SHOWREEL
-                  </span>
-                  <span style={{ fontFamily: FD, fontSize: '18px', fontWeight: 700, color: '#fff' }}>
-                    THRUST &amp; LOGIC REEL
-                  </span>
-                </div>
-                <span style={{ fontFamily: FM, fontSize: '9px', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)', padding: '5px 10px' }}>
-                  WATCH REEL ↗
-                </span>
-              </div>
-            </div>
-
           </div>
         </section>
 
@@ -756,18 +688,13 @@ export default function ProductionPage() {
               estimate, timeline, and creative approach—straight from the team doing the work.
             </p>
 
-            {/* India-focused note */}
-            <div style={{ fontFamily: FM, fontSize: '11px', letterSpacing: '0.08em', color: T.textDark, textTransform: 'uppercase', background: '#F0F2F5', padding: '8px 18px', border: `1px solid ${T.border}` }}>
-              Based in Chandigarh, India • Available for projects across India
-            </div>
-
             {/* CTAs: Enquiry Form + WhatsApp Option (Page 5 of PDF) */}
             <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', justifyContent: 'center', marginTop: '8px' }}>
               <Link to="/consult" className="btn-black-prod">
                 DISCUSS YOUR PROJECT <span>↗</span>
               </Link>
               <a
-                href="https://wa.me/917082568222?text=Hi%20Thrust%20%26%20Logic,%20I'd%20like%20to%20discuss%20a%20production%20project"
+                href="https://wa.me/917982056222?text=Hi%20Thrust%20%26%20Logic,%20I'd%20like%20to%20discuss%20a%20production%20project"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-whatsapp-prod"

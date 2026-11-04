@@ -15,8 +15,7 @@ const SEARCH_INDEX = [
   { page: '/development', section: 'hero', title: 'Development Services', keywords: ['development', 'engineering', 'systems', 'digital', 'code'] },
   { page: '/development', section: 'capabilities', title: 'What We Build', keywords: ['build', 'frontend', 'backend', 'apis', 'commerce', 'devops', 'cloud'] },
   { page: '/development', section: 'stack', title: 'Tools We Trust', keywords: ['tools', 'react', 'nodejs', 'typescript', 'aws', 'docker', 'postgres'] },
-  { page: '/development', section: 'work', title: 'Projects We Shipped', keywords: ['projects', 'shipped', 'case studies', 'work', 'portfolio'] },
-  
+
   // MarketingPage
   { page: '/marketing', section: 'hero', title: 'Marketing Services', keywords: ['marketing', 'growth', 'campaigns', 'performance'] },
   
@@ -242,4 +241,3 @@ export default function SearchBar() {
     </div>
   );
 }
-

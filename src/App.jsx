@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { lenis } from './lib/lenis';
 import MagneticCursor from './components/MagneticCursor';
@@ -12,7 +12,6 @@ import MarketingPage from './pages/MarketingPage';
 import ProductionPage from './pages/ProductionPage';
 import AboutPage from './pages/AboutPage';
 import ConsultPage from './pages/ConsultPage';
-import CaseStudyPage from './pages/CaseStudyPage';
 
 const DARK_BG_COLORS = [
   '#4A6B2F', '#F135A0', '#35A0F1', '#F1A035',
@@ -187,7 +186,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/development" element={<DevelopmentPage />} />
-        <Route path="/case-study/:id" element={<CaseStudyPage />} />
+        <Route path="/case-study/:id" element={<Navigate to="/" replace />} />
         <Route path="/marketing" element={<MarketingPage />} />
         <Route path="/production" element={<ProductionPage />} />
         <Route path="/about" element={<AboutPage />} />
@@ -205,4 +204,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-

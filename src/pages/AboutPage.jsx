@@ -49,12 +49,14 @@ const UNITS = [
 const FOUNDERS = [
   {
     name: 'Vikas Dhull',
+    photo: '/vikas.webp',
     role: 'Co-Founder & Managing Partner',
     title: 'Architect of Strategy',
     bio: 'Vikas leads client relations, financial strategy, and quality control. He is the final check on every deliverable, ensuring that our work aligns with your business goals and user experience. He brings military-grade discipline to agency management.',
   },
   {
     name: 'Dev Haldiyan',
+    photo: '/dev.webp',
     role: 'Co-Founder & Partner',
     title: 'Director of Production',
     bio: 'Dev leads the production department, overseeing everything from camera work to post-production. He brings specialized technical and visual expertise to our creative campaigns, ensuring every frame of content is studio-grade.',
@@ -213,6 +215,12 @@ export default function AboutPage() {
           <div className="abt-founder-grid">
             {FOUNDERS.map((founder) => (
               <article key={founder.name} className="abt-card" style={{ padding: 'clamp(26px, 4vw, 38px)', background: '#fff', border: `1px solid ${COLORS.border}`, borderRadius: 8 }}>
+                <img
+                  src={founder.photo}
+                  alt={`${founder.name}, ${founder.role}`}
+                  loading="lazy"
+                  style={{ display: 'block', width: '100%', aspectRatio: '4 / 5', objectFit: 'cover', objectPosition: 'center', borderRadius: 6, marginBottom: 26 }}
+                />
                 <div style={{ font: `700 10px ${FM}`, letterSpacing: '.16em', color: COLORS.coral, textTransform: 'uppercase' }}>{founder.title}</div>
                 <h3 style={{ ...headingStyle, fontSize: 29, margin: '16px 0 8px' }}>{founder.name}</h3>
                 <div style={{ font: `700 10px ${FM}`, letterSpacing: '.1em', color: COLORS.indigo, textTransform: 'uppercase' }}>{founder.role}</div>

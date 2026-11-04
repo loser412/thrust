@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { CASE_STUDIES } from '../data/caseStudies';
 import './HomePage.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -73,7 +72,8 @@ const PROOF_TESTIMONIALS = [
     author: 'Gurnam Saini — Founder, Ayurveda Organics',
   },
   {
-    ...CASE_STUDIES.find((caseStudy) => caseStudy.id === 'property-masters').testimonial,
+    quote: 'The new site instantly improved lead quality and made our agents more efficient.',
+    author: 'Rajesh Sehgal, Director, Property Masters',
   },
 ];
 
@@ -362,9 +362,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══════════ 03.5 / PROOF OF WORK ════════════════════════════ */}
+      {/* ══════════ 03.5 / CLIENTS & TESTIMONIALS ══════════════════ */}
       <section className="proof-section section-shell" ref={proofRef}>
-        <p className="overline proof-item"><i /> PROOF OF WORK</p>
+        <p className="overline proof-item"><i /> CLIENTS &amp; TESTIMONIALS</p>
 
         <div className="proof-logo-marquee proof-item" aria-label="Client logos">
           <div className="proof-logo-track">

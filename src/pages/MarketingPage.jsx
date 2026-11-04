@@ -8,7 +8,6 @@ gsap.registerPlugin(ScrollTrigger);
 /* ─── COLOR PALETTE (DARK RETRO WITH VINTAGE GROWTH ACCENTS) ─── */
 const BG_DARK   = '#12100E';       // deep vintage bronze-charcoal
 const BG_LIGHT  = '#EFEADF';       // warm retro cream
-const BG_ACCENT = '#1C1916';       // deep warm mahogany highlights
 const ACCENT    = '#2DCC70';       // retro phosphor mint green (growth)
 const AMBER     = '#E59A3B';       // retro amber gold (trajectory)
 const RUST      = '#C25942';       // retro terracotta/rust
@@ -25,18 +24,6 @@ const FB = 'var(--font-body)';      // Plus Jakarta Sans
 const FM = 'var(--font-mono)';      // monospace
 
 /* ─── DATA ─── */
-const WHAT_WE_DID = [
-  ['Platform Engineering', 'Designed and developed a custom, high-speed Shopify store with seamless multi-currency integration.'],
-  ['Content Production', 'Transitioned their social feed to high-quality Organic & AI-assisted video and visual assets, ensuring consistency.'],
-  ['Brand Consistency', 'Unified their visual identity across web and social channels.'],
-  ['Operational Support', 'Managed end-to-end posting schedules and copywriting to free up their team’s time.'],
-];
-
-const CASE_STUDY_SCREENSHOTS = [
-  { src: '/AO,%20facebook,%20ss.PNG', label: 'Facebook — 135.9K Views', platform: 'Facebook' },
-  { src: '/AO,%20instagram%20,%20ss.PNG', label: 'Instagram — 87.9K Views', platform: 'Instagram' },
-];
-
 const CAPS = [
   { n:'01', t:'Organic Social & Community', d:'We build your brand’s daily voice. We create strategic, high-value content designed to build a loyal following and establish absolute authority in your market.' },
   { n:'02', t:'Search Architecture (SEO)', d:'We engineer your site to dominate search results. We target high-intent keywords—capturing customers when they are holding a credit card and ready to buy.' },
@@ -105,7 +92,6 @@ function GrowthCapabilities({ sectionPad }) {
 
 export default function MarketingPage() {
   const heroRef     = useRef(null);
-  const caseRef     = useRef(null);
   const heroPathRef = useRef(null);
   const hc1Ref      = useRef(null);
   const hc2Ref      = useRef(null);
@@ -216,8 +202,7 @@ export default function MarketingPage() {
         }
         .mkt-cap-row:first-child { border-top: 1px solid ${BORDER_L}; }
         @media (max-width: 760px) {
-          .mkt-roadmap-grid, .mkt-case-grid, .mkt-data-grid, .mkt-services-intro { grid-template-columns: 1fr !important; }
-          .mkt-case-grid { gap: 40px !important; }
+          .mkt-roadmap-grid, .mkt-data-grid, .mkt-services-intro { grid-template-columns: 1fr !important; }
         }
       `}</style>
 
@@ -349,96 +334,6 @@ export default function MarketingPage() {
               </article>
             );
           })}
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════ */}
-      {/* 03. TESTIMONIAL — deep mahogany highlight section      */}
-      {/* ═══════════════════════════════════════════════════════ */}
-      <section style={{ background: BG_ACCENT, ...sectionPad, borderTop: `1px solid ${BORDER_D}`, borderBottom: `1px solid ${BORDER_D}` }}>
-        <div style={{ maxWidth: '840px' }}>
-          <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '40px' }}>
-            <span style={{ width: '22px', height: '2px', background: AMBER }} />
-            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: AMBER, textTransform: 'uppercase', fontWeight: 700 }}>
-              GURNAM SAINI / AYURVEDA ORGANICS
-            </span>
-          </div>
-          <blockquote className="mkt-reveal" style={{ fontFamily: FD, fontStyle: 'italic', fontWeight: 700, fontSize: 'clamp(30px,4.2vw,58px)', lineHeight: 1.15, letterSpacing: '-0.02em', margin: '0 0 36px', color: WHITE }}>
-            "The results were much better than anything we had tried before."
-          </blockquote>
-          <p className="mkt-reveal" style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.14em', color: MUTED_D, textTransform: 'uppercase' }}>
-            Gurnam Saini — Founder, Ayurveda Organics
-          </p>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════ */}
-      {/* 04. CASE STUDY — cream bg                             */}
-      {/* ═══════════════════════════════════════════════════════ */}
-      <section ref={caseRef} style={{ background: BG_LIGHT, ...sectionPad, color: DARK_TXT }}>
-        <div className="mkt-case-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
-
-          {/* LEFT */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-            <div>
-              <div className="mkt-reveal" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-                <span style={{ width: '22px', height: '2px', background: RUST }} />
-                <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: RUST, textTransform: 'uppercase', fontWeight: 700 }}>REAL-WORLD EXAMPLE</span>
-              </div>
-              <h2 className="mkt-reveal" style={{ fontFamily: FD, fontWeight: 700, fontSize: 'clamp(28px,3.5vw,48px)', lineHeight: 1, letterSpacing: '-0.02em', margin: 0, color: DARK_TXT }}>
-                Ayurveda Organics:<br />Building a Global-Standard Foundation.
-              </h2>
-            </div>
-            <p className="mkt-reveal" style={{ fontFamily: FB, fontSize: '14px', lineHeight: 1.85, color: MUTED_L, margin: 0 }}>
-              We partnered with Ayurveda Organics to modernize their digital infrastructure. Our goal was to build a high-performance e-commerce platform capable of handling global traffic and establish a consistent, high-quality content engine.
-            </p>
-            <div className="mkt-reveal">
-              <div style={{ fontFamily: FM, fontSize: '9px', color: RUST, letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '12px' }}>HOW WE HELPED</div>
-              {WHAT_WE_DID.map(([title, description]) => (
-                <div key={title} style={{ display: 'flex', alignItems: 'baseline', gap: '10px', padding: '9px 0', borderBottom: `1px solid ${BORDER_L}` }}>
-                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: RUST, flexShrink: 0 }} />
-                  <span style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.7, color: DARK_TXT }}><strong>{title}:</strong> {description}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* RIGHT — client-provided case-study results */}
-          <div className="mkt-reveal" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ background: BG_DARK, padding: 'clamp(22px,3vw,32px)', border: `1px solid ${BORDER_D}` }}>
-              <div style={{ fontFamily: FM, fontSize: '9px', color: ACCENT, textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700, marginBottom: '22px' }}>
-                Client-provided case-study results
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: '12px' }}>
-                {[
-                  { value: '125.5K', label: 'Facebook views' },
-                  { value: '65.8K', label: 'Instagram views' },
-                  { value: '294.8%', label: 'Instagram reach growth' },
-                  { value: '100%', label: 'Content consistency' },
-                ].map(({ value, label }) => (
-                  <div key={label} style={{ minHeight: '120px', padding: '20px', border: `1px solid ${BORDER_D}`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                    <div style={{ fontFamily: FD, fontSize: 'clamp(26px,3vw,38px)', fontWeight: 700, color: WHITE, letterSpacing: '-0.02em' }}>{value}</div>
-                    <div style={{ fontFamily: FM, fontSize: '8px', color: MUTED_D, textTransform: 'uppercase', letterSpacing: '0.1em', lineHeight: 1.6 }}>{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,minmax(0,1fr))', gap: '10px' }}>
-              {CASE_STUDY_SCREENSHOTS.map(({ src, label, platform }) => (
-                <figure key={src} style={{ minWidth: 0, margin: 0, overflow: 'hidden', border: `1px solid ${BORDER_D}` }}>
-                  <img
-                    src={src}
-                    alt={`Ayurveda Organics ${platform} campaign results`}
-                    loading="lazy"
-                    style={{ width: '100%', height: 'auto', display: 'block' }}
-                  />
-                  <figcaption style={{ padding: '8px 12px', background: 'rgba(45,204,112,0.04)', borderTop: `1px solid ${BORDER_D}`, fontFamily: FM, fontSize: '8px', color: ACCENT, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                    {label}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 

@@ -14,8 +14,6 @@ const SERVICES_LINKS = [
 
 const COMPANY_LINKS = [
   { to: '/about',       label: 'About Us' },
-  { to: '/#work',       label: 'Our Work' },
-  { to: '/marketing',   label: 'Case Studies' },
   { to: '/consult',     label: 'Contact' },
 ];
 

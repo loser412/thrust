@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import PremiumCaseCard from '../components/PremiumCaseCard';
-import CASE_STUDIES from '../data/caseStudies';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -80,11 +78,6 @@ const HERO_CODE =
 
 ✓ Ready to build.`;
 
-const CASE_STUDY_OUTCOMES = {
-  'property-masters': 'Client-provided case-study outcome: reduced agent admin time by 40% in Month 1.',
-  'ayurveda-organics': 'Client-provided case-study outcome: scaled to 10k+ concurrent users during global sales.',
-};
-
 /* ─── Process ────────────────────────────────────────────── */
 const PROCESS = [
   { num: '01', title: 'Planning',    desc: 'We talk about your business goals, map out exactly what your product will do, and plan the tech steps together in plain language.' },
@@ -106,7 +99,6 @@ export default function DevelopmentPage() {
   const tickerRef     = useRef(null);
   const svcRef        = useRef(null);
   const procRef       = useRef(null);
-  const workRef       = useRef(null);
   const ctaRef        = useRef(null);
 
   /* typewriter */
@@ -207,14 +199,6 @@ export default function DevelopmentPage() {
         { y: 60, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.75, stagger: 0.1, ease: 'power2.out',
           scrollTrigger: { trigger: procRef.current, start: 'top 72%' } },
-      );
-
-      /* ── WORK cards */
-      gsap.fromTo(
-        workRef.current?.querySelectorAll('.wk-card') ?? [],
-        { y: 55, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.85, stagger: 0.12, ease: 'power2.out',
-          scrollTrigger: { trigger: workRef.current, start: 'top 75%' } },
       );
 
       /* ── CTA */
@@ -377,19 +361,6 @@ export default function DevelopmentPage() {
                 >
                   START A PROJECT ↗
                 </Link>
-                <a href="#work" style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.22em',
-                  textTransform: 'uppercase', color: T.fg,
-                  border: `1px solid rgba(255,255,255,0.2)`, backdropFilter: 'blur(8px)',
-                  padding: '18px 38px', textDecoration: 'none', fontWeight: 600,
-                  transition: 'border-color 0.2s, color 0.2s', display: 'inline-block',
-                  background: 'rgba(255,255,255,0.04)',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = T.accent; e.currentTarget.style.color = T.accent; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = T.fg; }}
-                >
-                  VIEW WORK ↘
-                </a>
               </div>
             </div>
 
@@ -643,49 +614,6 @@ export default function DevelopmentPage() {
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: T.accent, fontWeight: 700 }}>{step.num}</span>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: 700, textTransform: 'uppercase', color: T.white, margin: 0, letterSpacing: '-0.01em' }}>{step.title}</h3>
                 <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', lineHeight: 1.75, color: T.body, margin: 0 }}>{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ══════════ WORK ══════════════════════════════════ */}
-        <section
-          id="work"
-          ref={workRef}
-          style={{ padding: 'clamp(80px,10vw,120px) clamp(24px,6vw,80px)', borderBottom: `1px solid ${T.border}` }}
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '56px', flexWrap: 'wrap', gap: '24px' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                <span style={{ display: 'inline-block', width: '28px', height: '1px', background: T.accent }} />
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.25em', textTransform: 'uppercase', color: T.accent }}>CASE STUDIES</span>
-              </div>
-              <h2 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5.5vw,76px)',
-                fontWeight: 700, letterSpacing: '-0.03em', textTransform: 'uppercase',
-                lineHeight: 0.88, color: T.white, margin: 0,
-              }}>
-                WHAT WE'VE<br /><span style={{ color: T.accent }}>BUILT.</span>
-              </h2>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: T.green, display: 'inline-block', boxShadow: `0 0 8px ${T.green}` }} />
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: T.green, letterSpacing: '0.1em' }}>CLIENT-PROVIDED CASE STUDY OUTCOMES</span>
-            </div>
-          </div>
-
-          <div className="development-case-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '16px', justifyItems: 'center' }}>
-            {CASE_STUDIES.filter(p => CASE_STUDY_OUTCOMES[p.id]).map(p => (
-              <div key={p.id} className="wk-card" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-                <PremiumCaseCard project={p} />
-                <p style={{
-                  width: '100%', maxWidth: '380px', margin: 0, padding: '14px 16px',
-                  border: `1px solid ${T.border}`, background: T.card,
-                  color: T.body, fontFamily: 'var(--font-body)', fontSize: '12px', lineHeight: 1.7,
-                  textAlign: 'center',
-                }}>
-                  {CASE_STUDY_OUTCOMES[p.id]}
-                </p>
               </div>
             ))}
           </div>

@@ -1,61 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
-
-/* ─── DATA ───────────────────────────────────────────────── */
-const SELECTED_PROJECTS = [
-  {
-    type: 'video',
-    title: 'Creative Studio Reel',
-    category: 'Commercial / Studio Reel',
-    role: 'Directing & Cinematography',
-    brief: 'Cinematic brand overview highlighting modern architectural spaces and lighting.',
-    src: '/crousel/30 Oct 2025.mp4',
-  },
-  {
-    type: 'video',
-    title: '2D Fitness Campaign',
-    category: 'Commercial / Product Demo',
-    role: 'Direction & Core Motion',
-    brief: 'Commercial product launch visualising fitness routines and active tracking.',
-    src: '/2d fitness/2D VIDEO.mp4',
-  },
-  {
-    type: 'video',
-    title: 'Precious Anniversary Film',
-    category: 'Brand Documentary',
-    role: 'Story, Direction & Capture',
-    brief: 'Narrative documentary capturing historical milestones and brand legacy.',
-    src: '/precious/Anniversary Main.mp4',
-  },
-  {
-    type: 'video',
-    title: 'Camera Test Motion Reel',
-    category: 'Technical Test & Grade',
-    role: 'RAW Grade & Camera Test',
-    brief: 'Color grading calibration test footage focusing on lighting density and dynamic range.',
-    src: '/crousel/IMG_9527.MOV',
-  },
-  {
-    type: 'image',
-    title: 'Production Still 01',
-    category: 'Commercial Photography',
-    role: 'On-Set Capture',
-    brief: 'High-fidelity portrait capture highlighting practical set lighting.',
-    src: '/crousel/IMG_1812.JPG',
-  },
-  {
-    type: 'image',
-    title: 'Production Still 02',
-    category: 'Set Photography',
-    role: 'Set Architecture',
-    brief: 'On-location setup still documenting camera placement and rigging.',
-    src: '/crousel/IMG_1813.JPG',
-  },
-];
 
 /* 6 Post-Production & Campaign Content Categories (Page 3 of PDF) */
 const SERVICE_CATEGORIES = [
@@ -168,8 +116,6 @@ export default function ProductionPage() {
   const mainRef        = useRef(null);
   const anniversaryVidRef = useRef(null);
 
-  const [activeWorkVideo, setActiveWorkVideo] = useState(null);
-
   useEffect(() => {
     window.scrollTo(0, 0);
 
@@ -240,15 +186,6 @@ export default function ProductionPage() {
           transition: transform 0.2s, opacity 0.2s; border: none; cursor: pointer;
         }
         .btn-black-prod:hover { transform: translateY(-2px); opacity: 0.92; }
-        .btn-outline-prod {
-          background: transparent; color: ${T.textDark};
-          border: 1px solid ${T.textDark};
-          font-family: ${FM}; font-size: 11px; font-weight: 700;
-          letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
-          padding: 16px 32px; display: inline-flex; align-items: center; gap: 8px;
-          transition: background 0.2s, color 0.2s, transform 0.2s;
-        }
-        .btn-outline-prod:hover { background: ${T.textDark}; color: #FFFFFF; transform: translateY(-2px); }
         .btn-whatsapp-prod {
           background: #25D366; color: #FFFFFF;
           font-family: ${FM}; font-size: 11px; font-weight: 700;
@@ -259,16 +196,6 @@ export default function ProductionPage() {
         .btn-whatsapp-prod:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,0.35); }
         @keyframes prodPulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
         .pulse-red { animation: prodPulse 1.8s ease-in-out infinite; }
-        .prod-work-card {
-          background: ${T.cardBg};
-          border: 1px solid ${T.border};
-          transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-        }
-        .prod-work-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 16px 36px rgba(0,0,0,0.08);
-          border-color: ${T.accent};
-        }
         .prod-svc-card {
           background: ${T.cardBg};
           border: 1px solid ${T.border};
@@ -353,14 +280,11 @@ export default function ProductionPage() {
                 we plan, produce and edit visuals that help your business communicate with clarity.
               </p>
 
-              {/* Action Buttons: Discuss Project & View Work */}
+              {/* Action Button */}
               <div className="h-anim" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginTop: '6px' }}>
                 <Link to="/consult" className="btn-black-prod" style={{ background: '#FFFFFF', color: T.textDark }}>
                   DISCUSS YOUR PROJECT <span>↗</span>
                 </Link>
-                <a href="#portfolio" className="btn-outline-prod" style={{ color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.5)' }}>
-                  VIEW OUR WORK ↓
-                </a>
               </div>
 
             </div>
@@ -368,135 +292,7 @@ export default function ProductionPage() {
         </section>
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 02. SELECTED WORK (PROOF BEFORE PROCESS)              */}
-        {/* ══════════════════════════════════════════════════════ */}
-        <section id="portfolio" className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-            <span style={{ width: '22px', height: '2px', background: T.accent }} />
-            <span style={{ fontFamily: FM, fontSize: '9px', letterSpacing: '0.2em', color: T.accent, textTransform: 'uppercase', fontWeight: 700 }}>
-              PORTFOLIO &amp; PROOF
-            </span>
-          </div>
-
-          <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '30px', alignItems: 'end', marginBottom: '56px', flexWrap: 'wrap' }}>
-            <div>
-              <h2 style={{ fontFamily: FD, fontSize: 'clamp(36px,5vw,68px)', fontWeight: 700, letterSpacing: '-0.02em', margin: 0, color: T.textDark }}>
-                Selected Projects
-              </h2>
-              <p style={{ fontFamily: FB, fontSize: '15px', color: T.textMuted, marginTop: '6px', maxWidth: '580px' }}>
-                Real commercial campaigns, product videos, and brand reels produced for our clients.
-              </p>
-            </div>
-            <div style={{ fontFamily: FM, fontSize: '10px', letterSpacing: '0.1em', color: T.textMuted, textTransform: 'uppercase' }}>
-              HOVER TO PREVIEW • CLICK TO PLAY
-            </div>
-          </div>
-
-          {/* 6 Projects Grid */}
-          <div className="production-card-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
-            {SELECTED_PROJECTS.map((item) => {
-              const [hovered, setHovered] = useState(false);
-              const [previewPlaying, setPreviewPlaying] = useState(false);
-              const cardVidRef = useRef(null);
-
-              useEffect(() => {
-                if (item.type !== 'video') return;
-                const vid = cardVidRef.current;
-                if (!vid) return;
-                if (hovered) {
-                  vid.play().catch(() => {});
-                } else {
-                  vid.pause();
-                  vid.currentTime = 0;
-                }
-              }, [hovered, item.type]);
-
-              return (
-                <div
-                  key={item.title}
-                  className="prod-work-card"
-                  onClick={() => {
-                    if (item.type === 'video') setActiveWorkVideo(item.src);
-                  }}
-                  onMouseEnter={() => setHovered(true)}
-                  onMouseLeave={() => setHovered(false)}
-                  style={{
-                    padding: '22px',
-                    cursor: item.type === 'video' ? 'pointer' : 'default',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    minHeight: '360px',
-                  }}
-                >
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    {/* Media Slot */}
-                    <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', overflow: 'hidden', background: '#F0EFF1' }}>
-                      {item.type === 'video' ? (
-                        <>
-                          <video
-                            ref={cardVidRef}
-                            src={item.src}
-                            muted
-                            loop
-                            playsInline
-                            preload="metadata"
-                            onPlay={() => setPreviewPlaying(true)}
-                            onPause={() => setPreviewPlaying(false)}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                          <div style={{
-                            position: 'absolute', inset: 0, display: 'flex', justifyContent: 'center',
-                            alignItems: 'center', background: hovered ? 'rgba(0,0,0,0.15)' : 'transparent',
-                            transition: 'background 0.3s',
-                          }}>
-                            {!previewPlaying && (
-                              <div style={{
-                                width: '42px', height: '42px', borderRadius: '50%', background: '#FFFFFF',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                boxShadow: '0 4px 14px rgba(0,0,0,0.2)',
-                              }}>
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill={T.textDark}>
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
-                            )}
-                          </div>
-                        </>
-                      ) : (
-                        <img
-                          src={item.src}
-                          alt={item.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                      )}
-                    </div>
-
-                    <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <span style={{ fontFamily: FM, fontSize: '9px', color: T.accent, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700 }}>
-                          {item.category}
-                        </span>
-                        <span style={{ fontFamily: FM, fontSize: '9px', color: T.textMuted }}>
-                          {item.role}
-                        </span>
-                      </div>
-                      <h3 style={{ fontFamily: FD, fontSize: '22px', fontWeight: 700, color: T.textDark, margin: '0 0 8px', lineHeight: 1.15 }}>
-                        {item.title}
-                      </h3>
-                      <p style={{ fontFamily: FB, fontSize: '13px', lineHeight: 1.6, color: T.textMuted, margin: 0 }}>
-                        {item.brief}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ══════════════════════════════════════════════════════ */}
-        {/* 03. POST-PRODUCTION & CAMPAIGN CONTENT (SERVICES)     */}
+        {/* 02. POST-PRODUCTION & CAMPAIGN CONTENT (SERVICES)     */}
         {/* ══════════════════════════════════════════════════════ */}
         <section id="services" className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
@@ -559,7 +355,7 @@ export default function ProductionPage() {
         </section>
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 04. PRODUCTION STANDARDS (Page 2 of PDF)              */}
+        {/* 03. PRODUCTION STANDARDS (Page 2 of PDF)              */}
         {/* ══════════════════════════════════════════════════════ */}
         <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
@@ -623,7 +419,7 @@ export default function ProductionPage() {
         </section>
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 05. PRODUCTION WORKFLOW (Page 2 of PDF)               */}
+        {/* 04. PRODUCTION WORKFLOW (Page 2 of PDF)               */}
         {/* ══════════════════════════════════════════════════════ */}
         <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 80px', borderBottom: `1px solid ${T.border}` }}>
           <div className="production-heading-grid" style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '40px', alignItems: 'end', marginBottom: '64px' }}>
@@ -656,7 +452,7 @@ export default function ProductionPage() {
         </section>
 
         {/* ══════════════════════════════════════════════════════ */}
-        {/* 06. CALL TO ACTION WITH WHATSAPP ENQUIRY               */}
+        {/* 05. CALL TO ACTION WITH WHATSAPP ENQUIRY               */}
         {/* ══════════════════════════════════════════════════════ */}
         <section className="sc-reveal" style={{ padding: '96px clamp(24px,6vw,80px) 140px', position: 'relative', overflow: 'hidden' }}>
           {/* Subtle loop of Anniversary video behind the CTA */}
@@ -711,64 +507,6 @@ export default function ProductionPage() {
         </section>
 
       </div>
-
-      {/* ══════════════════════════════════════════════════════ */}
-      {/* VIDEO LIGHTBOX MODAL                                   */}
-      {/* ══════════════════════════════════════════════════════ */}
-      {activeWorkVideo && (
-        <div
-          onClick={() => setActiveWorkVideo(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 9999,
-            background: 'rgba(0,0,0,0.92)',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '24px',
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '1000px',
-              aspectRatio: '16/9',
-              background: '#000',
-              border: '1px solid rgba(255,255,255,0.2)',
-              boxShadow: '0 24px 60px rgba(0,0,0,0.8)',
-            }}
-          >
-            <video
-              src={activeWorkVideo}
-              controls
-              autoPlay
-              playsInline
-              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-            />
-            <button
-              onClick={() => setActiveWorkVideo(null)}
-              style={{
-                position: 'absolute',
-                top: '-44px',
-                right: '0',
-                background: 'transparent',
-                border: 'none',
-                color: '#FFFFFF',
-                fontFamily: FM,
-                fontSize: '13px',
-                cursor: 'pointer',
-                letterSpacing: '0.1em',
-              }}
-            >
-              ✕ CLOSE
-            </button>
-          </div>
-        </div>
-      )}
 
     </div>
   );

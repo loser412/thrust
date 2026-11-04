@@ -256,18 +256,8 @@
     gap: 16px !important;
   }
 
-  .production-page .prod-work-card {
-    min-height: 0 !important;
-    padding: 16px !important;
-  }
-
   .production-page .prod-svc-card {
     padding: 24px 20px !important;
-  }
-
-  .production-page .prod-work-card > div:first-child > div:nth-child(2) > div {
-    flex-wrap: wrap;
-    gap: 6px 12px;
   }
 
   .about-page > section {
